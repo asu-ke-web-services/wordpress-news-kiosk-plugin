@@ -5,7 +5,7 @@ This is a WordPress plugin for generating pages that are viewed on the Kiosks ar
 
 The plugin is for the News Blog and provides shortcodes, a page template, and custom fields for posts.
 
-This plugin is set to replace our current RiseVision system.
+This plugin is set to replace our current RiseVision system. [Example](http://preview.risevision.com/Viewer.html?type=presentation&id=77cdc8d3-f3a9-4978-9f7c-addf0c366cd5)
 
 # How It Works
 
