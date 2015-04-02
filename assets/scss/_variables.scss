@@ -1,0 +1,35 @@
+// ==============
+// variables.scss
+// ==============
+$asu-red:     rgb(153, 0, 51);
+$border-gray: #e9e9e9;
+
+$event-blurb-padding: 20px;
+
+// ======
+// Media
+// Mobile
+// ======
+$asu-screen-sm:                 768px !default;
+$asu-screen-md:                 991px !default;
+$asu-screen-md-min:             $asu-screen-md + 1 !default;
+
+// =======================
+// Media Query Breakpoints
+// =======================
+$screen-xs-min: 480px !default;
+$screen-sm-min: 768px !default;
+$screen-md-min: 992px !default;
+$screen-lg-min: 1200px !default;
+ 
+$screen-xs-max: ($screen-sm-min - 1) !default;
+$screen-sm-max: ($screen-md-min - 1) !default;
+$screen-md-max: ($screen-lg-min - 1) !default;
+
+// ===========
+// Hero Images
+// ===========
+$sos-scarab-green:     #568e14;
+$sos-hero-ratio:       30%;
+$sos-hero-slim-height: 70px;
+$sos-hero-color:       #fff;

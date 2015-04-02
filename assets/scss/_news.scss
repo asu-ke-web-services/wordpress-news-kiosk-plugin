@@ -1,0 +1,29 @@
+// =========
+// news.scss
+// =========
+
+.news {
+  // ==========
+  // Categories
+  // ==========
+  .categories {
+
+    // Start Clearfix hack
+    
+    &:before,
+    &:after {
+      content: ' ';
+      display: table;
+    }
+    
+    &:after {
+      clear: both;
+    }
+
+    // End Clearfix hack
+
+    .news-category {
+      float: right;  
+    }
+  }
+}

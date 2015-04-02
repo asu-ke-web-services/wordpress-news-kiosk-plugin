@@ -1,0 +1,53 @@
+// ================
+// scaffolding.scss
+// ================
+
+.text-pop {
+  background-color: darken(white, 10%);
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.asu-box {
+  border-top: 8px solid $asu-red;
+  margin-bottom: 10px;
+  padding: 20px;
+  position: relative;
+
+  &:before {
+    border-bottom: 1px solid $border-gray;
+    border-left: 1px solid $border-gray;
+    border-right: 1px solid $border-gray;
+    content: '';
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+}
+
+.vertical-align-md {
+  @media(min-width: $screen-md-min) {
+    align-items: center;
+    display: flex;  
+  }
+}
+
+
+.social-media {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    display: inline-block;
+    font-size: 50px;
+
+    a {
+      border-bottom: 0;
+      text-decoration: none;
+    }
+  }
+}
