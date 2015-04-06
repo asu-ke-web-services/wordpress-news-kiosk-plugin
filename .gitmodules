@@ -1,3 +1,0 @@
-[submodule ".standards/coding-standards"]
-	path = .standards/coding-standards
-	url = https://github.com/gios-asu/wordpress-coding-standards.git
