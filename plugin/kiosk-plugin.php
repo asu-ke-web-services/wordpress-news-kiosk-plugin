@@ -1,7 +1,7 @@
 <?php
 /**
- * Gios Plugin
- * 
+ * Kiosk Plugin
+ *
  * Takes care of activation and deactivation.
  */
 
@@ -15,7 +15,7 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Plugin extends Base_Registrar {
-  
+
   public function __construct() {
     $this->plugin_slug = 'kiosk-plugin';
     $this->version     = '0.1';
@@ -36,7 +36,7 @@ class Kiosk_Plugin extends Base_Registrar {
    * Add activation and deactivation hooks
    */
   public function define_hooks() {
-    
+
   }
 
 }

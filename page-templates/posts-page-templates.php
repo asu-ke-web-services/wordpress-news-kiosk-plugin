@@ -21,7 +21,7 @@ class Posts_Page_Templates extends Base_Registrar {
   public function __construct() {
     $this->plugin_slug = 'kiosk-post-page-template';
     $this->version = '0.1';
-    $this->templates = array('posts-default-template.php' => 'KIOSK');
+    $this->templates = array( 'posts-default-template.php' => 'KIOSK' );
 
     $this->load_dependencies();
     $this->define_hooks();
@@ -56,7 +56,7 @@ class Posts_Page_Templates extends Base_Registrar {
       return $template;
     }
 
-    if ( ! isset( $this->templates[get_post_meta( $post->ID, '_wp_page_template', true )] ) ) {
+    if ( ! isset( $this->templates[ get_post_meta( $post->ID, '_wp_page_template', true ) ] ) ) {
       return $template;
     }
 
