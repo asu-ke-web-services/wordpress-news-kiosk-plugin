@@ -1,6 +1,10 @@
 Wordpress News Kiosk Plugin
 ===========================
-[![Build Status](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin.svg)](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin)
+[![Build Status](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin.svg)](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin) [![Code Climate](https://codeclimate.com/github/gios-asu/wordpress-news-kiosk-plugin/badges/gpa.svg)](https://codeclimate.com/github/gios-asu/wordpress-news-kiosk-plugin) [![Stories in Ready](https://badge.waffle.io/gios-asu/wordpress-news-kiosk-plugin.svg?label=ready&title=Ready)](http://waffle.io/gios-asu/wordpress-news-kiosk-plugin)
+
+[![Github release](https://img.shields.io/github/release/gios-asu/wordpress-news-kiosk-plugin.svg?style=flat)](https://github.com/gios-asu/wordpress-news-kiosk-plugin/releases)
+[![Github issues](https://img.shields.io/github/issues/gios-asu/wordpress-news-kiosk-plugin.svg?style=flat)](https://github.com/gios-asu/wordpress-news-kiosk-plugin/issues)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat)](https://github.com/gios-asu/wordpress-news-kiosk-plugin/blob/master/LICENSE.md)
 
 This is a WordPress plugin for generating pages that are viewed on the Kiosks around the Wrigely Hall building.
 
