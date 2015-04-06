@@ -54,7 +54,7 @@ function setup_kiosk_wp_plugin() {
   // ==========
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes();
   $posts_shortcodes->run();
-  
+
   // =====
   // Pages
   // =====
@@ -66,7 +66,6 @@ function setup_kiosk_wp_plugin() {
   // =====
   $general_admin          = new \Kiosk_WP\General_Admin();
   $posts_admin           = new \Kiosk_WP\Posts_Admin( $general_admin );
- 
   $general_admin->run();
   $posts_admin->run();
 
@@ -79,7 +78,6 @@ function setup_kiosk_wp_plugin() {
   // =============
   // Miscellaneous
   // =============
-  
   $css_styles = new \Kiosk_WP\CSS_Styles();
   $css_styles->run();
 

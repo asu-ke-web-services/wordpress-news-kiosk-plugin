@@ -13,9 +13,9 @@ require_once( plugin_dir_path( __FILE__ ) . '/../posts-admin.php' );
   <form method="post" action="options.php">
     <?php
         // This prints out all hidden setting fields
-        settings_fields( \Kiosk_WP\Posts_Admin::$options_group );   
+        settings_fields( \Kiosk_WP\Posts_Admin::$options_group );
         do_settings_sections( \Kiosk_WP\Posts_Admin::$section_name );
-        submit_button(); 
+        submit_button();
     ?>
   </form>
 </div>

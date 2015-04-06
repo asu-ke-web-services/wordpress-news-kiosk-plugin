@@ -10,7 +10,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   header( 'HTTP/1.1 403 Forbidden' );
   exit();
 }
+wp_head(); ?>
 
-get_header(); 
-
-get_footer();
+<div id="kisok-template" class="widecolumn">
+<?php if ( have_posts() ) : while ( have_posts() ) : the_post();
+    the_content();
+endwhile; endif; ?>
+</div>
+<?php wp_footer() ?>

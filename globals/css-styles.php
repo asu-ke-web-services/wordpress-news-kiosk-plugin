@@ -43,8 +43,8 @@ class CSS_Styles extends Base_Registrar {
    * @override
    */
   public function define_hooks() {
-    $this->add_action( 'wp_enqueue_scripts', $this, 'wp_enqueue_scripts' );
     $this->add_action( 'wp_enqueue_scripts',  $this,'asu_webstandards_scripts' );
+    $this->add_action( 'wp_enqueue_scripts', $this, 'wp_enqueue_scripts' );
   }
 
   /**
@@ -58,36 +58,35 @@ class CSS_Styles extends Base_Registrar {
   * Enqueue scripts and styles.
   */
   function asu_webstandards_scripts() {
-  // Wordpress provides jquery, but we enqueue our own mainly so we include it in the footer and control the version.
-  wp_deregister_script( 'jquery' );
-  wp_register_script( 'jquery', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
-  wp_register_script( 'bootstrap-js', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/ js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
-  wp_register_script( 'bootstrap-asu-js', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-web-standards/js/bootstrap-asu.min.js', array(), '0.1.2.3', true );
-  wp_enqueue_script( 'asu-wordpress-web-standards-theme-navigation', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/navigation.js', array(), '20120206', true );
-  wp_enqueue_script( 'asu-wordpress-web-standards-theme-skip-link-focus-fix', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/skip-link-focus-fix.js', array(), '20130115', true );
-  wp_register_script( 'asu-header', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/js/asu-header.min.js', array() , '4.0', true );
-  wp_register_script( 'asu-header-config', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/js/asu-header-config.js', array( 'asu-header' ) , '4.0', true );
-  /** ie 8 respondsive */
-  /** @see https://github.com/scottjehl/Respond */
-  wp_enqueue_script( 'asu-wordpress-web-standards-respond', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/respond.min.js', array(), '20150115', true );
-  wp_register_style( 'bootstrap-css', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
-  wp_register_style( 'bootstrap-asu', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-web-standards/css/bootstrap-asu.min.css', array(), '0.1.2.3', 'all' );
-  wp_register_style( 'base-wordpress-theme', plugin_dir_url( dirname( __FILE__ ) ) . '/style.css', array(), false, 'all' );
-  wp_register_style( 'asu-header-css', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/css/asu-nav.css', array(), false, 'all' );
-  wp_enqueue_script( 'jquery' );
-  wp_enqueue_script( 'bootstrap-js' );
-  wp_enqueue_script( 'bootstrap-asu-js' );
-  wp_enqueue_script( 'asu-header-config' );
-  wp_enqueue_script( 'asu-header' );
-  wp_enqueue_script( 'asu-wordpress-web-standards-respond' );
-  wp_enqueue_style( 'bootstrap-css' );
-  wp_enqueue_style( 'bootstrap-asu' );
-  wp_enqueue_style( 'base-wordpress-theme' );
-  wp_enqueue_style( 'child-style', get_stylesheet_uri() );
-  wp_enqueue_style( 'asu-header-css' );
-  if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
-  wp_enqueue_script( 'comment-reply' );
+    // Wordpress provides jquery, but we enqueue our own mainly so we include it in the footer and control the version.
+    wp_deregister_script( 'jquery' );
+    wp_register_script( 'jquery', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
+    wp_register_script( 'bootstrap-js', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/ js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
+    wp_register_script( 'bootstrap-asu-js', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-web-standards/js/bootstrap-asu.min.js', array(), '0.1.2.3', true );
+    wp_enqueue_script( 'asu-wordpress-web-standards-theme-navigation', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/navigation.js', array(), '20120206', true );
+    wp_enqueue_script( 'asu-wordpress-web-standards-theme-skip-link-focus-fix', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/skip-link-focus-fix.js', array(), '20130115', true );
+    wp_register_script( 'asu-header', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/js/asu-header.min.js', array() , '4.0', true );
+    wp_register_script( 'asu-header-config', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/js/asu-header-config.js', array( 'asu-header' ) , '4.0', true );
+    /** ie 8 respondsive */
+    /** @see https://github.com/scottjehl/Respond */
+    wp_enqueue_script( 'asu-wordpress-web-standards-respond', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/respond.min.js', array(), '20150115', true );
+    wp_register_style( 'bootstrap-css', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
+    wp_register_style( 'bootstrap-asu', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-web-standards/css/bootstrap-asu.min.css', array(), '0.1.2.3', 'all' );
+    wp_register_style( 'base-wordpress-theme', plugin_dir_url( dirname( __FILE__ ) ) . '/style.css', array(), false, 'all' );
+    wp_register_style( 'asu-header-css', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/asu-header/css/asu-nav.css', array(), false, 'all' );
+    wp_enqueue_script( 'jquery' );
+    wp_enqueue_script( 'bootstrap-js' );
+    wp_enqueue_script( 'bootstrap-asu-js' );
+    wp_enqueue_script( 'asu-header-config' );
+    wp_enqueue_script( 'asu-header' );
+    wp_enqueue_script( 'asu-wordpress-web-standards-respond' );
+    wp_enqueue_style( 'bootstrap-css' );
+    wp_enqueue_style( 'bootstrap-asu' );
+    wp_enqueue_style( 'base-wordpress-theme' );
+    wp_enqueue_style( 'child-style', get_stylesheet_uri() );
+    wp_enqueue_style( 'asu-header-css' );
+    if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+      wp_enqueue_script( 'comment-reply' );
+    }
   }
-  }
-
 }

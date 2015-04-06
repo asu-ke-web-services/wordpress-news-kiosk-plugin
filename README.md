@@ -1,5 +1,6 @@
 Wordpress News Kiosk Plugin
 ===========================
+[![Build Status](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin.svg)](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin)
 
 This is a WordPress plugin for generating pages that are viewed on the Kiosks around the Wrigely Hall building.
 

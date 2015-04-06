@@ -542,4 +542,7 @@ body.home .sos-hero-mobile {
   }
 }
 #kiosk-slider > .carousel-indicators li { visibility: hidden; }
+.carousel-caption {
+        padding-bottom: 1px;
+    }
 /*# sourceMappingURL=style.css.map */
