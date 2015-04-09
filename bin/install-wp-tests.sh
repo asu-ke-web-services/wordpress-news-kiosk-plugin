@@ -84,4 +84,4 @@ install_db
 
 # Make sure that the uploads file gets created
 mkdir -p $WP_CORE_DIR/wp-content/uploads
-cp ../tests/images/Desert.jpg $WP_CORE_DIR/wp-content/uploads
+cp $BASEDIR/../tests/images/Desert.jpg $WP_CORE_DIR/wp-content/uploads
