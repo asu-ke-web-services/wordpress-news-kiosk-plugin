@@ -9,7 +9,7 @@ namespace Kiosk_WP;
 if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   header( 'Status: 403 Forbidden' );
   header( 'HTTP/1.1 403 Forbidden' );
-  exit();
+  trigger_error( 'Error: This file should be accessed directly', E_USER_ERROR );
 }
 
 class Posts_Page_Templates extends Base_Registrar {

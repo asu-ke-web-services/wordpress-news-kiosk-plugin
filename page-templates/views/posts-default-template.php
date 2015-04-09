@@ -8,7 +8,8 @@ Description: Simple scaffolding to display the posts content and the sidebar.
 if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   header( 'Status: 403 Forbidden' );
   header( 'HTTP/1.1 403 Forbidden' );
-  exit();
+  trigger_error( 'Error: This file should be accessed directly', E_USER_ERROR );
+
 }
 wp_head(); ?>
 
