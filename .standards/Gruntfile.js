@@ -94,13 +94,13 @@
 
   // These plugins provide necessary tasks
   grunt.loadNpmTasks('grunt-phpcs');
-  grunt.loadNpmTasks('grunt-contrib-csslint');
+ // grunt.loadNpmTasks('grunt-contrib-csslint');
   grunt.loadNpmTasks('grunt-phpunit');
 
   // Default task
   grunt.registerTask('default', [
     'phpcs', 
-    'csslint',
+   // 'csslint',
     'phpunit']);
 };
 

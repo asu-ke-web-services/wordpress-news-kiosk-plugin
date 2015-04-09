@@ -74,7 +74,7 @@ HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
 
     while ( ! $exit_while ) {
-      $query_post_options = array(
+      $query_post_options  = array(
         'post_type'        => array( 'attachment', 'page', 'post' ),
         'posts_per_page'   => $limit,
         'orderby'          => 'post_date',
@@ -178,6 +178,6 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-    return $div_listitems;
+    return ( 0 == $current_post_count ? '' : $div_listitems );
   }
 }

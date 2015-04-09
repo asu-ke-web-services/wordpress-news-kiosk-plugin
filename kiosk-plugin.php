@@ -38,7 +38,7 @@ function setup_kiosk_wp_plugin() {
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-posts-shortcodes.php';
-  // require_once plugin_dir_path( __FILE__ ) . 'pages/posts-pages.php';
+  //require_once plugin_dir_path( __FILE__ ) . 'pages/posts-pages.php';
   require_once plugin_dir_path( __FILE__ ) . 'page-templates/posts-page-templates.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/ratio-slim-feature-images.php';
