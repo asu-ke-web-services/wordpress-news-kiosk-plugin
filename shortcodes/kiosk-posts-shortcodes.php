@@ -43,6 +43,14 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with images from post to display as slider
+   * Query the featured images which are attachments by thumbnail ID by passing post ID.
+   * Store current post item  and parse it the check if post has any images in the body.
+   * Regex string to search for images
+   * Run preg_match_all to grab all the images and save the results in $pics
+   * Query any custom fields for page_feature_image
+   * Query any custom fields for kiosk-end-date
+   * Show posts which are having either image as attachment or images in body of post
+   * or image with custom field and not expired
    */
   public function kiosk_posts( $atts, $content = null ) {
     $image_regex           = '/(?<!_)src=([\'"])?(.*?)\\1/';
@@ -87,15 +95,6 @@ HTML;
       $cureent_offset_posts       = $cureent_offset_posts + $limit;
       $posts              = get_posts( $query_post_options );
       if ( $posts ) {
-        /* Query the featured images which are attachments by thumbnail ID by passing post ID.
-        * Store current post item  and parse it the check if post has any images in the body.
-        * Regex string to search for images
-        * Run preg_match_all to grab all the images and save the results in $pics
-        * Query any custom fields for page_feature_image
-        * Query any custom fields for kiosk-end-date
-        * Show posts which are having either image as attachment or images in body of post
-        * or image with custom field and not expired
-        */
         foreach ( $posts as $post ){
           $image_attributes   = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ) ); // returns an array
           $content            = $post->post_content;
@@ -104,7 +103,6 @@ HTML;
           $kiosk_end_date     = get_post_meta( $post->ID, 'kiosk-end-date', true );
           $today              = strtotime( date( 'd-m-Y' ) );
           $expiration_date    = strtotime( $kiosk_end_date );
-
           //Do not show posts which are expired or doesn't have expiration date specified
           if ( empty($expiration_date) || $expiration_date < $today ) { // if expiration date is in the past
             continue;

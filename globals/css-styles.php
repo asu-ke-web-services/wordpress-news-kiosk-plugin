@@ -13,7 +13,7 @@ namespace Kiosk_WP;
 if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   header( 'Status: 403 Forbidden' );
   header( 'HTTP/1.1 403 Forbidden' );
-  exit();
+  trigger_error( 'Error: This file should be accessed directly', E_USER_ERROR );
 }
 
 /**
@@ -62,9 +62,6 @@ class CSS_Styles extends Base_Registrar {
     wp_deregister_script( 'jquery' );
     wp_register_script( 'jquery', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
     wp_register_script( 'bootstrap-js', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/ js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
-    wp_enqueue_script( 'asu-wordpress-web-standards-theme-navigation', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/navigation.js', array(), '20120206', true );
-    wp_enqueue_script( 'asu-wordpress-web-standards-theme-skip-link-focus-fix', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/skip-link-focus-fix.js', array(), '20130115', true );
-    wp_enqueue_script( 'asu-wordpress-web-standards-respond', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/js/respond.min.js', array(), '20150115', true );
     wp_register_style( 'bootstrap-css', plugin_dir_url( dirname( __FILE__ ) ) . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
     wp_register_style( 'base-wordpress-theme', plugin_dir_url( dirname( __FILE__ ) ) . '/style.css', array(), false, 'all' );
     wp_enqueue_script( 'jquery' );

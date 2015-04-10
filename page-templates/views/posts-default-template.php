@@ -18,4 +18,4 @@ wp_head(); ?>
     the_content();
 endwhile; endif; ?>
 </div>
-<?php wp_footer() ?>
+<?php wp_footer();
