@@ -94,7 +94,10 @@ HTML;
         foreach ( $posts as $post ){
           $image_attributes   = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ) ); // returns an array
           $content            = $post->post_content;
+          // Take the image tag src attribute from the content and store it in pics variable
+          //(?<!_)negative lookbehind  [\'"] match either ' or " (abc)capture group \1 backreference to group #1
           preg_match_all( '/(?<!_)src=([\'"])?(.*?)\\1/', $content, $pics );
+          print_r( $pics );
           $page_feature_image = get_post_meta( $post->ID, 'page_feature_image', true );
           $kiosk_end_date     = get_post_meta( $post->ID, 'kiosk-end-date', true );
           $today              = strtotime( date( 'd-m-Y' ) );
