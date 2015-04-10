@@ -17,16 +17,24 @@ class KioskPostsTest extends WP_UnitTestCase {
   function test_kiosk_posts_short_should_have_the_correct_number_of_entries() {
     $this->assertTrue( shortcode_exists( 'kiosk-posts' ) );
 
-    // Test no limit
+    // Test no tags
     $content = do_shortcode( '[kiosk-posts]' );
-    $this->assertEquals( '', $content, 'Empty string should be returned when no limit is provided' );
+    $this->assertContains( 'kiosk-slider-caption carousel-caption', $content, 'Return all posts when no tags provided' );
 
-    // Test 0
-    $content = do_shortcode( '[kiosk-posts tags='']' );
-    $this->assertEquals( '', $content, 'Empty string should be returned when passed empty string' );
+    // Test empty tag
+    $content = do_shortcode( '[kiosk-posts tags=""]' );
+    $this->assertContains( 'kiosk-slider-caption carousel-caption', $content, 'Return all posts when empty string passed on tags' );
 
-    // Test 1
-    $content = do_shortcode( '[kiosk-posts tags="Kiosk,SSS,kiosk-sss-lounge,SOS,kiosk-sos"' );
+    // Test with tags
+    $content = do_shortcode( '[kiosk-posts tags="Kiosk"]' );
     $this->assertContains( 'kiosk-slider-caption carousel-caption', $content );
+
+    // Test with multipe tags
+    $content = do_shortcode( '[kiosk-posts tags="Kiosk,SOS,SSS,kisok,abc,linux,windows"]' );
+    $this->assertContains( 'kiosk-slider-caption carousel-caption', $content );
+
+    // Test with wrong tags
+    $content = do_shortcode( '[kiosk-posts tags="no tags with this name"]' );
+    $this->assertNotContains( 'kiosk-slider-caption carousel-caption', $content );
   }
 }
