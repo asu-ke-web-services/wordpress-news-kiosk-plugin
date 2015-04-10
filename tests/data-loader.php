@@ -50,3 +50,4 @@ insert_feature_image__and_kisok_end_date( 'Title 1', 'Content 1', 'post', 'Kiosk
 insert_feature_image__and_kisok_end_date( 'Title 2', 'Content 2 <img src="/wp-content/uploads/Desert.jpg">', 'post', 'Kiosk', '30-04-2016', '', '' );
 insert_feature_image__and_kisok_end_date( 'Title 3', 'Content 3', 'post', 'SSS', '30-04-2016', '/wp-content/uploads/Desert.jpg', '' );
 insert_feature_image__and_kisok_end_date( 'Title 4', 'Content 4', 'post', 'Kiosk', '30-04-2016', '', '/wp-content/uploads/Desert.jpg', '' );
+insert_feature_image__and_kisok_end_date( 'Title 4', 'Content 4', 'post', 'Kiosk', '03-04-2014', '', '/wp-content/uploads/Desert.jpg', '' );
