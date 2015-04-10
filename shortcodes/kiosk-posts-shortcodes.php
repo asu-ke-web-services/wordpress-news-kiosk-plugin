@@ -53,11 +53,9 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
    * or image with custom field and not expired
    */
   public function kiosk_posts( $atts, $content = null ) {
-    $image_regex           = '/(?<!_)src=([\'"])?(.*?)\\1/';
     $current_post_count    = 0;
     $limit                 = 20;
     $cureent_offset_posts  = 0;
-    $exit_while            = false;
     $atts                  = shortcode_atts(
         array(
           'tags'  => '',
@@ -78,9 +76,8 @@ HTML;
       <div id="kiosk-slider" class="carousel slide" data-ride="carousel">
          <ol class="kiosk-slider carousel-indicators">
 HTML;
-
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
-
+    $exit_while            = false;
     while ( ! $exit_while ) {
       $query_post_options  = array(
         'post_type'        => array( 'attachment', 'page', 'post' ),
@@ -91,14 +88,13 @@ HTML;
         'offset'           => $cureent_offset_posts,
         'post_status'      => 'publish',
       );
-
       $cureent_offset_posts       = $cureent_offset_posts + $limit;
       $posts              = get_posts( $query_post_options );
       if ( $posts ) {
         foreach ( $posts as $post ){
           $image_attributes   = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ) ); // returns an array
           $content            = $post->post_content;
-          preg_match_all( $image_regex, $content, $pics );
+          preg_match_all( '/(?<!_)src=([\'"])?(.*?)\\1/', $content, $pics );
           $page_feature_image = get_post_meta( $post->ID, 'page_feature_image', true );
           $kiosk_end_date     = get_post_meta( $post->ID, 'kiosk-end-date', true );
           $today              = strtotime( date( 'd-m-Y' ) );
@@ -107,7 +103,6 @@ HTML;
           if ( empty($expiration_date) || $expiration_date < $today ) { // if expiration date is in the past
             continue;
           }
-
           if ( 0 == $current_post_count ){
             $div_listitems_active = ' class = "active" ';
             $div_slider_active    = ' active ';
@@ -115,7 +110,6 @@ HTML;
             $div_listitems_active = '';
             $div_slider_active    = '';
           }
-
           //Check if featured image is present or not
           if ( $image_attributes ){
             $div_listitems .= sprintf(
@@ -131,7 +125,6 @@ HTML;
                 apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
-
             //Check if posts had images in its body
           }else if ( ! empty($pics[2]) ) {
             $div_listitems .= sprintf(
