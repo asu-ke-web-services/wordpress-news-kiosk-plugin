@@ -12,16 +12,16 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   exit();
 }
 
-class Posts_Page_Templates extends Base_Registrar {
+class Kiosk_Page_Templates extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
   protected $templates;
 
 
   public function __construct() {
-    $this->plugin_slug = 'kiosk-post-page-template';
+    $this->plugin_slug = 'kiosk-page-template';
     $this->version = '0.1';
-    $this->templates = array( 'posts-default-template.php' => 'KIOSK' );
+    $this->templates = array( 'kiosk-default-template.php' => 'KIOSK' );
 
     $this->load_dependencies();
     $this->define_hooks();
@@ -32,15 +32,8 @@ class Posts_Page_Templates extends Base_Registrar {
   }
 
   public function define_hooks() {
-    $this->add_filter( 'page_attributes_dropdown_pages_args', $this, 'page_attributes_dropdown_pages_args' );
     $this->add_filter( 'wp_insert_post_data', $this, 'wp_insert_post_data' );
     $this->add_filter( 'template_include', $this, 'template_include' );
-  }
-
-  public function page_attributes_dropdown_pages_args( $atts ) {
-    $this->register_project_templates();
-
-    return $atts;
   }
 
   public function wp_insert_post_data( $atts ) {

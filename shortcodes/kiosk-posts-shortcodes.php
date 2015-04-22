@@ -62,19 +62,19 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    $kiosk_template      = '<li %s data-target="#kiosk-slider" data-slide-to="%d"></li>';
-    $kiosk_item_template = <<<HTML
+    $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
+    $kiosk_events_item_template = <<<HTML
     <div class="item %s">
       <img src="%s" class="img-responsive img-thumbnail" alt="%s"/>
-      <div class="kiosk-slider-caption carousel-caption">
+      <div class="kiosk_events_caption carousel-caption">
        <h3>%s</h3>
       </div>
     </div>
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk-slider" class="carousel slide" data-ride="carousel">
-         <ol class="kiosk-slider carousel-indicators">
+      <div id="kiosk_events_slider" class="carousel slide" data-ride="carousel">
+         <ol class="kiosk_events_slider_ol carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     $exit_while            = false;
@@ -102,7 +102,7 @@ HTML;
           $today              = strtotime( date( 'd-m-Y' ) );
           $expiration_date    = strtotime( $kiosk_end_date );
           //Do not show posts which are expired or doesn't have expiration date specified
-          if ( empty($expiration_date) || $expiration_date < $today ) { // if expiration date is in the past
+          if ( empty( $expiration_date ) || $expiration_date < $today ) { // if expiration date is in the past
             continue;
           }
           if ( 0 == $current_post_count ){
@@ -115,12 +115,12 @@ HTML;
           //Check if featured image is present or not
           if ( $image_attributes ){
             $div_listitems .= sprintf(
-                $kiosk_template,
+                $kiosk_events_template,
                 $div_listitems_active,
                 $current_post_count
             );
             $div_sliders   .= sprintf(
-                $kiosk_item_template,
+                $kiosk_events_item_template,
                 $div_slider_active,
                 $image_attributes[0],
                 $post->post_title,
@@ -130,12 +130,12 @@ HTML;
             //Check if posts had images in its body
           }else if ( ! empty($pics[2]) ) {
             $div_listitems .= sprintf(
-                $kiosk_template,
+                $kiosk_events_template,
                 $div_listitems_active,
                 $current_post_count
             );
             $div_sliders   .= sprintf(
-                $kiosk_item_template,
+                $kiosk_events_item_template,
                 $div_slider_active,
                 $pics[2][0],
                 $post->post_title,
@@ -143,23 +143,23 @@ HTML;
             );
             $current_post_count++;
             //Check if page_feature_image custom field has image and if it absolute else make absolute url from relative url //TO DO
-          }else if ( ! empty($page_feature_image) ){
+          }else if ( ! empty( $page_feature_image ) ){
             if ( parse_url( $page_feature_image, PHP_URL_SCHEME ) == '' ) {
               $page_feature_image = home_url( $page_feature_image );
             }
-             $div_listitems .= sprintf(
-                 $kiosk_template,
-                 $div_listitems_active,
-                 $current_post_count
-             );
-             $div_sliders   .= sprintf(
-                 $kiosk_item_template,
-                 $div_slider_active,
-                 $page_feature_image,
-                 $post->post_title,
-                 apply_filters( 'the_title', $post->post_title )
-             );
-             $current_post_count++;
+            $div_listitems .= sprintf(
+                $kiosk_events_template,
+                $div_listitems_active,
+                $current_post_count
+            );
+            $div_sliders   .= sprintf(
+                $kiosk_events_item_template,
+                $div_slider_active,
+                $page_feature_image,
+                $post->post_title,
+                apply_filters( 'the_title', $post->post_title )
+            );
+            $current_post_count++;
           }
         }
       }else {

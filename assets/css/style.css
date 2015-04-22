@@ -3,8 +3,227 @@
  * Copyright 2015 ASU
  * ======================================================================== */
 
-#kiosk-slider > .carousel-indicators li { visibility: hidden; }
-.carousel-caption {
-        padding-bottom: 1px;
-    }
+.kiosk_events_slider_ol{ 
+  visibility: hidden;
+}
+#kiosk_events_slider{
+  margin-top: 3em;
+  height: 100%;
+}
+
+#kiosk_events_slider h3{
+  color: #ffffff;
+}
+#kiosk_gallery_slider h3{
+  color: #ffffff;
+}
+.kiosk_news_slider_ol{
+ visibility: hidden
+}
+.kiosk_gallery_slider_ol{ 
+  visibility: hidden; 
+}
+#kisok_page_template{
+  font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
+  font-size: 100%;
+  color: #333;
+  background-image: url("../images/bg-display.jpg");
+}
+
+#kisok_page_template h1{
+  margin: 0;
+  font-weight: normal;
+}
+.kiosk_calendar_icon {
+  font-size: 1em; /* change kiosk_calendar_icon size */
+  display: inline-block;
+  position: relative;
+  width: 9em;
+  height: 8em;
+  background-color: #fff;
+  margin: 2em auto 0.5em;
+  border-radius: 0.1em;
+  border : 0.3em solid #818486;
+  overflow: hidden;
+  float: right;
+}
+
+.kiosk_calendar_icon *{
+  display: inline-block;
+  width: 100%;
+  font-size: 1em;
+  font-weight: bold;
+  font-style: normal;
+  text-align: center;
+}
+
+.kiosk_calendar_icon strong{
+  position: absolute;
+  top: 0;
+  padding: 0.4em 0;
+  color: #fff;
+  background-color: #A20B09;
+  border-bottom: 1px;
+  box-shadow: 0 2px 0;
+}
+
+
+.kiosk_calendar_icon span{
+  width: 100%;
+  font-size: 3em;
+  letter-spacing: -0.05em;
+  padding-top: 0.8em;
+  color: #2f2f2f;
+}
+.kiosk_display_time{
+  font-size: 1em; /* change kiosk_calendar_icon size */
+  display: inline-block;
+  position: relative;
+  margin: 4em auto 0.5em;
+  overflow: hidden;
+
+}
+.kiosk_display_time p{
+  font-family: Verdana,Verdana,Geneva,sans-serif;
+  color: #900;
+  font-size: 2em;
+  font-weight: bold;
+  width: 100%;
+}
+.kiosk_asu_school_sustaintabilty_logo{
+
+  position: relative;
+  margin: 2em auto;
+}
+.kiosk_asu_school_sustaintabilty_logo p{
+  font-family: Verdana,Verdana,Geneva,sans-serif;
+  font-size:2em;
+  color: #ffffff;
+  font-weight: bolder;
+  overflow: hidden;
+}
+.kiosk_news{
+  margin-top: 2em;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 5px solid #FFB310;
+  overflow: hidden;
+  height: 500px;
+  background-image: url("../images/asunews_vimeotag.png"),url("../images/asunews_grass.png");
+  background-repeat: no-repeat;
+  background-position: left top, center bottom;
+}
+.kiosk_news h3{
+  margin-top: 5em;
+}
+.kiosk_news p{
+  margin-bottom: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+
+}
+#kiosk_news_slider{  
+  overflow: hidden;
+}
+.kiosk_tweets{
+box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+border: 5px solid #FFB310;
+border-radius: 25px;
+height: 500px;
+overflow: hidden;
+z-index: 3;
+margin-top: 2em;
+background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
+position: absolute;
+}
+.kiosk_tweets_scrollContainer {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.kiosk_tweets_scrollContainer:last-child {
+    border-bottom-width: 0;
+}
+/* Header */
+.kiosk_tweets_timelineHeader {
+    padding: 10px;
+    position: relative;
+}
+.kiosk_tweets_twitterLogo {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    text-indent: -9999;
+    display: inline-block;
+    vertical-align: middle;
+    background: transparent url('../images/twitter-bird.png') no-repeat center;
+    background-size: 100%;
+}
+/* List item */
+.kiosk_tweets_tweet {
+    clear: both;
+    overflow: hidden;
+    padding: 10px;
+}
+.kiosk_tweets_list{
+  position: relative;
+}
+/* Columns */
+.kiosk_tweets_avatar {
+    float: left;
+}
+.kiosk_tweets_details {
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.kiosk_tweets_permalink {
+    position: relative;
+    float: right;
+    z-index: 10;
+}
+.kiosk_tweets_header {
+    position: relative;
+}
+.kiosk_tweets_header:before, .kiosk_tweets_header:after {
+    display: table;
+    content: "";
+}
+.kiosk_tweets_header:after {
+    clear: both;
+}
+.kiosk_tweets_large {
+    width: 73px;
+    height: 73px; 
+}
+.kiosk_tweets_small {
+    width: 48px;
+    height: 48px;
+}
+.kiosk_tweets_fullName {
+    padding-right: 10px;
+}
+
+.kiosk_tweets_text {
+    padding: 0;
+    margin: 0 5px 0 0;
+    overflow: hidden;
+    clear: both;
+    word-wrap: break-word;
+}
+.kiosk_tweets_retweet {
+    margin: 3px 0;
+}
+.kiosk_tweets_retweetIcon {
+    width: 14px;
+    height: 16px;
+    margin-right: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    background: transparent url('../images/retweet.png') no-repeat center;
+}
+
+
 /*# sourceMappingURL=style.css.map */
