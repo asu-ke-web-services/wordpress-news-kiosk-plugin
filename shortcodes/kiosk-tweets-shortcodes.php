@@ -150,7 +150,6 @@ HTML;
     $reg_exHash           = '/#([a-z_0-9]+)/i';
     $reg_exUser           = '/@([a-z_0-9]+)/i';
     $kisok_tweet_items    = '';
-    $kiosk_tweets_retweet = '';
     foreach ( $decode as $tweet ) {
         $tweet_text         = $tweet['text']; //get the tweet
         $tweet_screen_name  = $tweet['user']['screen_name'];
@@ -172,6 +171,8 @@ HTML;
             $tweet_text_retweet_link,
             $tweet_text_retweet_by
         );
+      }else {        
+        $kiosk_tweets_retweet = '';
       }
       // make links link to URL
       if ( preg_match( $reg_exUrl, $tweet_text, $url ) ) {
