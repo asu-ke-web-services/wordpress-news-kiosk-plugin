@@ -43,6 +43,7 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with slider from rss feed to display as slider
+   * To add feed from other urls update $feed_urls_array we can improve by accepting associative array
    *
    */
   public function kiosk_slider( $atts, $content = null ) {
@@ -111,7 +112,7 @@ HTML;
             $div_sliders  .= sprintf(
                 $kiosk_gallery_slider_item_template,
                 $div_slider_active,
-                str_replace( '_m.jpg', '_b.jpg', $res[1] ),
+                str_replace( '_m.jpg', '_b.jpg', $res[1] ), // updating to pic large quality image
                 $res[7],
                 $res[7]
             );

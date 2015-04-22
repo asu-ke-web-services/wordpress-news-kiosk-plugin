@@ -171,7 +171,7 @@ HTML;
             $tweet_text_retweet_link,
             $tweet_text_retweet_by
         );
-      }else {        
+      }else {
         $kiosk_tweets_retweet = '';
       }
       // make links link to URL

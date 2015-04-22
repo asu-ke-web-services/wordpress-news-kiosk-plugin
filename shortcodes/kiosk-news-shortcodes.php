@@ -67,10 +67,10 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
 
     // Fix any markup we destroyed
     $tidy_config = array(
-     'clean' => true,
-     'output-xhtml' => true,
+     'clean'          => true,
+     'output-xhtml'   => true,
      'show-body-only' => true,
-     'wrap' => 0,
+     'wrap'           => 0,
     );
 
     $tidy = tidy_parse_string( $content, $tidy_config, 'UTF8' );
@@ -83,17 +83,19 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
+   * Add more feed data my updating $feed_urls_array variable
+   * can be updated to accept as associative array which makes flexible
    *
    */
   public function kiosk_news( $atts, $content = null ) {
-    $current_count_feed    = 0;
+    $current_count_feed = 0;
     $feed_urls_array    = array(
       'https://asunews.asu.edu/taxonomy/term/153/all/feed',
       'https://asunews.asu.edu/taxonomy/term/178/all/feed',
       'https://asunews.asu.edu/taxonomy/term/358/all/feed',
       'https://asunews.asu.edu/taxonomy/term/40/all/feed',
     );
-    $current_post_count = 0;
+    $current_post_count       = 0;
     $kiosk_news_template      = '<li %s data-target="#kiosk_news_slider" data-slide-to="%d"></li>';
     $kiosk_news_item_template = <<<HTML
     <div class="item %s">
@@ -110,17 +112,17 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_news_slider" class="carousel slide" data-ride="carousel">
+      <div id="kiosk_news_slider" class="carousel slide kiosk_news_slider" data-ride="carousel">
          <ol class="kiosk_news_slider_ol carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
-    for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
-      if ( function_exists( 'fetch_feed' ) ) {
+    if ( function_exists( 'fetch_feed' ) ) {
         include_once( ABSPATH . WPINC . '/feed.php' );               // include the required file
-      }else {
-        error_log( 'Required file missing to import feed' );
-        break;
-      }
+    }else {
+      error_log( 'Required file missing to import feed' );
+      return '';
+    }
+    for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
       $feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
         //$current_count_feed = $feed->get_item_quantity($current_count_feed); // specify number of items
