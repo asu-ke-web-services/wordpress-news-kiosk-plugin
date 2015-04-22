@@ -116,7 +116,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
             <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
 HTML;
           $kiosk_tweets_item_template = <<<HTML
-              <li class="tweet item separator">
+              <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
                 <div class="kiosk_tweets_avatar">
                   <a target="_blank" href="https://twitter.com/%s">
                     <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large">

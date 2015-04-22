@@ -162,7 +162,7 @@ position: absolute;
     background-size: 100%;
 }
 /* List item */
-.kiosk_tweets_tweet {
+.kiosk_tweet {
     clear: both;
     overflow: hidden;
     padding: 10px;
