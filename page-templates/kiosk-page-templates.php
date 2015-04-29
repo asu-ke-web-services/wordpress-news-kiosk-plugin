@@ -32,19 +32,21 @@ class Kiosk_Page_Templates extends Base_Registrar {
   }
 
   public function define_hooks() {
+    $this->add_filter( 'page_attributes_dropdown_pages_args', $this, 'page_attributes_dropdown_pages_args' );
     $this->add_filter( 'wp_insert_post_data', $this, 'wp_insert_post_data' );
     $this->add_filter( 'template_include', $this, 'template_include' );
   }
-
+  public function page_attributes_dropdown_pages_args( $atts ) {
+    $this->register_project_templates();
+    return $atts;
+  }
   public function wp_insert_post_data( $atts ) {
     $this->register_project_templates();
-
     return $atts;
   }
 
   public function template_include( $template ) {
     global $post;
-
     if ( $post === null ) {
       return $template;
     }

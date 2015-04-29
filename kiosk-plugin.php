@@ -32,7 +32,7 @@ function setup_kiosk_wp_plugin() {
 
   // Verify kiosk api version
   // Mo version checking for now
-
+  // Require all the files for the Gios_Api
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
@@ -43,8 +43,10 @@ function setup_kiosk_wp_plugin() {
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-time-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-title-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'page-templates/kiosk-page-templates.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
+  require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
 
   // ===================
   // Plugin Registration
@@ -73,11 +75,14 @@ function setup_kiosk_wp_plugin() {
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Tweets_Shortcodes();
   $posts_shortcodes->run();
 
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Weather_Shortcodes();
+  $posts_shortcodes->run();
+
   // =====
   // Admin
   // =====
-  $general_admin          = new \Kiosk_WP\General_Admin();
-  $posts_admin           = new \Kiosk_WP\Posts_Admin( $general_admin );
+  $general_admin    = new \Kiosk_WP\General_Admin();
+  $posts_admin      = new \Kiosk_WP\Posts_Admin( $general_admin );
   $general_admin->run();
   $posts_admin->run();
 

@@ -31,7 +31,6 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
    * @override
    */
   public function load_dependencies() {
-    require_once( plugin_dir_path( __FILE__ ) . '../helpers/base-path-helper.php' );
   }
 
   public function define_hooks() {

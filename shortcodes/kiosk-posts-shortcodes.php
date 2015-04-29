@@ -31,7 +31,6 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
    * @override
    */
   public function load_dependencies() {
-    require_once( plugin_dir_path( __FILE__ ) . '../helpers/base-path-helper.php' );
   }
 
   public function define_hooks() {
@@ -73,7 +72,7 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_events_slider" class="carousel slide" data-ride="carousel">
+      <div id="kiosk_events_slider" class="kiosk_events_slider carousel slide" data-ride="carousel">
          <ol class="kiosk_events_slider_ol carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';

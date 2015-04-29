@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Title Shortcode functionality.
+ * Tweets Shortcode functionality.
  *
  * Provides shortcodes for users to use in Wordpress
  *
@@ -19,6 +19,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
 
   protected $plugin_slug;
   protected $version;
+  protected $localsettings = array();
 
   public function __construct()  {
     $this->plugin_slug = 'kiosk-tweets-shortcodes';
@@ -31,120 +32,75 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    * @override
    */
   public function load_dependencies() {
-    require_once( plugin_dir_path( __FILE__ ) . '../helpers/base-path-helper.php' );
+    // file must be present to include account settings;
+    if ( file_exists( plugin_dir_path( __FILE__ ) . '../localsettings.php' ) ) {
+      require( plugin_dir_path( __FILE__ ) . '../localsettings.php' );
+      $this->localsettings = $localsettings;
+    }
   }
 
   public function define_hooks() {
     $this->add_shortcode( 'kiosk-tweets', $this, 'kiosk_tweets' );
   }
 
-  /**
-   * [kiosk_tweets]
-   *
-   * @param $atts array
-   * Generates a <div> tag with tweets
-   * update twitter_handle, oauth_access_token, oauth_access_token_secret,
-   * consumer_key,consumer_secret
-   * with required account details
-   *
-   */
-  public function kiosk_tweets( $atts, $content = null ) {
-
-    $twitter_handle            = 'chasethenag420';
-    $oauth_access_token        = '100546785-KSMdrNdNcj28JaI3n34pnJvwcJdfPcTFck6Eew60';
-    $oauth_access_token_secret = '0aaJGj42M5kuVqIwUMfgLZcsrWS1nAL5DRRV5hRHM2Nwi';
-    $consumer_key              = 'moCOwkmNe6nYwBRqU6olIWI9W';
-    $consumer_secret           = 'zdmg40gSxw0ZV1mtkrzsLBR1MzndnO7AgSUtQpeFV16QLlczZC';
-    $twitter_api_url                       = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-    function build_base_string( $baseURI, $method, $params ) {
-      $r = array();
-      ksort( $params );
-      foreach ( $params as $key => $value ){
-        $r[] = "$key=" . rawurlencode( $value );
-      }
-      return $method . '&' . rawurlencode( $baseURI ) . '&' . rawurlencode( implode( '&', $r ) );
+  function create_base_url( $baseURI, $method, $params ) {
+    $r = array();
+    ksort( $params );
+    foreach ( $params as $key => $value ){
+      $r[] = "$key=" . rawurlencode( $value );
     }
+    return $method . '&' . rawurlencode( $baseURI ) . '&' . rawurlencode( implode( '&', $r ) );
+  }
 
-    function build_authorization_header( $oauth ) {
-      $r = 'Authorization: OAuth ';
-      $values = array();
-      foreach ( $oauth as $key => $value ) {
-        $values[] = "$key=\"" . rawurlencode( $value ) . '"';
-      }
-      $r .= implode( ', ', $values );
-      return $r;
+  function create_request_header( $oauth ) {
+    $r = 'Authorization: OAuth ';
+    $values = array();
+    foreach ( $oauth as $key => $value ) {
+      $values[] = "$key=\"" . rawurlencode( $value ) . '"';
     }
-    $oauth = array(
-    'oauth_consumer_key'      => $consumer_key,
-     'oauth_nonce'            => time(),
-     'oauth_signature_method' => 'HMAC-SHA1',
-     'oauth_token'            => $oauth_access_token,
-     'oauth_timestamp'        => time(),
-     'oauth_version'          => '1.0',
-     'screen_name'            => $twitter_handle,
-    );
+    $r .= implode( ', ', $values );
+    return $r;
+  }
 
-    $base_info        = build_base_string( $twitter_api_url, 'GET', $oauth );
-    $composite_key    = rawurlencode( $consumer_secret ) . '&' . rawurlencode( $oauth_access_token_secret );
-    $oauth_signature  = base64_encode( hash_hmac( 'sha1', $base_info, $composite_key, true ) );
-    $oauth['oauth_signature'] = $oauth_signature;
-
-    // Make Requests
-    $header = array(
-      build_authorization_header( $oauth ),
-      'Content-Type: application/json',
-      'Expect:',
-    );
-    $options = array(
-      CURLOPT_HTTPHEADER     => $header,
-      CURLOPT_HEADER         => false,
-      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle,
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_SSL_VERIFYPEER => false,
-    );
-          $feed   = curl_init();
-          curl_setopt_array( $feed, $options );
-          $json   = curl_exec( $feed );
-          curl_close( $feed );
-          $decode = json_decode( $json, true ); //getting the file content as array
-          $kiosk_tweets_header_template = <<<HTML
-          <div class="kiosk_tweets_timelineHeader">
-             <h1 class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</h1>
-              <a class="kiosk_tweets_twitterLogo" href="https://twitter.com/" title="Twitter" target="_blank">Twitter</a>
+  function kiosk_parse_tweets( $decode ){
+    $kiosk_tweets_header_template = <<<HTML
+    <div class="kiosk_tweets_timelineHeader">
+       <h1 class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</h1>
+        <a class="kiosk_tweets_twitterLogo" href="https://twitter.com/" title="Twitter" target="_blank">Twitter</a>
+    </div>
+    <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
+      <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
+HTML;
+    $kiosk_tweets_item_template = <<<HTML
+        <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
+          <div class="kiosk_tweets_avatar">
+            <a target="_blank" href="https://twitter.com/%s">
+              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large">
+            </a>
           </div>
-          <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
-            <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
+          <div class="kiosk_tweets_details">
+            <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style">
+              <time class="date">%s</time>
+            </a>
+            <div class="kiosk_tweets_header">
+              <a target="_blank" href="https://twitter.com/%s">
+               <span class="kiosk_tweets_fullName kiosk_tweets_font_style">%s</span>
+               <span class="kiosk_tweets_userName kiosk_tweets_font_style">@%s</span>
+              </a>
+            </div>
+            <div class="kiosk_tweets_content">
+              <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
+            </div>
+         </li>
 HTML;
-          $kiosk_tweets_item_template = <<<HTML
-              <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
-                <div class="kiosk_tweets_avatar">
-                  <a target="_blank" href="https://twitter.com/%s">
-                    <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large">
-                  </a>
-                </div>
-                <div class="kiosk_tweets_details">
-                  <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style">
-                    <time class="date">%s</time>
-                  </a>
-                  <div class="kiosk_tweets_header">
-                    <a target="_blank" href="https://twitter.com/%s">
-                     <span class="kiosk_tweets_fullName kiosk_tweets_font_style">%s</span>
-                     <span class="kiosk_tweets_userName kiosk_tweets_font_style">@%s</span>
-                    </a>
-                  </div>
-                  <div class="kiosk_tweets_content">
-                    <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
-                  </div>
-               </li>
+    $kiosk_tweets_retweet_template = <<<HTML
+        <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
+          <i class="kiosk_tweets_retweetIcon"></i>Retweeted by <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
+        </div>
 HTML;
-          $kiosk_tweets_retweet_template = <<<HTML
-              <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
-                <i class="kiosk_tweets_retweetIcon"></i>Retweeted by <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
-              </div>
-HTML;
-        $kiosk_tweets_footer_template = <<<HTML
-              </ol>
-           </div>
+    $kiosk_tweets_footer_template = <<<HTML
+          </ol>
+       </div>
 HTML;
     $reg_exUrl            = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
     $reg_exHash           = '/#([a-z_0-9]+)/i';
@@ -204,5 +160,59 @@ HTML;
       $kisok_tweet_items = $kisok_tweet_items.$kisok_tweet;
     }
     return $kiosk_tweets_header_template.$kisok_tweet_items.$kiosk_tweets_footer_template;
+  }
+
+  /**
+   * [kiosk_tweets]
+   *
+   * @param $atts array
+   * Generates a <div> tag with tweets
+   * update twitter_handle, oauth_access_token, oauth_access_token_secret,
+   * consumer_key,consumer_secret
+   * with required account details in localsettings.php
+   *
+   */
+  public function kiosk_tweets( $atts, $content = null ) {
+
+    $twitter_handle            = $this->localsettings['twitter_handle'];
+    $oauth_access_token        = $this->localsettings['oauth_access_token'];
+    $oauth_access_token_secret = $this->localsettings['oauth_access_token_secret'];
+    $consumer_key              = $this->localsettings['consumer_key'];
+    $consumer_secret           = $this->localsettings['consumer_secret'];
+    $twitter_api_url           = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+    $oauth                     = array(
+     'oauth_consumer_key'      => $consumer_key,
+     'oauth_nonce'            => time(),
+     'oauth_signature_method' => 'HMAC-SHA1',
+     'oauth_token'            => $oauth_access_token,
+     'oauth_timestamp'        => time(),
+     'oauth_version'          => '1.0',
+     'screen_name'            => $twitter_handle,
+    );
+
+    $base_info        = $this->create_base_url( $twitter_api_url, 'GET', $oauth );
+    $composite_key    = rawurlencode( $consumer_secret ) . '&' . rawurlencode( $oauth_access_token_secret );
+    $oauth_signature  = base64_encode( hash_hmac( 'sha1', $base_info, $composite_key, true ) );
+    $oauth['oauth_signature'] = $oauth_signature;
+
+    // Make Requests
+    $header = array(
+      $this->create_request_header( $oauth ),
+      'Content-Type: application/json',
+      'Expect:',
+    );
+    $options = array(
+      CURLOPT_HTTPHEADER     => $header,
+      CURLOPT_HEADER         => false,
+      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_SSL_VERIFYPEER => false,
+    );
+    $feed   = curl_init();
+    curl_setopt_array( $feed, $options );
+    $json   = curl_exec( $feed );
+    curl_close( $feed );
+    $decode = json_decode( $json, true ); //getting the file content as array
+    return $this->kiosk_parse_tweets( $decode );
   }
 }

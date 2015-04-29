@@ -6,15 +6,18 @@
 .kiosk_events_slider_ol{ 
   visibility: hidden;
 }
-#kiosk_events_slider{
+.kiosk_events_slider{
   margin-top: 3em;
   height: 100%;
 }
 
-#kiosk_events_slider h3{
+.kiosk_events_slider h3{
   color: #ffffff;
 }
-#kiosk_gallery_slider h3{
+.kiosk_gallery_slider_caption h3{
+  color: #ffffff;
+}
+.kiosk_gallery_slider h3{
   color: #ffffff;
 }
 .kiosk_news_slider_ol{
@@ -23,14 +26,14 @@
 .kiosk_gallery_slider_ol{ 
   visibility: hidden; 
 }
-#kisok_page_template{
+.kisok_page_template{
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 100%;
   color: #333;
   background-image: url("../images/bg-display.jpg");
 }
 
-#kisok_page_template h1{
+.kisok_page_template h1{
   margin: 0;
   font-weight: normal;
 }
@@ -89,6 +92,7 @@
   font-size: 2em;
   font-weight: bold;
   width: 100%;
+  margin: 0.1em;
 }
 .kiosk_asu_school_sustaintabilty_logo{
 
@@ -122,107 +126,137 @@
   margin-right: 0.5em;
 
 }
-#kiosk_news_slider{  
+.kiosk_news_slider{  
   overflow: hidden;
 }
+.kiosk_weather{
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+  border-radius: 25px;
+  height: 240px;
+  overflow: hidden;
+  z-index: 3;
+  margin-top: 2em;
+  background: none repeat scroll 0% 0% rgba(106, 168, 79, 0.76); 
+  position: relative;
+}
+.kiosk_weather_forecast_block h5{
+  color: #ffffff;
+}
+.kiosk_weather_location{
+  font-size: 2em;
+  color: #fff;
+}
+.kiosk_weather_current_image{
+  width: 100%;
+  max-height: 100%;
+  margin-top: 3em; 
+}
+.kiosk_weather_current{
+  color: #fff;
+  text-align: center;
+}
+.kiosk_weather_forecast_block{
+  color: #fff;
+}
 .kiosk_tweets{
-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
-border: 5px solid #FFB310;
-border-radius: 25px;
-height: 500px;
-overflow: hidden;
-z-index: 3;
-margin-top: 2em;
-background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
-position: absolute;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+  border-radius: 25px;
+  height: 550px;
+  overflow: hidden;
+  z-index: 3;
+  margin-top: 2em;
+  background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
+  position: relative;
 }
 .kiosk_tweets_scrollContainer {
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .kiosk_tweets_scrollContainer:last-child {
-    border-bottom-width: 0;
+  border-bottom-width: 0;
 }
 /* Header */
 .kiosk_tweets_timelineHeader {
-    padding: 10px;
-    position: relative;
+  padding: 10px;
+  position: relative;
 }
 .kiosk_tweets_twitterLogo {
-    position: absolute;
-    top: 0px;
-    right: 10px;
-    width: 50px;
-    height: 50px;
-    text-indent: -9999;
-    display: inline-block;
-    vertical-align: middle;
-    background: transparent url('../images/twitter-bird.png') no-repeat center;
-    background-size: 100%;
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  text-indent: -9999;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent url('../images/twitter-bird.png') no-repeat center;
+  background-size: 100%;
 }
 /* List item */
 .kiosk_tweet {
-    clear: both;
-    overflow: hidden;
-    padding: 10px;
+  clear: both;
+  overflow: hidden;
+  padding: 10px;
 }
 .kiosk_tweets_list{
   position: relative;
 }
 /* Columns */
 .kiosk_tweets_avatar {
-    float: left;
+  float: left;
 }
 .kiosk_tweets_details {
-    overflow: hidden;
-    padding-left: 10px;
+  overflow: hidden;
+  padding-left: 10px;
 }
 
 .kiosk_tweets_permalink {
-    position: relative;
-    float: right;
-    z-index: 10;
+  position: relative;
+  float: right;
+  z-index: 10;
 }
 .kiosk_tweets_header {
-    position: relative;
+  position: relative;
 }
 .kiosk_tweets_header:before, .kiosk_tweets_header:after {
-    display: table;
-    content: "";
+  display: table;
+  content: "";
 }
 .kiosk_tweets_header:after {
-    clear: both;
+  clear: both;
 }
 .kiosk_tweets_large {
-    width: 73px;
-    height: 73px; 
+  width: 73px;
+  height: 73px; 
 }
 .kiosk_tweets_small {
-    width: 48px;
-    height: 48px;
+  width: 48px;
+  height: 48px;
 }
 .kiosk_tweets_fullName {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .kiosk_tweets_text {
-    padding: 0;
-    margin: 0 5px 0 0;
-    overflow: hidden;
-    clear: both;
-    word-wrap: break-word;
+  padding: 0;
+  margin: 0 5px 0 0;
+  overflow: hidden;
+  clear: both;
+  word-wrap: break-word;
 }
 .kiosk_tweets_retweet {
-    margin: 3px 0;
+  margin: 3px 0;
 }
 .kiosk_tweets_retweetIcon {
-    width: 14px;
-    height: 16px;
-    margin-right: 4px;
-    display: inline-block;
-    vertical-align: middle;
-    background: transparent url('../images/retweet.png') no-repeat center;
+  width: 14px;
+  height: 16px;
+  margin-right: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent url('../images/retweet.png') no-repeat center;
 }
 
 
