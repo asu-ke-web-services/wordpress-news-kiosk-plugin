@@ -216,7 +216,5 @@ HTML;
     $decode = json_decode( $json, true ); //getting the file content as array
     $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode ) . '</div>';
     return $kiosk_tweets_div;
-
-
   }
 }

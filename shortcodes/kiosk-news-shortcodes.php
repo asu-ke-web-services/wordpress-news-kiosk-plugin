@@ -54,7 +54,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     if ( true == strpos( $content, 'read more' ) ){
       $content = substr_replace( $content,'',strpos( $content, 'read more' ) );
     }
-    $content = trim ( $content );
+    $content = trim( $content );
     // If we only have 1 paragraph and less than $words words, reset the content
     // to the full event content
     if ( count( explode( ' ', $content ) ) < $words ) {
@@ -63,7 +63,6 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
       // We have some trimming to do
       $content = implode( ' ', array_slice( explode( ' ', $content ), 0, $words ) );
       $content = trim( $content );
-      
       if ( substr( $content, -1 ) == '.' ) {
         $content .= '..';
       } else {
@@ -107,9 +106,9 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    $feed = explode(',', $atts['feed']);
-    for ( $i = 0 ; $i < count($feed) ; $i++) {
-      $feed_number = $feed[ $i ];     
+    $feed = explode( ',', $atts['feed'] );
+    for ( $i = 0 ; $i < count( $feed ); $i++ ) {
+      $feed_number = $feed[ $i ];
       $feed_urls_array[ $i ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
     }
     $current_post_count       = 0;

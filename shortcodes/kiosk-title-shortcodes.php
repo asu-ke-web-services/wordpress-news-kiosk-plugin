@@ -51,7 +51,7 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
       <img src="wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png" class="img-responsive"/>
       </div>
 HTML;
-$kiosk_title_div = '<div class="kiosk_title">' . $asu_title . '</div>';
+    $kiosk_title_div = '<div class="kiosk_title">' . $asu_title . '</div>';
     return $kiosk_title_div;
   }
 }
