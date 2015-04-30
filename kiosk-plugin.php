@@ -32,7 +32,7 @@ function setup_kiosk_wp_plugin() {
 
   // Verify kiosk api version
   // Mo version checking for now
-  // Require all the files for the Gios_Api
+  // Require all the files for the Kiosk plugin
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
