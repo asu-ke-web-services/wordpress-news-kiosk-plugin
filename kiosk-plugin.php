@@ -32,16 +32,21 @@ function setup_kiosk_wp_plugin() {
 
   // Verify kiosk api version
   // Mo version checking for now
-
+  // Require all the files for the Kiosk plugin
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-posts-shortcodes.php';
-  //require_once plugin_dir_path( __FILE__ ) . 'pages/posts-pages.php';
-  require_once plugin_dir_path( __FILE__ ) . 'page-templates/posts-page-templates.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-news-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-slider-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-time-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-title-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'page-templates/kiosk-page-templates.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
-  require_once plugin_dir_path( __FILE__ ) . 'globals/ratio-slim-feature-images.php';
+  require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
 
   // ===================
   // Plugin Registration
@@ -55,24 +60,36 @@ function setup_kiosk_wp_plugin() {
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes();
   $posts_shortcodes->run();
 
-  // =====
-  // Pages
-  // =====
-  // $posts_pages = new \Kiosk_WP\Posts_Pages();
-  // $posts_pages->run();
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_News_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Slider_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Time_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Title_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Tweets_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Weather_Shortcodes();
+  $posts_shortcodes->run();
 
   // =====
   // Admin
   // =====
-  $general_admin          = new \Kiosk_WP\General_Admin();
-  $posts_admin           = new \Kiosk_WP\Posts_Admin( $general_admin );
+  $general_admin    = new \Kiosk_WP\General_Admin();
+  $posts_admin      = new \Kiosk_WP\Posts_Admin( $general_admin );
   $general_admin->run();
   $posts_admin->run();
 
   // ==============
   // Page Templates
   // ==============
-  $posts_page_templates = new \Kiosk_WP\Posts_Page_Templates();
+  $posts_page_templates = new \Kiosk_WP\Kiosk_Page_Templates();
   $posts_page_templates->run();
 
   // =============
@@ -81,7 +98,5 @@ function setup_kiosk_wp_plugin() {
   $css_styles = new \Kiosk_WP\CSS_Styles();
   $css_styles->run();
 
-  $feature = new \Kiosk_WP\Ratio_Slim_Feature_Images();
-  $feature->run();
 }
 setup_kiosk_wp_plugin();
