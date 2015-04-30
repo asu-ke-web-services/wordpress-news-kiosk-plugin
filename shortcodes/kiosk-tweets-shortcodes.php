@@ -75,7 +75,7 @@ HTML;
         <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
           <div class="kiosk_tweets_avatar">
             <a target="_blank" href="https://twitter.com/%s">
-              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt="">
+              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt=""/>
             </a>
           </div>
           <div class="kiosk_tweets_details">
