@@ -126,6 +126,7 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-    return $div_listitems;
+     $kiosk_slider_div = '<div class="kiosk_slider">' . $div_listitems . '</div>';
+    return $kiosk_slider_div;
   }
 }

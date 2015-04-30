@@ -31,31 +31,43 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * @override
    */
   public function load_dependencies() {
+    if ( function_exists( 'fetch_feed' ) ) {
+        include_once( ABSPATH . WPINC . '/feed.php' ); // include the required file to pull feed
+    }else {
+      error_log( 'Required file missing to import feed' );
+      return '';
+    }
   }
 
   public function define_hooks() {
-    $this->add_shortcode( 'kiosk-news', $this, 'kiosk_news' );
+    $this->add_shortcode( 'kiosk-asu-news', $this, 'kiosk_asu_news' );
   }
   /**
    * Excerpt. Uses the excerpt if it is set, otherwise uses the main body if it is
    * less than 50 words.
    */
   public function content_excerpt( $contentExcerpt, $words = 50 ) {
-    $content = $contentExcerpt;
+    $content = strip_tags( $contentExcerpt );
+    if ( true == strpos( $content, 'Article source:' ) ){
+      $content = substr_replace( $content,'',strpos( $content, 'Article source:' ) );
+    }
+    if ( true == strpos( $content, 'read more' ) ){
+      $content = substr_replace( $content,'',strpos( $content, 'read more' ) );
+    }
+    $content = trim ( $content );
     // If we only have 1 paragraph and less than $words words, reset the content
     // to the full event content
     if ( count( explode( ' ', $content ) ) < $words ) {
-      return $contentExcerpt;
-    } else {
+        return $content;
+    }else {
       // We have some trimming to do
       $content = implode( ' ', array_slice( explode( ' ', $content ), 0, $words ) );
       $content = trim( $content );
-      if ( true != strpos( $content,'read more' ) ) {
-        if ( substr( $content, -1 ) == '.' ) {
-          $content .= '..';
-        } else {
-          $content .= '...';
-        }
+      
+      if ( substr( $content, -1 ) == '.' ) {
+        $content .= '..';
+      } else {
+        $content .= '...';
       }
     }
 
@@ -78,7 +90,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     return '' . $tidy;
   }
   /**
-   * [kiosk_news]
+   * [kiosk_asu_news]
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
@@ -86,19 +98,25 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * can be updated to accept as associative array which makes flexible
    *
    */
-  public function kiosk_news( $atts, $content = null ) {
+  public function kiosk_asu_news( $atts, $content = null ) {
     $current_count_feed = 0;
-    $feed_urls_array    = array(
-      'https://asunews.asu.edu/taxonomy/term/153/all/feed',
-      'https://asunews.asu.edu/taxonomy/term/178/all/feed',
-      'https://asunews.asu.edu/taxonomy/term/358/all/feed',
-      'https://asunews.asu.edu/taxonomy/term/40/all/feed',
+    $atts = shortcode_atts(
+        array(
+          'feed'  => '153,178,358,40',
+          'limit' => '20',
+        ),
+        $atts
     );
+    $feed = explode(',', $atts['feed']);
+    for ( $i = 0 ; $i < count($feed) ; $i++) {
+      $feed_number = $feed[ $i ];     
+      $feed_urls_array[ $i ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
+    }
     $current_post_count       = 0;
-    $kiosk_news_template      = '<li %s data-target="#kiosk_news_slider" data-slide-to="%d"></li>';
-    $kiosk_news_item_template = <<<HTML
+    $kiosk_asu_news_template      = '<li %s data-target="#kiosk_asu_news_slider" data-slide-to="%d"></li>';
+    $kiosk_asu_news_item_template = <<<HTML
     <div class="item %s">
-      <div>
+      <div class="kiosk_asu_news_header">
         <a href="%s" title="%s"><h3><p>%s</p></h3></a>
         </div>
       <div>
@@ -111,16 +129,10 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_news_slider" class="carousel slide kiosk_news_slider" data-ride="carousel">
-         <ol class="kiosk_news_slider_ol carousel-indicators">
+      <div id="kiosk_asu_news_slider" class="carousel slide kiosk_asu_news_slider" data-ride="carousel">
+         <ol class="kiosk_asu_news_slider_ol carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
-    if ( function_exists( 'fetch_feed' ) ) {
-        include_once( ABSPATH . WPINC . '/feed.php' );               // include the required file
-    }else {
-      error_log( 'Required file missing to import feed' );
-      return '';
-    }
     for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
       $feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
@@ -146,13 +158,13 @@ HTML;
           }
 
           $div_listitems .= sprintf(
-              $kiosk_news_template,
+              $kiosk_asu_news_template,
               $div_listitems_active,
               $current_post_count
           );
 
           $div_sliders  .= sprintf(
-              $kiosk_news_item_template,
+              $kiosk_asu_news_item_template,
               $div_slider_active,
               $item->get_permalink(),
               $item->get_title(),
@@ -169,6 +181,7 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-    return $div_listitems;
+     $kiosk_asu_news_div = '<div class="kiosk_asu_news">' . $div_listitems . '</div>';
+    return $kiosk_asu_news_div;
   }
 }

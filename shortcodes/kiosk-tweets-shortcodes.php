@@ -75,7 +75,7 @@ HTML;
         <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
           <div class="kiosk_tweets_avatar">
             <a target="_blank" href="https://twitter.com/%s">
-              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large">
+              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt="">
             </a>
           </div>
           <div class="kiosk_tweets_details">
@@ -91,7 +91,8 @@ HTML;
             <div class="kiosk_tweets_content">
               <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
             </div>
-         </li>
+          </div>
+        </li>
 HTML;
     $kiosk_tweets_retweet_template = <<<HTML
         <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
@@ -213,6 +214,9 @@ HTML;
     $json   = curl_exec( $feed );
     curl_close( $feed );
     $decode = json_decode( $json, true ); //getting the file content as array
-    return $this->kiosk_parse_tweets( $decode );
+    $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode ) . '</div>';
+    return $kiosk_tweets_div;
+
+
   }
 }

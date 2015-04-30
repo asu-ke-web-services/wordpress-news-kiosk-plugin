@@ -170,6 +170,7 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-    return ( 0 == $current_post_count ? '' : $div_listitems );
+    $kiosk_events_div = '<div class="kiosk_events">' . $div_listitems . '</div>';
+    return ( 0 == $current_post_count ? '' : $kiosk_events_div );
   }
 }

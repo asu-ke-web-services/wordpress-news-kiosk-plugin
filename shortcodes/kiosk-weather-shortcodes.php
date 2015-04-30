@@ -119,6 +119,7 @@ HTML;
     $json = curl_exec( $session );
     // Convert JSON to PHP array
     $json_weather = json_decode( $json, true );
-    return $this->kiosk_parse_weather( $json_weather );
+    $kiosk_weather_div = '<div class="kiosk_weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
+    return $kiosk_weather_div;
   }
 }

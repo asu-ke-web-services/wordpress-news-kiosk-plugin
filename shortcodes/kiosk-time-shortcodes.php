@@ -48,7 +48,7 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
 
     $calender_template = <<<HTML
     <div class="row">
-      <div class="kiosk_display_cal col-md-6">
+      <div class="kiosk_display_cal  col-md-6">
         <time  class="kiosk_calendar_icon">
           <strong>%s</strong>
           <span>%s</span>
@@ -69,6 +69,7 @@ HTML;
         $dayOfMonth,
         $current_time
     );
-    return $calender_time;
+    $kiosk_time_div = '<div class="kiosk_time">' . $calender_time . '</div>';
+    return $kiosk_time_div;
   }
 }

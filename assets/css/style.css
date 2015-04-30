@@ -20,7 +20,7 @@
 .kiosk_gallery_slider h3{
   color: #ffffff;
 }
-.kiosk_news_slider_ol{
+.kiosk_asu_news_slider_ol{
  visibility: hidden
 }
 .kiosk_gallery_slider_ol{ 
@@ -106,7 +106,7 @@
   font-weight: bolder;
   overflow: hidden;
 }
-.kiosk_news{
+.kiosk_asu_news{
   margin-top: 2em;
   background-color: #ffffff;
   border-radius: 25px;
@@ -117,18 +117,19 @@
   background-repeat: no-repeat;
   background-position: left top, center bottom;
 }
-.kiosk_news h3{
-  margin-top: 5em;
+.kiosk_asu_news h3{
+  margin-top: 6em;
 }
-.kiosk_news p{
+.kiosk_asu_news p{
   margin-bottom: 0.5em;
   margin-left: 0.5em;
   margin-right: 0.5em;
 
 }
-.kiosk_news_slider{  
+.kiosk_asu_news_slider{  
   overflow: hidden;
 }
+
 .kiosk_weather{
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
