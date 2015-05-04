@@ -8,7 +8,7 @@
 }
 .kiosk_events_slider{
   margin-top: 3em;
-  height: 100%;
+  width: 100%;
 }
 
 .kiosk_events_slider h3{
@@ -106,13 +106,18 @@
   font-weight: bolder;
   overflow: hidden;
 }
+.kiosk_title{
+  width: 100%;
+  height: 12%;
+}
 .kiosk_asu_news{
   margin-top: 2em;
   background-color: #ffffff;
   border-radius: 25px;
   border: 5px solid #FFB310;
   overflow: hidden;
-  height: 500px;
+  width: 100%;
+  height: 44%;
   background-image: url("../images/asunews_vimeotag.png"),url("../images/asunews_grass.png");
   background-repeat: no-repeat;
   background-position: left top, center bottom;
@@ -129,18 +134,31 @@
 .kiosk_asu_news_slider{  
   overflow: hidden;
 }
+.kiosk_slider{
+  width: 100%;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+
+}
 
 .kiosk_weather{
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
   border-radius: 25px;
-  height: 240px;
+  height: 22%;
+  width: 100%;
   overflow: hidden;
   z-index: 3;
   margin-top: 2em;
   background: none repeat scroll 0% 0% rgba(106, 168, 79, 0.76); 
   position: relative;
 }
+    
+.kiosk_weather [class*='col-']:not(:first-child),.kiosk_weather [class*='col-']:not(:last-child) {
+  padding-right:0;
+  padding-left:0;
+}
+
 .kiosk_weather_forecast_block h5{
   color: #ffffff;
 }
@@ -149,8 +167,8 @@
   color: #fff;
 }
 .kiosk_weather_current_image{
-  width: 100%;
-  max-height: 100%;
+  width: 5em;
+  height: 5em;
   margin-top: 3em; 
 }
 .kiosk_weather_current{
@@ -164,7 +182,8 @@
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
   border-radius: 25px;
-  height: 550px;
+  width: 100%;
+  height: 49%;
   overflow: hidden;
   z-index: 3;
   margin-top: 2em;
@@ -172,7 +191,6 @@
   position: relative;
 }
 .kiosk_tweets_scrollContainer {
-  height: 100%;
   position: relative;
   overflow: hidden;
 }
@@ -188,9 +206,8 @@
   position: absolute;
   top: 0px;
   right: 10px;
-  width: 50px;
-  height: 50px;
-  text-indent: -9999;
+  width: 3em;
+  height: 4em;
   display: inline-block;
   vertical-align: middle;
   background: transparent url('../images/twitter-bird.png') no-repeat center;
@@ -222,10 +239,7 @@
 .kiosk_tweets_header {
   position: relative;
 }
-.kiosk_tweets_header:before, .kiosk_tweets_header:after {
-  display: table;
-  content: "";
-}
+
 .kiosk_tweets_header:after {
   clear: both;
 }

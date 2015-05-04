@@ -14,7 +14,7 @@ var size=$('.kiosk_tweets_item').size();
 
 })($('.kiosk_tweets_item'));
 }
-
+//resetfaded();
 scrollTweets();
 
 function resetfaded(jq){
