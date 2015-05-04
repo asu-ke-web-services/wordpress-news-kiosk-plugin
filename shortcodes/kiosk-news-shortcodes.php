@@ -88,6 +88,36 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
 
     return '' . $tidy;
   }
+
+  public function rss_sort_asc($a, $b)
+  {
+    $a_startDate = strtotime( $a->get_date() );
+    $b_startDate = strtotime( $b->get_date() );
+    if ( $a_startDate == $b_startDate ) {
+      return 0;
+    }
+    return ( $a_startDate < $b_startDate ) ? 1 : -1;
+  }
+  public function remove_duplicates_rss( $rss ){
+    /* new length of modified array */
+    $newlength = 1;
+    $length = count( $rss );
+    for ( $i = 1; $i < $length; $i++ ){
+
+      for ( $j = 0; $j < $newlength ; $j++ ){
+        if ( $rss[ $i ]->get_title() == $rss[ $j ]->get_title() ){
+          break;
+        }
+      }
+      /* if none of the values in index[0..j] of array is not same as array[i],
+      then copy the current value to corresponding new position in array */
+      if ( $j == $newlength ){
+        $rss[ $newlength++ ] = $rss[ $i ];
+      }
+    }
+    return array_slice( $rss, 0, $newlength - 1 );
+  }
+
   /**
    * [kiosk_asu_news]
    *
@@ -98,7 +128,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_asu_news( $atts, $content = null ) {
-    $current_count_feed = 0;
+    $total_feed_count = 0;
     $atts = shortcode_atts(
         array(
           'feed'  => '153,178,358,40',
@@ -107,6 +137,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
         $atts
     );
     $feed = explode( ',', $atts['feed'] );
+    $limit = $atts['limit'];
     for ( $i = 0 ; $i < count( $feed ); $i++ ) {
       $feed_number = $feed[ $i ];
       $feed_urls_array[ $i ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
@@ -132,50 +163,54 @@ HTML;
          <ol class="kiosk_asu_news_slider_ol carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
+    $items = [];
     for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
       $feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
-        //$current_count_feed = $feed->get_item_quantity($current_count_feed); // specify number of items
-        $items = $feed->get_items( 0 ); // create an array of items
-        $current_count_feed = $current_count_feed + count( $items );
+        $items = array_merge( $items, $feed->get_items( 0 ) ); // create an array of items
+        $total_feed_count = $total_feed_count + count( $items );
       endif;
-      if ( 0 == $current_count_feed ){
+      // If feed is not avaialable and tried all the feed urls show as feed unavailable else try next feed url
+      if ( 0 == $total_feed_count ){
         if ( $feed_element == count( $feed_urls_array ) - 1 ){
           $div_sliders .= '<div>The feed is either empty or unavailable.</div>';
         }else {
           continue;
         }
       }
-      else {
-        foreach ( $items as $item ) :
-          if ( 0 == $current_post_count ) {
-            $div_listitems_active = ' class = "active" ';
-            $div_slider_active    = ' active ';
-          }else {
-            $div_listitems_active = '';
-            $div_slider_active    = '';
-          }
-
-          $div_listitems .= sprintf(
-              $kiosk_asu_news_template,
-              $div_listitems_active,
-              $current_post_count
-          );
-
-          $div_sliders  .= sprintf(
-              $kiosk_asu_news_item_template,
-              $div_slider_active,
-              $item->get_permalink(),
-              $item->get_title(),
-              $item->get_title(),
-              $item->get_date( 'j F Y @ g:i a' ),
-              $this->content_excerpt( $item->get_description(),50 )
-          );
-
-          $current_post_count++;
-        endforeach;
-      }
     }
+    usort( $items, array( $this, 'rss_sort_asc' ) );
+    $items = $this->remove_duplicates_rss( $items );
+    //  else {
+    for ( $current_feed = 0; ( $current_feed < $limit ) && ( $current_feed <= $total_feed_count ); $current_feed++ ){
+      $item = $items[ $current_feed ];
+      if ( 0 == $current_post_count ) {
+        $div_listitems_active = ' class = "active" ';
+        $div_slider_active    = ' active ';
+      }else {
+        $div_listitems_active = '';
+        $div_slider_active    = '';
+      }
+
+      $div_listitems .= sprintf(
+          $kiosk_asu_news_template,
+          $div_listitems_active,
+          $current_post_count
+      );
+
+      $div_sliders  .= sprintf(
+          $kiosk_asu_news_item_template,
+          $div_slider_active,
+          $item->get_permalink(),
+          $item->get_title(),
+          $item->get_title(),
+          $item->get_date( 'j F Y @ g:i a' ),
+          $this->content_excerpt( $item->get_description(),50 )
+      );
+
+      $current_post_count++;
+    }
+    //}
      $div_listitems .= '</ol>';
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
