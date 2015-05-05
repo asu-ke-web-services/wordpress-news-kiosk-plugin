@@ -27,14 +27,14 @@ class KioskPostsTest extends WP_UnitTestCase {
 
     // Test with tags
     $content = do_shortcode( '[kiosk-posts tags="Kiosk"]' );
-    $this->assertContains( 'kiosk_events_caption carousel-caption', $content );
+    $this->assertContains( 'kiosk_events_caption carousel-caption', $content, 'Return all posts with kisok tags' );
 
     // Test with multipe tags
     $content = do_shortcode( '[kiosk-posts tags="Kiosk,SOS,SSS,kisok,abc,linux,windows"]' );
-    $this->assertContains( 'kiosk_events_caption carousel-caption', $content );
+    $this->assertContains( 'kiosk_events_caption carousel-caption', $content,'Return all posts with kisok Kiosk,SOS,SSS,kisok,abc,linux,windows' );
 
     // Test with wrong tags
     $content = do_shortcode( '[kiosk-posts tags="no tags with this name"]' );
-    $this->assertNotContains( 'kiosk_events_caption carousel-caption', $content );
+    $this->assertNotContains( 'kiosk_events_caption carousel-caption', $content, 'Do not return any posts' );
   }
 }

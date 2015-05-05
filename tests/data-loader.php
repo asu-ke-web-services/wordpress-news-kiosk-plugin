@@ -43,7 +43,6 @@ function insert_feature_image__and_kisok_end_date(){
   add_post_meta( $new_post_id, 'kiosk-end-date', $kiosk_end_date );
   add_post_meta( $new_post_id, 'page_feature_image', $page_feature_image );
   $attach_id = wp_insert_attachment( $attachment, $feature_image_path, $new_post_id );
-
 }
 // Use date format d-m-y
 insert_feature_image__and_kisok_end_date( 'Title 1', 'Content 1', 'post', 'Kiosk', '12-12-2016', '/wp-content/uploads/Desert.jpg', '/wp-content/uploads/Desert.jpg' );

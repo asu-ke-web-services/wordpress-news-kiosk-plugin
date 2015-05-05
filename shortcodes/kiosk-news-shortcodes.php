@@ -89,7 +89,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     return '' . $tidy;
   }
 
-  public function rss_sort_asc($a, $b)
+  public function rss_sort_date_dsc($a, $b)
   {
     $a_startDate = strtotime( $a->get_date() );
     $b_startDate = strtotime( $b->get_date() );
@@ -119,7 +119,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_asu_news]
+   * [kiosk_asu_news limit='20' feed='153,178,358,40']
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
@@ -179,10 +179,10 @@ HTML;
         }
       }
     }
-    usort( $items, array( $this, 'rss_sort_asc' ) );
+    usort( $items, array( $this, 'rss_sort_date_dsc' ) );
     $items = $this->remove_duplicates_rss( $items );
-    //  else {
-    for ( $current_feed = 0; ( $current_feed < $limit ) && ( $current_feed <= $total_feed_count ); $current_feed++ ){
+    $new_total_feed_count = count( $items );
+    for ( $current_feed = 0; ( $current_feed < $limit ) && $new_total_feed_count > 0 && ( $current_feed < $new_total_feed_count ); $current_feed++ ){
       $item = $items[ $current_feed ];
       if ( 0 == $current_post_count ) {
         $div_listitems_active = ' class = "active" ';
@@ -210,12 +210,11 @@ HTML;
 
       $current_post_count++;
     }
-    //}
      $div_listitems .= '</ol>';
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
      $kiosk_asu_news_div = '<div class="kiosk_asu_news">' . $div_listitems . '</div>';
-    return $kiosk_asu_news_div;
+    return $new_total_feed_count > 0 ? $kiosk_asu_news_div : '';
   }
 }
