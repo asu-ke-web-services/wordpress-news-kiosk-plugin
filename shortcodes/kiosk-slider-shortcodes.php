@@ -31,6 +31,12 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
    * @override
    */
   public function load_dependencies() {
+    if ( function_exists( 'fetch_feed' ) ) {
+      include_once(ABSPATH . WPINC . '/feed.php');               // include the required file
+    }else {
+      error_log( 'Required file missing to import feed' );
+      return '';
+    }
   }
 
   public function define_hooks() {
@@ -74,12 +80,6 @@ HTML;
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ){
-      if ( function_exists( 'fetch_feed' ) ) {
-        include_once(ABSPATH . WPINC . '/feed.php');               // include the required file
-      }else {
-        error_log( 'Required file missing to import feed' );
-        break;
-      }
       $items = [];
       $feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly

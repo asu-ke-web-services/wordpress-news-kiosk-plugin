@@ -119,7 +119,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_asu_news limit='20' feed='153,178,358,40']
+   * [kiosk_asu_news limit='20' feed='153,178,358,40' content_limit='50']
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
@@ -133,11 +133,13 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
         array(
           'feed'  => '153,178,358,40',
           'limit' => '20',
+          'content_limit' => '50',
         ),
         $atts
     );
     $feed = explode( ',', $atts['feed'] );
     $limit = $atts['limit'];
+    $content_limit = $atts['content_limit'];
     for ( $i = 0 ; $i < count( $feed ); $i++ ) {
       $feed_number = $feed[ $i ];
       $feed_urls_array[ $i ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
@@ -149,10 +151,10 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
       <div class="kiosk_asu_news_header">
         <a href="%s" title="%s"><h3><p>%s</p></h3></a>
         </div>
-      <div>
+      <div class="kiosk_asu_news_time">
         <p>%s</p>
       </div>
-      <div>
+      <div class="kiosk_asu_news_content">
         <p>%s</p>
       </div>
     </div>
@@ -205,7 +207,7 @@ HTML;
           $item->get_title(),
           $item->get_title(),
           $item->get_date( 'j F Y @ g:i a' ),
-          $this->content_excerpt( $item->get_description(),50 )
+          $this->content_excerpt( $item->get_description(), $content_limit )
       );
 
       $current_post_count++;

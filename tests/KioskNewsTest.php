@@ -22,6 +22,12 @@ class KioskNewsTest extends WP_UnitTestCase {
     // Test limit tag
     $content = do_shortcode( '[kiosk-asu-news limit="20"]' );
     $this->assertContains( 'kiosk_asu_news_slider', $content, 'Returns asu news items' );
+    $numberOfEvents = substr_count( $content, '<li' );
+    $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 news items' );
+
+    // Test with content_limit tag
+    $content = do_shortcode( '[kiosk-asu-news content_limit="10"]' );
+    $this->assertContains( 'kiosk_asu_news_slider', $content, 'Returns asu news items' );
 
     // Test with feed tag
     $content = do_shortcode( '[kiosk-asu-news feed="153,40,358"]' );
@@ -30,6 +36,8 @@ class KioskNewsTest extends WP_UnitTestCase {
     // Test with multipe tags
     $content = do_shortcode( '[kiosk-asu-news feed="153,40,358" limit="5" ]' );
     $this->assertContains( 'kiosk_asu_news_slider', $content, 'Returns asu news items' );
+    $numberOfEvents = substr_count( $content, '<li' );
+    $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 news items' );
 
     // Test with wrong feed value
     $content = do_shortcode( '[kiosk-asu-news feed="3213131"]' );

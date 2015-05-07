@@ -120,7 +120,8 @@
   height: 44%;
   background-image: url("../images/asunews_vimeotag.png"),url("../images/asunews_grass.png");
   background-repeat: no-repeat;
-  background-position: left top, center bottom;
+  background-position: 10px 20px, center bottom;
+
 }
 .kiosk_asu_news h3{
   margin-top: 6em;
@@ -183,35 +184,57 @@
   border: 5px solid #FFB310;
   border-radius: 25px;
   width: 100%;
-  height: 49%;
+  height: 550px;
   overflow: hidden;
   z-index: 3;
   margin-top: 2em;
   background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
   position: relative;
+  color: #fff;
 }
 .kiosk_tweets_scrollContainer {
   position: relative;
   overflow: hidden;
-}
-.kiosk_tweets_scrollContainer:last-child {
-  border-bottom-width: 0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  height: 430px;
 }
 /* Header */
 .kiosk_tweets_timelineHeader {
+  --padding: 10px;
+  position: relative;
+  color: #fff;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 60px;
+}
+.kiosk_tweets_timelineTitle{
   padding: 10px;
   position: relative;
+  color: #fff;
+  font-size: 2.5em;
 }
 .kiosk_tweets_twitterLogo {
   position: absolute;
-  top: 0px;
+  top: 10px;
   right: 10px;
   width: 3em;
-  height: 4em;
   display: inline-block;
   vertical-align: middle;
   background: transparent url('../images/twitter-bird.png') no-repeat center;
   background-size: 100%;
+  color: #fff;
+  z-index: -1;
+}
+.kiosk_tweets_font_style {
+  border-bottom: 1px;
+  color: #ffffff;
+
+}
+
+.kiosk_tweets_hyper_link,.kiosk_tweets_hash_tag,.kiosk_tweets_at{
+  color: #029;
 }
 /* List item */
 .kiosk_tweet {
@@ -221,6 +244,8 @@
 }
 .kiosk_tweets_list{
   position: relative;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 /* Columns */
 .kiosk_tweets_avatar {
@@ -238,6 +263,7 @@
 }
 .kiosk_tweets_header {
   position: relative;
+  color: #fff;
 }
 
 .kiosk_tweets_header:after {
@@ -256,7 +282,7 @@
 }
 
 .kiosk_tweets_text {
-  padding: 0;
+  padding-right: 10px;
   margin: 0 5px 0 0;
   overflow: hidden;
   clear: both;

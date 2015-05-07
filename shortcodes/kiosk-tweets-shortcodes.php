@@ -65,8 +65,8 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   function kiosk_parse_tweets( $decode ){
     $kiosk_tweets_header_template = <<<HTML
     <div class="kiosk_tweets_timelineHeader">
-       <h1 class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</h1>
-        <a class="kiosk_tweets_twitterLogo" href="https://twitter.com/" title="Twitter" target="_blank">Twitter</a>
+       <b class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</b>
+        <p class="kiosk_tweets_twitterLogo"  title="Twitter" target="_blank">Twitter</p>
     </div>
     <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
       <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
@@ -74,19 +74,17 @@ HTML;
     $kiosk_tweets_item_template = <<<HTML
         <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
           <div class="kiosk_tweets_avatar">
-            <a target="_blank" href="https://twitter.com/%s">
+            <a class="kiosk_tweets_font_style" target="_blank" href="https://twitter.com/%s">
               <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt=""/>
             </a>
           </div>
           <div class="kiosk_tweets_details">
-            <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style">
+            <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style kiosk_tweets_font_style">
               <time class="date">%s</time>
             </a>
             <div class="kiosk_tweets_header">
-              <a target="_blank" href="https://twitter.com/%s">
-               <span class="kiosk_tweets_fullName kiosk_tweets_font_style">%s</span>
-               <span class="kiosk_tweets_userName kiosk_tweets_font_style">@%s</span>
-              </a>
+               <div class="kiosk_tweets_fullName">%s</div>
+               <div class="kiosk_tweets_userName">@%s</div>
             </div>
             <div class="kiosk_tweets_content">
               <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
@@ -122,7 +120,7 @@ HTML;
         $tweet_date_time         = date_format( date_create( $tweet['retweeted_status']['created_at'] ),'d M' );
         $tweet_status_link       = $tweet['retweeted_status']['id_str'];
         $tweet_text_retweet_link = $tweet['retweeted_status']['user']['profile_image_url'];
-        $tweet_text_retweet_by   = $tweet['retweeted_status']['user']['screen_name'];
+        $tweet_text_retweet_by   = $tweet['user']['screen_name'];
         $kiosk_tweets_retweet    = sprintf(
             $kiosk_tweets_retweet_template,
             $tweet_text_retweet_link,
@@ -134,16 +132,16 @@ HTML;
       // make links link to URL
       if ( preg_match( $reg_exUrl, $tweet_text, $url ) ) {
         // make the urls hyper links
-        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk_tweets_font_style\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk_tweets_font_style kiosk_tweets_hyper_link\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
       }
       if ( preg_match( $reg_exHash, $tweet_text, $hash ) ) {
         // make the hash tags hyper links
-        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk_tweets_font_style\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk_tweets_font_style kiosk_tweets_hash_tag\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
         // swap out the # in the URL to make %23
         $tweet_text = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
       }
       if ( preg_match( $reg_exUser, $tweet_text, $user ) ) {
-        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk_tweets_font_style\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
+        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk_tweets_font_style kiosk_tweets_at\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
       }
       $kisok_tweet = sprintf(
           $kiosk_tweets_item_template,
@@ -152,7 +150,7 @@ HTML;
           $tweet_screen_name,
           $tweet_status_link,
           $tweet_date_time,
-          $tweet_screen_name,
+          //$tweet_screen_name,
           $tweet_full_name,
           $tweet_screen_name,
           $tweet_text,
