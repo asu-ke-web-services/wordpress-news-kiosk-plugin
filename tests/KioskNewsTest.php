@@ -38,9 +38,5 @@ class KioskNewsTest extends WP_UnitTestCase {
     $this->assertContains( 'kiosk_asu_news_slider', $content, 'Returns asu news items' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 news items' );
-
-    // Test with wrong feed value
-    $content = do_shortcode( '[kiosk-asu-news feed="3213131"]' );
-    $this->assertNotContains( 'kiosk_asu_news_slider', $content, 'Should not return any news items' );
   }
 }
