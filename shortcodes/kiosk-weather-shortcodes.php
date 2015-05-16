@@ -49,14 +49,14 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
     $current_condition_temp = $json_weather['query']['results']['channel']['item']['condition']['temp'];
 
     $current_weather_div_template = <<<HTML
-      <img class="kiosk_weather_current_image" src="http://l.yimg.com/a/i/us/we/52/%s.gif"/>
+      <img class='kiosk_weather_current_image' src='http://l.yimg.com/a/i/us/we/52/%s.gif' >
       <p><b>%s<sup>o</sup>%s</b></p>
 HTML;
 
     $forecast_weather_block_template = <<<HTML
-      <div class="kiosk_weather_forecast_block col-md-4">
+      <div class='kiosk_weather_forecast_block col-xs-4'>
         <h5>%s</h5>
-        <img class="kiosk_weather_forecast_block_image" src="http://l.yimg.com/a/i/us/we/52/%s.gif"/>
+        <img class='kiosk_weather_forecast_block_image' src='http://l.yimg.com/a/i/us/we/52/%s.gif' >
         <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
       </div>
 HTML;
@@ -81,13 +81,13 @@ HTML;
     $weather_div = <<<HTML
     <div class="container-fluid">
       <div class="row">
-          <div class="kiosk_weather_current col-md-3">
+          <div class="kiosk_weather_current col-xs-3">
           %s
           </div>
-          <div class="kiosk_weather_forecast col-md-9">
+          <div class="kiosk_weather_forecast col-xs-9">
             <div class="container-fluid">
               <div class ="row">
-                <div class="kiosk_weather_location">
+                <div class="kiosk_weather_location col-xs-12">
                   <b>%s</b>
                 </div>
               </div>

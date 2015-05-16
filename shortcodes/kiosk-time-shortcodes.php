@@ -55,10 +55,11 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
         </time>
       </div>
       <div class="kiosk_display_time col-md-6">
-        <p>%s</p>
+        <p id="kiosk_display_time">%s</p>
       </div>
     </div>
 HTML;
+
     date_default_timezone_set( 'America/Phoenix' );
     $month = date( 'M' );
     $dayOfMonth = date( 'd' );
@@ -69,7 +70,7 @@ HTML;
         $dayOfMonth,
         $current_time
     );
-    $kiosk_time_div = '<div class="kiosk_time">' . $calender_time . '</div>';
+    $kiosk_time_div = '<div class="kiosk_time" id="kiosk_time">' . $calender_time . '</div>';
     return $kiosk_time_div;
   }
 }
