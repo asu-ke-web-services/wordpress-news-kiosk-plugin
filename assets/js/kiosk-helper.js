@@ -94,7 +94,7 @@ function kioskTweetTime() {
     });
     var t = setTimeout(function() {
         kioskTweetTime()
-    }, 5000);
+    }, 10000);
 
 }
 kioskTweetTime();

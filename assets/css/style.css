@@ -50,8 +50,7 @@
     
     display: inline-block;
     position: relative;
-    width: 70%;
-    height: 12%;
+    --width: 100px;
     background-color: #fff;
     margin: 20% 0% 10% 2%;
     border-radius: 0.1em;
@@ -72,7 +71,7 @@
 .kiosk_calendar_icon strong {
     position: absolute;
     top: 0;
-    padding: 0.4em 0;
+    padding: 0.4em;
     color: #fff;
     background-color: #A20B09;
     border-bottom: 1px;
@@ -87,7 +86,7 @@
     width: 100%;
     font-size: 3em;
     letter-spacing: -0.05em;
-    padding-top: 0.8em;
+    padding: 40px 30px 10px 30px;
     color: #2f2f2f;
 }
 
@@ -136,6 +135,7 @@
     overflow: hidden;
     width: 100%;
     height: 40%;
+    min-height: 500px;
     background-image: url("../images/asunews_vimeotag.png"), url("../images/asunews_grass.png");
     background-repeat: no-repeat;
     background-position: 10px 20px, center bottom;
@@ -215,6 +215,7 @@
     border-radius: 25px;
     width: 100%;
     height: 48%;
+    min-height: 500px;
     overflow: hidden;
     z-index: 3;
     margin-top: 2em;
