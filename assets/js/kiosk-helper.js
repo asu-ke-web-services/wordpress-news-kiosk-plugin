@@ -51,7 +51,7 @@ $(document).ready(function() {
 // To start carousel effect after reload (fix)
 function startCarousel() {
     $('.carousel').carousel({
-        interval: 3000
+        interval: 10000
     });
 }
 startCarousel();

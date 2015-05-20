@@ -87,7 +87,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $kiosk_tweets_header_template = <<<HTML
     <div class="kiosk_tweets_timelineHeader">
        <b class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</b>
-        <p class="kiosk_tweets_twitterLogo"  title="Twitter" target="_blank">Twitter</p>
+       <p class="kiosk_tweets_twitterLogo"  title="Twitter" target="_blank">Twitter</p>
     </div>
     <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
       <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
@@ -96,27 +96,30 @@ HTML;
         <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
           <div class="kiosk_tweets_avatar">
             <a class="kiosk_tweets_font_style" target="_blank" href="https://twitter.com/%s">
-              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt=""/>
+              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt="">
             </a>
           </div>
           <div class="kiosk_tweets_details">
-            <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style kiosk_tweets_font_style">
-              <p class="kiosk_date">%s</p>
-              <p class="kiosk_actualtweettime">%s</p>
-            </a>
+            <div class=" kiosk_tweets_permalink kiosk_tweets_timestamp_font_style kiosk_tweets_font_style">
+              <div class="kiosk_date">%s</div>
+              <div class="kiosk_actualtweettime">%s</div>
+            </div>
             <div class="kiosk_tweets_header">
                <div class="kiosk_tweets_fullName">%s</div>
                <div class="kiosk_tweets_userName">@%s</div>
             </div>
             <div class="kiosk_tweets_content">
-              <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
+              <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> 
+              <div>%s</div>
             </div>
           </div>
         </li>
 HTML;
     $kiosk_tweets_retweet_template = <<<HTML
         <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
-          <i class="kiosk_tweets_retweetIcon"></i>Retweeted by <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
+          <i class="kiosk_tweets_retweetIcon"></i>
+          Retweeted by
+          <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
         </div>
 HTML;
     $kiosk_tweets_footer_template = <<<HTML
@@ -172,8 +175,8 @@ HTML;
           $kiosk_tweets_item_template,
           $tweet_screen_name,
           $tweet_profile_pic,
-          $tweet_screen_name,
-          $tweet_status_link,
+          //$tweet_screen_name,
+          //$tweet_status_link,
           $tweet_date_time,
           $tweet_date_time_actual,
           //$tweet_screen_name,
