@@ -167,7 +167,8 @@ HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     $items = [];
     for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
-      $feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
+      //$feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
+      $feed = $this->kiosk_news_fetch_feed( $feed_urls_array[ $feed_element ] );
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
         $items = array_merge( $items, $feed->get_items( 0 ) ); // create an array of items
         $total_feed_count = $total_feed_count + count( $items );
@@ -218,5 +219,8 @@ HTML;
      $div_listitems .= '</div>';
      $kiosk_asu_news_div = '<div class="kiosk_asu_news">' . $div_listitems . '</div>';
     return $new_total_feed_count > 0 ? $kiosk_asu_news_div : '';
+  }
+  function kiosk_news_fetch_feed( $feed_url){
+    return fetch_feed( $feed_url ); // specify the source feed
   }
 }

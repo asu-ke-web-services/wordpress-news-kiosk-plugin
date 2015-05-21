@@ -23,6 +23,7 @@ function resetfaded(jq) {
     });
 }
 
+// To update Kiosk time
 function kioskTime() {
     var date = new Date();
     var hours = date.getHours();
@@ -56,7 +57,7 @@ function startCarousel() {
 }
 startCarousel();
 
-//to update tweet time relative to current time
+//To update tweet time relative to current time every 10 seconds
 function kioskTweetTime() {
     var time = Math.round(+new Date() / 1000);
     var formated_time = $('.kiosk_date');

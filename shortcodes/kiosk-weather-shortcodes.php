@@ -110,6 +110,16 @@ HTML;
    */
   public function kiosk_weather( $atts, $content = null ) {
 
+    $json = $this->kiosk_weather_json();
+    // Convert JSON to PHP array
+    $json_weather = json_decode( $json, true );
+    $kiosk_weather_div = '<div class="kiosk_weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
+    return $kiosk_weather_div;
+  }
+  /**
+  * Connect to Yahoo weather api and gets the json object for tempe area
+  */
+  public function kiosk_weather_json(){
     $BASE_URL = 'http://query.yahooapis.com/v1/public/yql';
     $yql_query = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="tempe, az")';
     $yql_query_url = $BASE_URL . '?q=' . urlencode( $yql_query ) . '&format=json';
@@ -117,9 +127,7 @@ HTML;
     $session = curl_init( $yql_query_url );
     curl_setopt( $session, CURLOPT_RETURNTRANSFER, true );
     $json = curl_exec( $session );
-    // Convert JSON to PHP array
-    $json_weather = json_decode( $json, true );
-    $kiosk_weather_div = '<div class="kiosk_weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
-    return $kiosk_weather_div;
+    curl_close( $session );
+    return $json;
   }
 }

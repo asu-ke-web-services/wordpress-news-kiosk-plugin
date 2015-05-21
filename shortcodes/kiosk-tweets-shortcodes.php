@@ -83,7 +83,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   }
 
 
-  function kiosk_parse_tweets( $decode ){
+  function kiosk_parse_tweets( $decode, $limit ){
     $kiosk_tweets_header_template = <<<HTML
     <div class="kiosk_tweets_timelineHeader">
        <b class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</b>
@@ -130,14 +130,18 @@ HTML;
     $reg_exHash           = '/#([a-z_0-9]+)/i';
     $reg_exUser           = '/@([a-z_0-9]+)/i';
     $kisok_tweet_items    = '';
+    $num_of_items         = 0;
     foreach ( $decode as $tweet ) {
-        $tweet_text              = array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
-        $tweet_screen_name       = array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
-        $tweet_full_name         = array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
-        $tweet_profile_pic       = array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
-        $tweet_date_time         = array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
-        $tweet_date_time_actual  = strtotime( $tweet['created_at'] );
-        $tweet_status_link       = array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
+      if ( ++$num_of_items > $limit ){
+        break;
+      }
+      $tweet_text              = array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
+      $tweet_screen_name       = array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
+      $tweet_full_name         = array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
+      $tweet_profile_pic       = array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
+      $tweet_date_time         = array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
+      $tweet_date_time_actual  = strtotime( $tweet['created_at'] );
+      $tweet_status_link       = array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
 
       if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ){
         $tweet_screen_name       = $tweet['retweeted_status']['user']['screen_name'];
@@ -201,7 +205,22 @@ HTML;
    *
    */
   public function kiosk_tweets( $atts, $content = null ) {
-
+    $atts                  = shortcode_atts(
+        array(
+          'limit'  => '20',
+        ),
+        $atts
+    );
+    $json   = $this->kiosk_tweets_json( $atts, $content );
+    $decode = json_decode( $json, true ); //getting the file content as array
+    if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){
+      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $decode['errors'][0]['message']. '</div>';
+    } else {
+      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode, $atts['limit'] ) . '</div>';
+    }
+    return $kiosk_tweets_div;
+  }
+  public function kiosk_tweets_json( $atts, $content ){
     $twitter_handle            = $this->localsettings['twitter_handle'];
     $oauth_access_token        = $this->localsettings['oauth_access_token'];
     $oauth_access_token_secret = $this->localsettings['oauth_access_token_secret'];
@@ -216,7 +235,7 @@ HTML;
      'oauth_timestamp'        => time(),
      'oauth_version'          => '1.0',
      'screen_name'            => $twitter_handle,
-     'count'                  => 20,
+     'count'                  => $atts['limit'],
      'include_rts'            => 1,
     );
 
@@ -234,7 +253,7 @@ HTML;
     $options = array(
       CURLOPT_HTTPHEADER     => $header,
       CURLOPT_HEADER         => false,
-      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle . '&count=20&include_rts=1',
+      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle . '&count=' . $atts['limit'] . '&include_rts=1',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_SSL_VERIFYPEER => false,
     );
@@ -242,12 +261,188 @@ HTML;
     curl_setopt_array( $feed, $options );
     $json   = curl_exec( $feed );
     curl_close( $feed );
-    $decode = json_decode( $json, true ); //getting the file content as array
-    if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){
-      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $decode['errors'][0]['message']. '</div>';
-    } else {
-      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode ) . '</div>';
-    }
-    return $kiosk_tweets_div;
+    return $json;
+  }
+  function return_unit_test_data(){
+    $sample_json = <<<JSON
+[
+  {
+    "created_at":"Fri May 15 20:59:29 +0000 2015",
+    "id":599318204721205249,
+    "id_str":"599318204721205249",
+    "text":"test1",
+    "source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated":false,
+    "in_reply_to_status_id":null,
+    "in_reply_to_status_id_str":null,
+    "in_reply_to_user_id":null,
+    "in_reply_to_user_id_str":null,
+    "in_reply_to_screen_name":null,
+    "user":{
+      "id":100546785,
+      "id_str":"100546785",
+      "name":"Nagarjuna",
+      "screen_name":"chasethenag420",
+      "location":"Bangalore",
+      "description":"",
+      "url":null,
+      "entities":{
+        "description":{
+          "urls":[
+
+          ]
+        }
+      },
+      "protected":false,
+      "followers_count":27,
+      "friends_count":96,
+      "listed_count":0,
+      "created_at":"Wed Dec 30 17:11:46 +0000 2009",
+      "favourites_count":0,
+      "utc_offset":null,
+      "time_zone":null,
+      "geo_enabled":false,
+      "verified":false,
+      "statuses_count":22,
+      "lang":"en",
+      "contributors_enabled":false,
+      "is_translator":false,
+      "is_translation_enabled":false,
+      "profile_background_color":"C0DEED",
+      "profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile":false,
+      "profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg",
+      "profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg",
+      "profile_link_color":"0084B4",
+      "profile_sidebar_border_color":"C0DEED",
+      "profile_sidebar_fill_color":"DDEEF6",
+      "profile_text_color":"333333",
+      "profile_use_background_image":true,
+      "default_profile":true,
+      "default_profile_image":false,
+      "following":false,
+      "follow_request_sent":false,
+      "notifications":false
+    },
+    "geo":null,
+    "coordinates":null,
+    "place":null,
+    "contributors":null,
+    "retweet_count":0,
+    "favorite_count":0,
+    "entities":{
+      "hashtags":[
+
+      ],
+      "symbols":[
+
+      ],
+      "user_mentions":[
+
+      ],
+      "urls":[
+
+      ]
+    },
+    "favorited":false,
+    "retweeted":false,
+    "lang":"en"
+  },
+  {
+    "created_at":"Thu Jun 17 06:27:40 +0000 2010",
+    "id":16368735150,
+    "id_str":"16368735150",
+    "text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup",
+    "source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e",
+    "truncated":false,
+    "in_reply_to_status_id":null,
+    "in_reply_to_status_id_str":null,
+    "in_reply_to_user_id":null,
+    "in_reply_to_user_id_str":null,
+    "in_reply_to_screen_name":null,
+    "user":{
+      "id":100546785,
+      "id_str":"100546785",
+      "name":"Nagarjuna",
+      "screen_name":"chasethenag420",
+      "location":"Bangalore",
+      "description":"",
+      "url":null,
+      "entities":{
+        "description":{
+          "urls":[
+
+          ]
+        }
+      },
+      "protected":false,
+      "followers_count":27,
+      "friends_count":96,
+      "listed_count":0,
+      "created_at":"Wed Dec 30 17:11:46 +0000 2009",
+      "favourites_count":0,
+      "utc_offset":null,
+      "time_zone":null,
+      "geo_enabled":false,
+      "verified":false,
+      "statuses_count":22,
+      "lang":"en",
+      "contributors_enabled":false,
+      "is_translator":false,
+      "is_translation_enabled":false,
+      "profile_background_color":"C0DEED",
+      "profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png",
+      "profile_background_tile":false,
+      "profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg",
+      "profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg",
+      "profile_link_color":"0084B4",
+      "profile_sidebar_border_color":"C0DEED",
+      "profile_sidebar_fill_color":"DDEEF6",
+      "profile_text_color":"333333",
+      "profile_use_background_image":true,
+      "default_profile":true,
+      "default_profile_image":false,
+      "following":false,
+      "follow_request_sent":false,
+      "notifications":false
+    },
+    "geo":null,
+    "coordinates":null,
+    "place":null,
+    "contributors":null,
+    "retweet_count":0,
+    "favorite_count":0,
+    "entities":{
+      "hashtags":[
+
+      ],
+      "symbols":[
+
+      ],
+      "user_mentions":[
+        {
+          "screen_name":"samantha_prabhu",
+          "name":"Samantha Ruth prabhu",
+          "id":578616675,
+          "id_str":"578616675",
+          "indices":[
+            0,
+            16
+          ]
+        }
+      ],
+      "urls":[
+
+      ]
+    },
+    "favorited":false,
+    "retweeted":false,
+    "lang":"en"
+  }
+]
+JSON;
+    return $sample_json;
   }
 }
