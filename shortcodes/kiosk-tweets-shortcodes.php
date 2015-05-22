@@ -264,5 +264,5 @@ HTML;
     curl_close( $feed );
     return $json;
   }
-    
+
 }
