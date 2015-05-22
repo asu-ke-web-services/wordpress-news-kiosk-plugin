@@ -211,6 +211,7 @@ HTML;
         ),
         $atts
     );
+
     $json   = $this->kiosk_tweets_json( $atts, $content );
     $decode = json_decode( $json, true ); //getting the file content as array
     if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){
@@ -263,4 +264,5 @@ HTML;
     curl_close( $feed );
     return $json;
   }
+    
 }
