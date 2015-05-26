@@ -37,7 +37,10 @@ class KioskSliderTest extends WP_UnitTestCase {
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 image items' );
   }
-
+  /**
+    * return_unit_test_data() creates a mock up data to be used as feed data 
+    * @return SimplePie
+    */
   function return_unit_test_data(){
     $sample_json = <<<XML
 <?xml version="1.0" encoding="utf-8"?>

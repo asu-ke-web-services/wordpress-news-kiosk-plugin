@@ -139,6 +139,14 @@ HTML;
      $kiosk_slider_div = '<div class="kiosk_slider">' . $div_listitems . '</div>';
     return $total_feed_count > 0 ? $kiosk_slider_div : '';
   }
+
+  /**
+   * The function is seperated for unit test mocking purpose
+   * It returns either the actual feed in case of normal flow
+   * for unit test case it returns the mock up data.
+   * Returns a SimplePie object type
+   * @return SimplePie.
+   */
   function kiosk_slider_fetch_feed( $feed_url){
     return fetch_feed( $feed_url ); // specify the source feed
   }

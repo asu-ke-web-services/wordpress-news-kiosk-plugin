@@ -220,7 +220,15 @@ HTML;
      $kiosk_asu_news_div = '<div class="kiosk_asu_news">' . $div_listitems . '</div>';
     return $new_total_feed_count > 0 ? $kiosk_asu_news_div : '';
   }
-  function kiosk_news_fetch_feed( $feed_url){
+
+  /**
+   * kiosk_news_fetch_feed( $feed_url ) seperated for unit test mocking purpose
+   * It returns either the actual feed in case of normal flow
+   * for unit test case it returns the mock up data.
+   * Returns a SimplePie object type
+   * @return SimplePie.
+   */
+  function kiosk_news_fetch_feed( $feed_url ){
     return fetch_feed( $feed_url ); // specify the source feed
   }
 }

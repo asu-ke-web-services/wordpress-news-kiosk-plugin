@@ -28,6 +28,10 @@ class KioskWeatherTest extends WP_UnitTestCase {
     $this->assertContains( 'kiosk_weather_current', $content, 'Should return current weather block' );
     $this->assertContains( 'kiosk_weather_forecast', $content, 'Should return forecast weather block' );
   }
+  /**
+  * return_unit_test_data() creates a mock up data to be used as yahoo weather response json
+  * @return string
+  */
   function return_unit_test_data(){
     $sample_json = <<<JSON
 {

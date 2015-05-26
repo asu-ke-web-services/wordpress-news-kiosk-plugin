@@ -39,6 +39,11 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
     $this->add_shortcode( 'kiosk-weather', $this, 'kiosk_weather' );
   }
 
+  /**
+  * kiosk_parse_weather( $json_weather ) takes a json formatted string and retrieves the current and forecast data
+  * and creates a div block for the current and next 3 days forecast 
+  * @return string
+  */
   function kiosk_parse_weather( $json_weather ) {
 
     $channel_title = $json_weather['query']['results']['channel']['title'];
@@ -117,8 +122,13 @@ HTML;
     return $kiosk_weather_div;
   }
   /**
-  * Connect to Yahoo weather api and gets the json object for tempe area
-  */
+   * Connect to Yahoo weather api and gets the json object for tempe area
+   * The function is seperated for unit test mocking purpose
+   * It returns either the actual feed in case of normal flow
+   * for unit test case it returns the mock up data.
+   * Returns a JSON type formatted string.
+   * @return string
+   */
   public function kiosk_weather_json(){
     $BASE_URL = 'http://query.yahooapis.com/v1/public/yql';
     $yql_query = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="tempe, az")';

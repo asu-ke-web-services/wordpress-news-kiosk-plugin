@@ -43,6 +43,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $this->add_shortcode( 'kiosk-tweets', $this, 'kiosk_tweets' );
   }
 
+  /**
+   * create_base_url( $baseURI, $method, $params ) helper to create encoded url with given parameters
+   * @return string
+   */
   function create_base_url( $baseURI, $method, $params ) {
     $r = array();
     ksort( $params );
@@ -52,6 +56,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     return $method . '&' . rawurlencode( $baseURI ) . '&' . rawurlencode( implode( '&', $r ) );
   }
 
+  /**
+  * create_request_header( $oauth ) creates a Header for authentication to invoke twitter streaming API
+  * @return string
+  */
   function create_request_header( $oauth ) {
     $r = 'Authorization: OAuth ';
     $values = array();
@@ -61,7 +69,16 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $r .= implode( ', ', $values );
     return $r;
   }
-  function time_short_form($ptime) {
+
+  /**
+   * time_short_form($ptime) Helper function to 
+   * update tweet time relative to current time in case of 
+   * less than 24 hours as hours ago
+   * or less than 1 hour as minutes ago
+   * or less than 1 minute as seconds ago
+   * @return string
+   */
+  function time_short_form( $ptime ) {
     $etime = time() - strtotime( $ptime );
     if ( $etime < 1 ) {
         return 'now';
@@ -69,7 +86,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $a = array(
           1                       => 's',
           60                      => 'm',
-          60 * 60                   => 'h',
+          60 * 60                 => 'h',
     );
 
     foreach ( $a as $secs => $str ) {
@@ -82,7 +99,13 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     return date_format( date_create( $ptime ),'d M' );
   }
 
-
+  /**
+   * kiosk_parse_tweets( $decode, $limit )
+   * Accepts the json formatted string and the limit on number of tweets
+   * Creates a div block with all the tweets and by converting the hash tags and @ and urls to hyperlinks
+   * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted. 
+   * @return string
+   */
   function kiosk_parse_tweets( $decode, $limit ){
     $kiosk_tweets_header_template = <<<HTML
     <div class="kiosk_tweets_timelineHeader">
@@ -221,6 +244,13 @@ HTML;
     }
     return $kiosk_tweets_div;
   }
+
+  /**
+   * kiosk_tweets_json( $atts, $content ) Connects to twitter streaming API using given credentails
+   * and creates a json formatted string with all the given limit of tweets
+   * This function returns mock up data incase of unit testing.
+   * @return string
+   */
   public function kiosk_tweets_json( $atts, $content ){
     $twitter_handle            = $this->localsettings['twitter_handle'];
     $oauth_access_token        = $this->localsettings['oauth_access_token'];
