@@ -38,7 +38,7 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_posts tags="t,a,g,s"]
+   * [kiosk_posts tags="t,a,g,s" default_image="http://www.example1.jpg,http://www.example2.jpg,http://www.example3.jpg"]
    *
    * @param $atts array
    * Generates a <div> tag with images from post to display as slider
@@ -58,16 +58,24 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     $atts                  = shortcode_atts(
         array(
           'tags'  => '',
+          'default_image' => '',
         ),
         $atts
     );
+    $default_image = $atts['default_image'];
     $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
     $kiosk_events_item_template = <<<HTML
     <div class="item %s">
-      <img src="%s" class="img-responsive" alt="%s"/>
+      <img src="%s" class="img-responsive center-block" alt="%s">
       <div class="kiosk_events_caption carousel-caption">
        <h3>%s</h3>
       </div>
+    </div>
+HTML;
+
+    $kiosk_events_item_default_image_template = <<<HTML
+    <div class="item %s">
+      <img src="%s" class="img-responsive center-block">
     </div>
 HTML;
     // Prepare carousel
@@ -166,10 +174,35 @@ HTML;
         $exit_while = true;
       }
     }
-     $div_listitems .= '</ol>';
-     $div_listitems .= $div_sliders;
-     $div_listitems .= '</div>';
-     $div_listitems .= '</div>';
+    //return ( 0 == $current_post_count ? '' : $kiosk_events_div );
+    if ( 0 == $current_post_count && ! empty( $default_image ) ) {
+      $default_image_array = explode( ',', $default_image );
+      for ( $k = 0 ; $k < count( $default_image_array ); $k++ ) {
+        if ( 0 == $k ){
+          $div_listitems_active = ' class = "active" ';
+          $div_slider_active    = ' active ';
+        }else {
+          $div_listitems_active = '';
+          $div_slider_active    = '';
+        }
+        $div_listitems .= sprintf(
+            $kiosk_events_template,
+            $div_listitems_active,
+            $k
+        );
+        $div_sliders   .= sprintf(
+            $kiosk_events_item_default_image_template,
+            $div_slider_active,
+            trim( $default_image_array[ $k ] )
+        );
+        $current_post_count++;
+
+      }
+    }
+    $div_listitems .= '</ol>';
+    $div_listitems .= $div_sliders;
+    $div_listitems .= '</div>';
+    $div_listitems .= '</div>';
     $kiosk_events_div = '<div class="kiosk_events">' . $div_listitems . '</div>';
     return ( 0 == $current_post_count ? '' : $kiosk_events_div );
   }

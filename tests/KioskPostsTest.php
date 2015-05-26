@@ -37,5 +37,11 @@ class KioskPostsTest extends WP_UnitTestCase {
     $content = do_shortcode( '[kiosk-posts tags="no tags with this name"]' );
     $this->assertNotContains( 'kiosk_events_caption carousel-caption', $content, 'Do not return any posts' );
 
+    // Test with wrong tags and default image
+    $content = do_shortcode( '[kiosk-posts tags="no tags with this name" default_image="wp-content/uploads/Desert.jpg,wp-content/uploads/Desert.jpg,wp-content/uploads/Desert.jpg"]' );
+    $this->assertContains( 'img-responsive center-block', $content, 'Return the default images when tags are not present' );
+    $numberOfEvents = substr_count( $content, '<li' );
+    $this->assertEquals( 3, $numberOfEvents, 'There should 3 event items' );
+
   }
 }

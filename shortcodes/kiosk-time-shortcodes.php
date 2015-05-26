@@ -47,15 +47,17 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
   public function kiosk_time( $atts, $content = null ) {
 
     $calender_template = <<<HTML
-    <div class="row">
-      <div class="kiosk_display_cal col-xs-5">
-        <div  class="kiosk_calendar_icon">
-          <strong>%s</strong>
-          <span>%s</span>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="kiosk_display_cal col-xs-4 col-sm-5">
+          <div  class="kiosk_calendar_icon">
+            <strong>%s</strong>
+            <span>%s</span>
+          </div>
         </div>
-      </div>
-      <div class="kiosk_display_time col-xs-7">
-        <p id="kiosk_display_time">%s</p>
+        <div class="kiosk_display_time col-xs-8 col-sm-7">
+          <p id="kiosk_display_time">%s</p>
+        </div>
       </div>
     </div>
 HTML;
