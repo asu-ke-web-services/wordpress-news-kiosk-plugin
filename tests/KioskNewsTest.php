@@ -51,7 +51,7 @@ class KioskNewsTest extends WP_UnitTestCase {
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 news items' );
   }
   /**
-  * return_unit_test_data() creates a mock up data to be used as feed data 
+  * return_unit_test_data() creates a mock up data to be used as feed data
   * @return SimplePie
   */
   function return_unit_test_data(){

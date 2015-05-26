@@ -35,7 +35,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
 
   }
   /**
-  * return_unit_test_data() creates a mock up data to be used as twitter streaming api response 
+  * return_unit_test_data() creates a mock up data to be used as twitter streaming api response
   * @return string
   */
   function return_unit_test_data(){

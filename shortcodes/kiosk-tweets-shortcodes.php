@@ -71,8 +71,8 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * time_short_form($ptime) Helper function to 
-   * update tweet time relative to current time in case of 
+   * time_short_form($ptime) Helper function to
+   * update tweet time relative to current time in case of
    * less than 24 hours as hours ago
    * or less than 1 hour as minutes ago
    * or less than 1 minute as seconds ago
@@ -103,7 +103,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    * kiosk_parse_tweets( $decode, $limit )
    * Accepts the json formatted string and the limit on number of tweets
    * Creates a div block with all the tweets and by converting the hash tags and @ and urls to hyperlinks
-   * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted. 
+   * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted.
    * @return string
    */
   function kiosk_parse_tweets( $decode, $limit ){

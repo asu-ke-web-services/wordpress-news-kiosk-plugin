@@ -41,7 +41,7 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
 
   /**
   * kiosk_parse_weather( $json_weather ) takes a json formatted string and retrieves the current and forecast data
-  * and creates a div block for the current and next 3 days forecast 
+  * and creates a div block for the current and next 3 days forecast
   * @return string
   */
   function kiosk_parse_weather( $json_weather ) {
