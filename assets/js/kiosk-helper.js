@@ -1,38 +1,18 @@
 /*! kisok v1.0 
-* Scrolls 10 tweets with fade in and fade out effect and a delay of 5 seconds. 
-**/
-function scrollTweets() {
-  var n = 0;
-  var size = $('.kiosk_tweets_item').size();
-  (function rotateTweets(jq) {
-    jq.eq(n).fadeIn(2000).delay(5000).fadeOut(2000, function() {
-      n++;
-      if (n == 10) {
-        n = 0;
-        resetFaded(jq);
-      };
-      rotateTweets(jq);
+ * Scrolls tweets with slideDown effect and a delay of 5 seconds. 
+ **/
+$(document).ready(function() {
+  setInterval(function scrollTweets() {
+    $('.kiosk-tweets__list li:last-child').slideDown('slow', function() {
+      $(this).prependTo($('.kiosk-tweets__list')).show();
     });
-
-  })($('.kiosk_tweets_item'));
-}
-
-scrollTweets();
+  }, 5000);
+});
 
 /*
-* Fades in all the elements passed.
-*
-*/
-function resetFaded(jq) {
-  jq.each(function() {
-    $(this).fadeIn(0)
-  });
-}
-
-/*
-* Invokes itself with 5 seconds interval and updates the time
-*
-*/
+ * Invokes itself with 5 seconds interval and updates the time
+ *
+ */
 function kioskTime() {
   var date = new Date();
   var hours = date.getHours();
@@ -49,22 +29,24 @@ function kioskTime() {
   }, 5000);
 
 }
-kioskTime();
+$(document).ready(function() {
+  kioskTime();
+});
 
 /*
-* Invokes ajax call to server every 5 minutes and 
-* replaces tweets block and weather block
-*
-*/
+ * Invokes ajax call to server every 5 minutes and 
+ * replaces tweets block and weather block
+ *
+ */
 $(document).ready(function() {
   setInterval(function() {
     $.ajax({
       url: $(location).attr("href"),
       success: function(response) {
-        result_kiosk_tweets = $(".kiosk_tweets", response);
-        $(".kiosk_tweets").replaceWith(result_kiosk_tweets);
-        result_kiosk_weather = $(".kiosk_weather", response);
-        $(".kiosk_weather").replaceWith(result_kiosk_weather);
+        result_kiosk_tweets = $(".kiosk-tweets", response);
+        $(".kiosk-tweets").replaceWith(result_kiosk_tweets);
+        result_kiosk_weather = $(".kiosk-weather", response);
+        $(".kiosk-weather").replaceWith(result_kiosk_weather);
       }
     })
   }, 300000);
@@ -72,15 +54,15 @@ $(document).ready(function() {
 
 
 /*
-* To update tweet time relative to current time every 10 seconds
-* For each tweet read the actual time got from server and update the tweet time
-* relative to the current time every 10 seconds interval
-* If less than 1 second show as now
-* If less than minute display as seconds ago
-* If less than hours display as minutes ago
-* If less than 24 hours display as hours ago
-* Otherwise leave it as set by server.
-*/
+ * To update tweet time relative to current time every 10 seconds
+ * For each tweet read the actual time got from server and update the tweet time
+ * relative to the current time every 10 seconds interval
+ * If less than 1 second show as now
+ * If less than minute display as seconds ago
+ * If less than hours display as minutes ago
+ * If less than 24 hours display as hours ago
+ * Otherwise leave it as set by server.
+ */
 function kioskTweetTime() {
   var time = Math.round(+new Date() / 1000);
   var formated_time = $('.kiosk_date');
@@ -121,4 +103,18 @@ function kioskTweetTime() {
   }, 10000);
 
 }
-kioskTweetTime();
+$(document).ready(function() {
+  kioskTweetTime();
+});
+$(document).ready(function() {
+  var screen_height = 1080; //Not using window.screen.height as the posts image is not scaling unless increase width
+  $('.kiosk-tweets').height(screen_height - $('.kiosk-tweets').offset().top);
+  $('.kiosk-tweets_scroll-container').height($('.kiosk-tweets').height() - 120);
+  $('.kiosk-asu-news').height(screen_height - $('.kiosk-asu-news').offset().top);
+  $('.kiosk-events').height(screen_height - $('.kiosk-events').offset().top);
+});
+$(document).ready(function() {
+  $('.carousel').carousel({
+    interval: 10000
+  })
+});

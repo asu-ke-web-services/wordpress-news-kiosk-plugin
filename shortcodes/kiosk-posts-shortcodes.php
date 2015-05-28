@@ -66,22 +66,14 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
     $kiosk_events_item_template = <<<HTML
     <div class="item %s">
-      <img src="%s" class="img-responsive center-block" alt="%s">
-      <div class="kiosk_events_caption carousel-caption">
-       <h3>%s</h3>
-      </div>
+      <img src="%s" class="img-responsive center-block kiosk-events__slider__image" alt="%s">
     </div>
 HTML;
 
-    $kiosk_events_item_default_image_template = <<<HTML
-    <div class="item %s">
-      <img src="%s" class="img-responsive center-block">
-    </div>
-HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_events_slider" class="kiosk_events_slider carousel slide" data-ride="carousel">
-         <ol class="kiosk_events_slider_ol carousel-indicators">
+      <div id="kiosk_events_slider" class="kiosk-events__slider carousel slide" data-ride="carousel">
+         <ol class="kiosk-events__slider__carousel-indicators carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     $exit_while            = false;
@@ -141,6 +133,9 @@ HTML;
                 $div_listitems_active,
                 $current_post_count
             );
+            if ( parse_url( $pics[2][0], PHP_URL_SCHEME ) == '' ) {
+              $pics[2][0] = home_url( $pics[2][0] );
+            }
             $div_sliders   .= sprintf(
                 $kiosk_events_item_template,
                 $div_slider_active,
@@ -191,7 +186,7 @@ HTML;
             $k
         );
         $div_sliders   .= sprintf(
-            $kiosk_events_item_default_image_template,
+            $kiosk_events_item_template,
             $div_slider_active,
             trim( $default_image_array[ $k ] )
         );
@@ -203,7 +198,7 @@ HTML;
     $div_listitems .= $div_sliders;
     $div_listitems .= '</div>';
     $div_listitems .= '</div>';
-    $kiosk_events_div = '<div class="kiosk_events">' . $div_listitems . '</div>';
+    $kiosk_events_div = '<div class="kiosk-events">' . $div_listitems . '</div>';
     return ( 0 == $current_post_count ? '' : $kiosk_events_div );
   }
 }

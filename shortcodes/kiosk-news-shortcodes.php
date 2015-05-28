@@ -148,21 +148,21 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     $kiosk_asu_news_template      = '<li %s data-target="#kiosk_asu_news_slider" data-slide-to="%d"></li>';
     $kiosk_asu_news_item_template = <<<HTML
     <div class="item %s">
-      <div class="kiosk_asu_news_header">
+      <div class="kiosk-asu-news__slider__header">
         <a href="%s" title="%s"><h3><p>%s</p></h3></a>
         </div>
-      <div class="kiosk_asu_news_time">
+      <div class="kiosk-asu-news__slider__time">
         <p>%s</p>
       </div>
-      <div class="kiosk_asu_news_content">
+      <div class="kiosk-asu-news__slider__content">
         <p>%s</p>
       </div>
     </div>
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_asu_news_slider" class="carousel slide kiosk_asu_news_slider" data-ride="carousel">
-         <ol class="kiosk_asu_news_slider_ol carousel-indicators">
+      <div id="kiosk_asu_news_slider" class="carousel slide kiosk-asu-news__slider" data-ride="carousel">
+         <ol class="kiosk-asu-news__slider__carousel-indicators carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     $items = [];
@@ -217,7 +217,7 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-     $kiosk_asu_news_div = '<div class="kiosk_asu_news">' . $div_listitems . '</div>';
+     $kiosk_asu_news_div = '<div class="kiosk-asu-news">' . $div_listitems . '</div>';
     return $new_total_feed_count > 0 ? $kiosk_asu_news_div : '';
   }
 

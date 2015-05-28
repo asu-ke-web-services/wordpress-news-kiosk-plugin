@@ -108,41 +108,39 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    */
   function kiosk_parse_tweets( $decode, $limit ){
     $kiosk_tweets_header_template = <<<HTML
-    <div class="kiosk_tweets_timelineHeader">
-       <b class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</b>
-       <p class="kiosk_tweets_twitterLogo"  title="Twitter" target="_blank">Twitter</p>
+    <div class="kiosk-tweets_timeline-header">
+       <b class="kiosk-tweets_timeline-header__title">Tweets</b>
+       <p class="kiosk-tweets_timeline-header__twitter-logo"  title="Twitter" target="_blank">Twitter</p>
     </div>
-    <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
-      <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
+    <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets_scroll-container">
+      <ol class="kiosk-tweets__list" id="kiosk_tweets_list">
 HTML;
     $kiosk_tweets_item_template = <<<HTML
-        <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
-          <div class="kiosk_tweets_avatar">
-            <a class="kiosk_tweets_font_style" target="_blank" href="https://twitter.com/%s">
-              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt="">
-            </a>
+        <li class="kiosk-tweets__tweet">
+          <div class="kiosk-tweets__tweet__avatar">
+              <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
           </div>
-          <div class="kiosk_tweets_details">
-            <div class=" kiosk_tweets_permalink kiosk_tweets_timestamp_font_style kiosk_tweets_font_style">
-              <div class="kiosk_date">%s</div>
-              <div class="kiosk_actualtweettime">%s</div>
+          <div class="kiosk-tweets__tweet__details">
+            <div class="kiosk-tweets__tweet__details_permalink kiosk-tweets__tweet__font-style">
+              <div>%s</div>
+              <div class="kiosk-tweets__tweet__details__actual-tweet-time">%s</div>
             </div>
-            <div class="kiosk_tweets_header">
-               <div class="kiosk_tweets_fullName">%s</div>
-               <div class="kiosk_tweets_userName">@%s</div>
+            <div class="kiosk-tweets__tweet__details__header">
+               <div class="kiosk-tweets__tweet__details__header__full-name">%s</div>
+               <div class="kiosk-tweets__tweet__details__header__user-name">@%s</div>
             </div>
-            <div class="kiosk_tweets_content">
-              <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> 
+            <div>
+              <div class="kiosk-tweets__tweet__details__text kiosk-tweets__tweet__font-style"> %s </div> 
               <div>%s</div>
             </div>
           </div>
         </li>
 HTML;
     $kiosk_tweets_retweet_template = <<<HTML
-        <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
-          <i class="kiosk_tweets_retweetIcon"></i>
+        <div class="kiosk-tweets__tweet__retweet kiosk-tweets__tweet__font-style">
+          <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
-          <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
+          <a target="_blank" href="%s" class="kiosk-tweets__tweet__font-style"> %s </a>
         </div>
 HTML;
     $kiosk_tweets_footer_template = <<<HTML
@@ -187,20 +185,20 @@ HTML;
       // make links link to URL
       if ( preg_match( $reg_exUrl, $tweet_text, $url ) ) {
         // make the urls hyper links
-        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk_tweets_font_style kiosk_tweets_hyper_link\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
       }
       if ( preg_match( $reg_exHash, $tweet_text, $hash ) ) {
         // make the hash tags hyper links
-        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk_tweets_font_style kiosk_tweets_hash_tag\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
         // swap out the # in the URL to make %23
         $tweet_text = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
       }
       if ( preg_match( $reg_exUser, $tweet_text, $user ) ) {
-        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk_tweets_font_style kiosk_tweets_at\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
+        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
       }
       $kisok_tweet = sprintf(
           $kiosk_tweets_item_template,
-          $tweet_screen_name,
+          //$tweet_screen_name,
           $tweet_profile_pic,
           //$tweet_screen_name,
           //$tweet_status_link,
@@ -238,9 +236,9 @@ HTML;
     $json   = $this->kiosk_tweets_json( $atts, $content );
     $decode = json_decode( $json, true ); //getting the file content as array
     if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){
-      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $decode['errors'][0]['message']. '</div>';
+      $kiosk_tweets_div = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
     } else {
-      $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode, $atts['limit'] ) . '</div>';
+      $kiosk_tweets_div = '<div class="kiosk-tweets">' . $this->kiosk_parse_tweets( $decode, $atts['limit'] ) . '</div>';
     }
     return $kiosk_tweets_div;
   }

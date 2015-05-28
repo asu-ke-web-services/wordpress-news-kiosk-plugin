@@ -67,16 +67,16 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $kiosk_gallery_slider_template      = '<li %s data-target="#kiosk_gallery_slider" data-slide-to="%d"></li>';
     $kiosk_gallery_slider_item_template = <<<HTML
     <div class="item %s">
-      <img src="%s" class="img-responsive" alt="%s"/>
-      <div class="kiosk_gallery_slider_caption carousel-caption">
+      <img src="%s" class="img-responsive" alt="%s">
+      <div class="kiosk-gallery__slider-caption carousel-caption">
        <h3>%s</h3>
       </div>
     </div>
 HTML;
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_gallery_slider" class="carousel slide" data-ride="carousel">
-         <ol class="kiosk_gallery_slider_ol carousel-indicators">
+      <div id="kiosk_gallery_slider" class="kiosk-gallery__slider carousel slide" data-ride="carousel">
+         <ol class="kiosk-gallery__slider__carousel-indicators carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ){
@@ -136,7 +136,7 @@ HTML;
      $div_listitems .= $div_sliders;
      $div_listitems .= '</div>';
      $div_listitems .= '</div>';
-     $kiosk_slider_div = '<div class="kiosk_slider">' . $div_listitems . '</div>';
+     $kiosk_slider_div = '<div class="kiosk-gallery">' . $div_listitems . '</div>';
     return $total_feed_count > 0 ? $kiosk_slider_div : '';
   }
 

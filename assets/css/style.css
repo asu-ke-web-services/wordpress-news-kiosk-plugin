@@ -3,350 +3,377 @@
  * Copyright 2015 ASU
  * ======================================================================== */
 
-.kiosk_events_slider_ol {
-    visibility: hidden;
+.kiosk-page-template {
+  font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
+  font-size: 100%;
+  color: #333;
+  background-image: url("../images/bg-display.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.kiosk_events_slider {
-    margin-top: 3em;
-    width: 100%;
+.kiosk-page-template h1 {
+  margin: 0;
+  font-weight: normal;
 }
 
-.kiosk_events_slider h3 {
-    color: #ffffff;
+.kiosk-title {
+  width: 100%;
+  margin: 40px 2em 1em 0em;
 }
 
-.kiosk_gallery_slider_caption h3 {
-    color: #ffffff;
+.kiosk-title__logo {
+  position: relative;
 }
 
-.kiosk_gallery_slider h3 {
-    color: #ffffff;
+.kiosk-weather {
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+  border-radius: 25px;
+  min-height: 250px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 3;
+  margin-top: 2em;
+  background: none repeat scroll 0% 0% rgba(106, 168, 79, 0.76);
+  position: relative;
 }
 
-.kiosk_asu_news_slider_ol {
-    visibility: hidden
+.kiosk-weather [class*='kiosk-weather__forecast']:not(:first-child) {
+  padding-left: 0;
 }
 
-.kiosk_gallery_slider_ol {
-    visibility: hidden;
+.kiosk-weather [class*='kiosk-weather__forecast']:not(:last-child) {
+  padding-right: 0;
 }
-
-.kisok_page_template {
-    font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-    font-size: 100%;
-    color: #333;
-    background-image: url("../images/bg-display.jpg");
-}
-
-.kisok_page_template h1 {
-    margin: 0;
-    font-weight: normal;
-}
-
-.kiosk_calendar_icon {
-    font-size: 1em;
-    background-color: #FFF;
-    border-radius: 0.1em;
-    border: 0.3em solid #818486;
-    margin: 20% 0% 10% 2%;
-    position: relative;
-    float: right;
-    display: inline-block;
-    --width: 130px;
-    overflow: hidden;
-}
-
-.kiosk_calendar_icon * {
-    display: inline-block;
-    width: 100%;
-    font-size: 1em;
-    font-weight: bold;
-    font-style: normal;
+.kiosk-weather__forecast__item{
     text-align: center;
 }
-
-.kiosk_calendar_icon strong {
-    top: 0px;
-    padding: 0.4em;
-    color: #FFF;
-    background-color: #A20B09;
-    border-bottom: 1px none;
-    box-shadow: 0px 2px 0px;
-    position: relative;
+.kiosk-weather__forecast__item h5 {
+  color: #ffffff;
+  
 }
 
-.kiosk_time {
-    margin: 2%;
+.kiosk-weather__forecast__location {
+  font-size: 2em;
+  color: #fff;
+  padding-left: 15px;
 }
 
-.kiosk_calendar_icon span {
-    width: 100%;
-    font-size: 3em;
-    letter-spacing: -0.05em;
-    color: #2F2F2F;
-    padding: 10px 20px;
+.kiosk-weather__current__item-image {
+  width: 90%;
+  --height: 5em;
+  margin-top: 3em;
 }
 
-.kiosk_display_time {
-    font-size: 1em;
-    /* change kiosk_calendar_icon size */
-    
-    display: inline-block;
-    position: relative;
-    margin: 4em auto 0.5em;
-    overflow: hidden;
+.kiosk_weather_forecast__item_image {
+  width: 50%;
 }
 
-.kiosk_display_time p {
-    font-family: Verdana, Verdana, Geneva, sans-serif;
-    color: #900;
-    font-size: 2em;
-    font-weight: bold;
-    width: 100%;
-    margin: 0.1em;
-    letter-spacing: -0.05em;
+.kiosk-weather__current {
+  color: #fff;
+  text-align: center;
 }
 
-.kiosk_asu_school_sustaintabilty_logo {
-    position: relative;
+.kiosk-weather__forecast__item {
+  color: #fff;
 }
 
-.kiosk_asu_school_sustaintabilty_logo p {
-    font-family: Verdana, Verdana, Geneva, sans-serif;
-    font-size: 2em;
-    color: #ffffff;
-    font-weight: bolder;
-    overflow: hidden;
+.kiosk-tweets {
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+  border-radius: 25px;
+  width: 100%;
+  --height: 48%;
+  --min-height: 564px;
+  overflow: hidden;
+  z-index: 3;
+  margin-top: 2em;
+  background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
+  position: relative;
+  color: #fff;
 }
 
-.kiosk_title {
-    width: 100%;
-    --height: 12%;
-    margin: 4em 2em 1em 0em;
-}
-
-.kiosk_asu_news {
-    margin-top: 2em;
-    background-color: #ffffff;
-    border-radius: 25px;
-    border: 5px solid #FFB310;
-    overflow: hidden;
-    width: 100%;
-    height: 40%;
-    min-height: 450px;
-    background-image: url("../images/asunews_vimeotag.png"), url("../images/asunews_grass.png");
-    background-repeat: no-repeat;
-    background-position: 10px 20px, center bottom;
-    background-size: auto, 100% 20%;
-}
-
-.kiosk_asu_news h3 {
-    margin-top: 150px;
-}
-
-.kiosk_asu_news p {
-    margin-bottom: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-
-.kiosk_asu_news_slider {
-    overflow: hidden;
-}
-
-.kiosk_slider {
-    width: 100%;
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
-    border: 5px solid #FFB310;
-}
-
-.kiosk_weather {
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
-    border: 5px solid #FFB310;
-    border-radius: 25px;
-    --height: 22%;
-    width: 100%;
-    overflow: hidden;
-    z-index: 3;
-    margin-top: 2em;
-    background: none repeat scroll 0% 0% rgba(106, 168, 79, 0.76);
-    position: relative;
-}
-
-.kiosk_weather [class*='col-']:not(:first-child),
-.kiosk_weather [class*='col-']:not(:last-child) {
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.kiosk_weather_forecast_block h5 {
-    color: #ffffff;
-}
-
-.kiosk_weather_location {
-    font-size: 2em;
-    color: #fff;
-}
-
-.kiosk_weather_current_image {
-    width: 90%;
-    --height: 5em;
-    margin-top: 3em;
-}
-
-.kiosk_weather_forecast_block_image {
-    width: 50%;
-}
-
-.kiosk_weather_current {
-    color: #fff;
-    text-align: center;
-}
-
-.kiosk_weather_forecast_block {
-    color: #fff;
-}
-
-.kiosk_tweets {
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
-    border: 5px solid #FFB310;
-    border-radius: 25px;
-    width: 100%;
-    height: 48%;
-    min-height: 550px;
-    overflow: hidden;
-    z-index: 3;
-    margin-top: 2em;
-    background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
-    position: relative;
-    color: #fff;
-}
-
-.kiosk_tweets_scrollContainer {
-    position: relative;
-    overflow: hidden;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    height: 430px;
+.kiosk-tweets_scroll-container {
+  position: relative;
+  overflow: hidden;
+  --padding-bottom: 20px;
+  margin: 15px;
 }
 /* Header */
 
-.kiosk_tweets_timelineHeader {
-    --padding: 10px;
-    position: relative;
-    color: #fff;
-    margin-top: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    height: 60px;
+.kiosk-tweets_timeline-header {
+  --padding: 10px;
+  position: relative;
+  color: #fff;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 60px;
 }
 
-.kiosk_tweets_timelineTitle {
-    padding: 10px;
-    position: relative;
-    color: #fff;
-    font-size: 2.5em;
+.kiosk-tweets_timeline-header__title {
+  padding: 10px;
+  position: relative;
+  color: #fff;
+  font-size: 2.5em;
 }
 
-.kiosk_tweets_twitterLogo {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 3em;
-    display: inline-block;
-    vertical-align: middle;
-    background: transparent url('../images/twitter-bird.png') no-repeat center;
-    background-size: 100%;
-    color: #fff;
-    z-index: -1;
+.kiosk-tweets_timeline-header__twitter-logo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 3em;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent url('../images/twitter-bird.png') no-repeat center;
+  background-size: 100%;
+  color: #fff;
+  z-index: -1;
 }
 
-.kiosk_tweets_font_style {
-    border-bottom: 1px;
-    color: #ffffff;
+.kiosk-tweets__tweet__font-style {
+  border-bottom: 1px;
+  color: #ffffff;
 }
 
-.kiosk_tweets_hyper_link,
-.kiosk_tweets_hash_tag,
-.kiosk_tweets_at {
-    color: #029;
-}
-/* List item */
-
-.kiosk_tweet {
-    clear: both;
-    overflow: hidden;
-    padding: 10px;
+.kiosk-tweets__tweet__link {
+  color: #029;
 }
 
-.kiosk_tweets_list {
-    position: relative;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-/* Columns */
-
-.kiosk_tweets_avatar {
-    float: left;
+.kiosk-tweets__tweet {
+  clear: both;
+  overflow: hidden;
+  padding: 10px;
+  position: relative;
+  ;
 }
 
-.kiosk_tweets_details {
-    overflow: hidden;
-    padding-left: 10px;
+.kiosk-tweets__list {
+  position: relative;
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
-.kiosk_tweets_permalink {
-    position: relative;
-    float: right;
-    z-index: 10;
+.kiosk-tweets__tweet__avatar {
+  float: left;
 }
 
-.kiosk_tweets_header {
-    position: relative;
-    color: #fff;
+.kiosk-tweets__tweet__details {
+  overflow: hidden;
+  padding-left: 10px;
 }
 
-.kiosk_tweets_header:after {
-    clear: both;
+.kiosk-tweets__tweet__details_permalink {
+  position: relative;
+  float: right;
+  z-index: 10;
 }
 
-.kiosk_tweets_large {
-    width: 73px;
-    height: 73px;
+.kiosk-tweets__tweet__details__header {
+  position: relative;
+  color: #fff;
 }
 
-.kiosk_tweets_small {
-    width: 48px;
-    height: 48px;
+.kiosk-tweets__tweet__details__header:after {
+  clear: both;
 }
 
-.kiosk_tweets_fullName {
-    padding-right: 10px;
+.kiosk-tweets__tweet__avatar__image {
+  width: 73px;
+  height: 73px;
 }
 
-.kiosk_tweets_text {
-    padding-right: 10px;
-    margin: 0 5px 0 0;
-    overflow: hidden;
-    clear: both;
-    word-wrap: break-word;
+.kiosk-tweets__tweet__details__header__full-name {
+  padding-right: 10px;
 }
 
-.kiosk_tweets_retweet {
-    margin: 3px 0;
+.kiosk-tweets__tweet__details__text {
+  padding-right: 10px;
+  margin: 0 5px 0 0;
+  overflow: hidden;
+  clear: both;
+  word-wrap: break-word;
 }
 
-.kiosk_tweets_retweetIcon {
-    width: 14px;
-    height: 16px;
-    margin-right: 4px;
-    display: inline-block;
-    vertical-align: middle;
-    background: transparent url('../images/retweet.png') no-repeat center;
+.kiosk-tweets__tweet__retweet {
+  margin: 3px 0;
 }
 
-.kiosk_actualtweettime {
-    display: none;
+.kiosk-tweets__tweet__retweet__icon {
+  width: 14px;
+  height: 16px;
+  margin-right: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent url('../images/retweet.png') no-repeat center;
+}
+
+.kiosk-tweets__tweet__details__actual-tweet-time {
+  display: none;
+}
+
+.kiosk-events__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-events {
+  margin-top: 40px;
+}
+
+.kiosk-events__slider {
+  padding: 10px;
+  height: 100%;
+}
+
+.kiosk-events__slider__image {
+  vertical-align: middle;
+  height: 100%;
+}
+
+.kiosk-date-time__calendar-icon {
+  font-size: 1em;
+  background-color: #FFF;
+  border-radius: 0.1em;
+  border: 0.3em solid #818486;
+  margin: 20% 0% 10% 2%;
+  position: relative;
+  float: right;
+  display: inline-block;
+  --width: 130px;
+  overflow: hidden;
+}
+
+.kiosk-date-time__calendar-icon * {
+  display: inline-block;
+  width: 100%;
+  font-size: 1em;
+  font-weight: bold;
+  font-style: normal;
+  text-align: center;
+}
+
+.kiosk-date-time__calendar-icon strong {
+  top: 0px;
+  padding: 6px;
+  color: #FFF;
+  background-color: #A20B09;
+  border-bottom: 1px none;
+  box-shadow: 0px 2px 0px;
+  position: relative;
+}
+
+.kiosk-date-time {
+  margin-top: 20px;
+}
+
+.kiosk-date-time [class*='col-'],
+.kiosk-date-time [class*='col-'] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.kiosk-date-time__calendar-icon span {
+  font-size: 48px;
+  letter-spacing: -0.05em;
+  color: #2F2F2F;
+  padding: 10px 20px;
+}
+
+.kiosk-date-time__time {
+  font-size: 1em;
+  /* change kiosk_calendar_icon size */
+  
+  display: inline-block;
+  position: relative;
+  margin: 4em auto 0.8em;
+  overflow: hidden;
+}
+
+.kiosk-date-time__time p {
+  font-family: Verdana, Verdana, Geneva, sans-serif;
+  color: #900;
+  font-size: 2em;
+  font-weight: bold;
+  width: 100%;
+  margin: 0.1em;
+  padding-left: 20px;
+  letter-spacing: -0.05em;
+}
+
+.kiosk-gallery__slider-caption h3 {
+  color: #ffffff;
+}
+
+.kiosk-gallery__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-gallery {
+  width: 100%;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
+  border: 5px solid #FFB310;
+}
+
+.kiosk-asu-news__slider__carousel-indicators {
+  visibility: hidden
+}
+
+.kiosk-asu-news {
+  margin-top: 2em;
+  background-color: #ffffff;
+  border-radius: 25px;
+  border: 5px solid #FFB310;
+  overflow: hidden;
+  width: 100%;
+  height: 40%;
+  min-height: 412px;
+  --background-image: url("../images/asunews_vimeotag.png"), url("../images/asunews_grass.png");
+  background-image: url("../images/asunews_now_header.jpg"), url("../images/asunews_grass.png");
+  background-repeat: no-repeat;
+  background-position: 10px 20px, center bottom;
+  background-size: auto, 100% 20%;
+  position: relative;
+}
+
+.kiosk-asu-news h3 {
+  margin-top: 80px;
+}
+
+.kiosk-asu-news p {
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.kiosk-asu-news__slider {
+  overflow: hidden;
+}
+
+.kiosk-col-left {
+  width: 28%;
+}
+
+.kiosk-col-middle {
+  width: 44%
+}
+
+.kiosk-col-right {
+  width: 28%;
+}
+
+.kiosk-outer-div {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+
+.spanWidth {
+  width: 29%;
+}
+
+.show {
+  border: 1px solid #fff;
+  background-color: #eee;
 }
 /*# sourceMappingURL=style.css.map */
