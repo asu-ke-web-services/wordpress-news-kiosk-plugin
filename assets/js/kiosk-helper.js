@@ -25,13 +25,10 @@ function kioskTime() {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   document.getElementById('kiosk_display_time').innerHTML = strTime;
   var t = setTimeout(function() {
-    kioskTime()
+    kioskTime();
   }, 5000);
 
 }
-$(document).ready(function() {
-  kioskTime();
-});
 
 /*
  * Invokes ajax call to server every 5 minutes and 
@@ -47,6 +44,7 @@ $(document).ready(function() {
         $(".kiosk-tweets").replaceWith(result_kiosk_tweets);
         result_kiosk_weather = $(".kiosk-weather", response);
         $(".kiosk-weather").replaceWith(result_kiosk_weather);
+        reSizeTweetsEventsNews();
       }
     })
   }, 300000);
@@ -99,22 +97,34 @@ function kioskTweetTime() {
     }
   });
   var t = setTimeout(function() {
-    kioskTweetTime()
+    kioskTweetTime();
   }, 10000);
 
 }
-$(document).ready(function() {
-  kioskTweetTime();
-});
-$(document).ready(function() {
-  var screen_height = 1080; //Not using window.screen.height as the posts image is not scaling unless increase width
+
+/**
+ *reSizeTweetsEventsNews() changes the size of Tweets, asu-news and events block according to background image height of 1080px.
+ *
+ */
+function reSizeTweetsEventsNews() {
+  var screen_height = window.screen.height; 
+   var screen_width = window.screen.width; 
+  $('.col-md-3').width(window.screen.width*0.28);
+  $('.col-md-6').width(window.screen.width*0.36);
   $('.kiosk-tweets').height(screen_height - $('.kiosk-tweets').offset().top);
   $('.kiosk-tweets_scroll-container').height($('.kiosk-tweets').height() - 120);
   $('.kiosk-asu-news').height(screen_height - $('.kiosk-asu-news').offset().top);
   $('.kiosk-events').height(screen_height - $('.kiosk-events').offset().top);
-});
+  $('.kiosk-events__slider__image').height(screen_height - $('.kiosk-events__slider__image').offset().top);
+  $('.kiosk-events__slider__image').width(($('.kiosk-events').width()>$('.kiosk-events__slider').width()?$('.kiosk-events').width():$('.kiosk-events__slider').width()));
+}
 $(document).ready(function() {
   $('.carousel').carousel({
     interval: 10000
   })
+});
+$(document).ready(function() {
+  kioskTweetTime();
+  reSizeTweetsEventsNews();
+  kioskTime();
 });
