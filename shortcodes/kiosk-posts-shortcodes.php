@@ -38,7 +38,7 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_posts tags="t,a,g,s"]
+   * [kiosk_posts tags="t,a,g,s" default_image="http://www.example1.jpg,http://www.example2.jpg,http://www.example3.jpg"]
    *
    * @param $atts array
    * Generates a <div> tag with images from post to display as slider
@@ -58,22 +58,22 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     $atts                  = shortcode_atts(
         array(
           'tags'  => '',
+          'default_image' => '',
         ),
         $atts
     );
+    $default_image = $atts['default_image'];
     $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
     $kiosk_events_item_template = <<<HTML
     <div class="item %s">
-      <img src="%s" class="img-responsive img-thumbnail" alt="%s"/>
-      <div class="kiosk_events_caption carousel-caption">
-       <h3>%s</h3>
-      </div>
+      <img src="%s" class="img-responsive center-block kiosk-events__slider__image" alt="%s">
     </div>
 HTML;
+
     // Prepare carousel
     $div_listitems = <<<HTML
-      <div id="kiosk_events_slider" class="kiosk_events_slider carousel slide" data-ride="carousel">
-         <ol class="kiosk_events_slider_ol carousel-indicators">
+      <div id="kiosk_events_slider" class="kiosk-events__slider carousel slide" data-ride="carousel">
+         <ol class="kiosk-events__slider__carousel-indicators carousel-indicators">
 HTML;
     $div_sliders        = '<div class="carousel-inner" role="listbox">';
     $exit_while            = false;
@@ -122,8 +122,8 @@ HTML;
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $image_attributes[0],
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
             //Check if posts had images in its body
@@ -133,12 +133,15 @@ HTML;
                 $div_listitems_active,
                 $current_post_count
             );
+            if ( parse_url( $pics[2][0], PHP_URL_SCHEME ) == '' ) {
+              $pics[2][0] = home_url( $pics[2][0] );
+            }
             $div_sliders   .= sprintf(
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $pics[2][0],
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
             //Check if page_feature_image custom field has image and if it absolute else make absolute url from relative url //TO DO
@@ -155,8 +158,8 @@ HTML;
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $page_feature_image,
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
           }
@@ -166,11 +169,41 @@ HTML;
         $exit_while = true;
       }
     }
-     $div_listitems .= '</ol>';
-     $div_listitems .= $div_sliders;
-     $div_listitems .= '</div>';
-     $div_listitems .= '</div>';
-    $kiosk_events_div = '<div class="kiosk_events">' . $div_listitems . '</div>';
+    //return ( 0 == $current_post_count ? '' : $kiosk_events_div );
+    if ( 0 == $current_post_count && ! empty( $default_image ) ) {
+      $default_image_array = explode( ',', $default_image );
+      for ( $k = 0 ; $k < count( $default_image_array ); $k++ ) {
+        if ( 0 == $k ){
+          $div_listitems_active = ' class = "active" ';
+          $div_slider_active    = ' active ';
+        }else {
+          $div_listitems_active = '';
+          $div_slider_active    = '';
+        }
+        $div_listitems .= sprintf(
+            $kiosk_events_template,
+            $div_listitems_active,
+            $k
+        );
+        if ( parse_url( $default_image_array[ $k ], PHP_URL_SCHEME ) == '' ) {
+          $default_image_array[ $k ] = home_url( $default_image_array[ $k ] );
+        }
+
+        $div_sliders   .= sprintf(
+            $kiosk_events_item_template,
+            $div_slider_active,
+            trim( $default_image_array[ $k ] ),
+            ''
+        );
+        $current_post_count++;
+
+      }
+    }
+    $div_listitems .= '</ol>';
+    $div_listitems .= $div_sliders;
+    $div_listitems .= '</div>';
+    $div_listitems .= '</div>';
+    $kiosk_events_div = '<div class="kiosk-events">' . $div_listitems . '</div>';
     return ( 0 == $current_post_count ? '' : $kiosk_events_div );
   }
 }

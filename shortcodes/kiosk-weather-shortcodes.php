@@ -39,6 +39,11 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
     $this->add_shortcode( 'kiosk-weather', $this, 'kiosk_weather' );
   }
 
+  /**
+  * kiosk_parse_weather( $json_weather ) takes a json formatted string and retrieves the current and forecast data
+  * and creates a div block for the current and next 3 days forecast
+  * @return string
+  */
   function kiosk_parse_weather( $json_weather ) {
 
     $channel_title = $json_weather['query']['results']['channel']['title'];
@@ -49,14 +54,14 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
     $current_condition_temp = $json_weather['query']['results']['channel']['item']['condition']['temp'];
 
     $current_weather_div_template = <<<HTML
-      <img class="kiosk_weather_current_image" src="http://l.yimg.com/a/i/us/we/52/%s.gif"/>
+      <img class='kiosk-weather__current__item-image center-block' src='http://l.yimg.com/a/i/us/we/52/%s.gif' >
       <p><b>%s<sup>o</sup>%s</b></p>
 HTML;
 
     $forecast_weather_block_template = <<<HTML
-      <div class="kiosk_weather_forecast_block col-md-4">
+      <div class='kiosk-weather__forecast__item col-xs-4'>
         <h5>%s</h5>
-        <img class="kiosk_weather_forecast_block_image" src="http://l.yimg.com/a/i/us/we/52/%s.gif"/>
+        <img class='kiosk-weather_forecast__item_image center-block' src='http://l.yimg.com/a/i/us/we/52/%s.gif' >
         <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
       </div>
 HTML;
@@ -69,7 +74,7 @@ HTML;
     );
 
     $forecast_weather_block = '';
-    for ( $i = 1; $i < 4; $i++ ){
+    for ( $i = 0; $i < 3; $i++ ){
       $forecast_weather_block .= sprintf(
           $forecast_weather_block_template,
           date_format( date_create( $forecast[ $i ]['date'] ), 'l' ),
@@ -79,25 +84,21 @@ HTML;
       );
     }
     $weather_div = <<<HTML
-    <div class="container-fluid">
       <div class="row">
-          <div class="kiosk_weather_current col-md-3">
+          <div class="kiosk-weather__current col-xs-3">
           %s
           </div>
-          <div class="kiosk_weather_forecast col-md-9">
-            <div class="container-fluid">
-              <div class ="row">
-                <div class="kiosk_weather_location">
-                  <b>%s</b>
-                </div>
-              </div>
-              <div class="row">
-                %s
+          <div class="kiosk-weather__forecast col-xs-9">
+            <div class ="row">
+              <div class="kiosk-weather__forecast__location span12">
+                <b>%s</b>
               </div>
             </div>
+            <div class="row">
+              %s
+            </div>            
           </div>
       </div>
-    </div>
 HTML;
     return sprintf( $weather_div, $current_weather_div, $location_title, $forecast_weather_block );
   }
@@ -110,6 +111,21 @@ HTML;
    */
   public function kiosk_weather( $atts, $content = null ) {
 
+    $json = $this->kiosk_weather_json();
+    // Convert JSON to PHP array
+    $json_weather = json_decode( $json, true );
+    $kiosk_weather_div = '<div class="kiosk-weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
+    return $kiosk_weather_div;
+  }
+  /**
+   * Connect to Yahoo weather api and gets the json object for tempe area
+   * The function is seperated for unit test mocking purpose
+   * It returns either the actual feed in case of normal flow
+   * for unit test case it returns the mock up data.
+   * Returns a JSON type formatted string.
+   * @return string
+   */
+  public function kiosk_weather_json(){
     $BASE_URL = 'http://query.yahooapis.com/v1/public/yql';
     $yql_query = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="tempe, az")';
     $yql_query_url = $BASE_URL . '?q=' . urlencode( $yql_query ) . '&format=json';
@@ -117,9 +133,7 @@ HTML;
     $session = curl_init( $yql_query_url );
     curl_setopt( $session, CURLOPT_RETURNTRANSFER, true );
     $json = curl_exec( $session );
-    // Convert JSON to PHP array
-    $json_weather = json_decode( $json, true );
-    $kiosk_weather_div = '<div class="kiosk_weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
-    return $kiosk_weather_div;
+    curl_close( $session );
+    return $json;
   }
 }

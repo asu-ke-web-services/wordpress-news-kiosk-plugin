@@ -47,18 +47,19 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
   public function kiosk_time( $atts, $content = null ) {
 
     $calender_template = <<<HTML
-    <div class="row">
-      <div class="kiosk_display_cal  col-md-6">
-        <time  class="kiosk_calendar_icon">
-          <strong>%s</strong>
-          <span>%s</span>
-        </time>
+      <div class="row">
+        <div class="kiosk-date-time__calendar col-xs-4 col-sm-4">
+          <div  class="kiosk-date-time__calendar-icon">
+            <strong>%s</strong>
+            <span>%s</span>
+          </div>
+        </div>
+        <div class="kiosk-date-time__time col-xs-8 col-sm-8">
+          <p id="kiosk_display_time">%s</p>
+        </div>
       </div>
-      <div class="kiosk_display_time col-md-6">
-        <p>%s</p>
-      </div>
-    </div>
 HTML;
+
     date_default_timezone_set( 'America/Phoenix' );
     $month = date( 'M' );
     $dayOfMonth = date( 'd' );
@@ -69,7 +70,7 @@ HTML;
         $dayOfMonth,
         $current_time
     );
-    $kiosk_time_div = '<div class="kiosk_time">' . $calender_time . '</div>';
+    $kiosk_time_div = '<div class="kiosk-date-time" id="kiosk_time">' . $calender_time . '</div>';
     return $kiosk_time_div;
   }
 }

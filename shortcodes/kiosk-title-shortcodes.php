@@ -45,13 +45,13 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_title( $atts, $content = null ) {
-
+    $site_url = get_site_url();
     $asu_title = <<<HTML
-    <div class="kiosk_asu_school_sustaintabilty_logo">
-      <img src="wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png" class="img-responsive"/>
+    <div class="kiosk-title__logo">
+      <img src="{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png" class="img-responsive">
       </div>
 HTML;
-    $kiosk_title_div = '<div class="kiosk_title">' . $asu_title . '</div>';
+    $kiosk_title_div = '<div class="kiosk-title">' . $asu_title . '</div>';
     return $kiosk_title_div;
   }
 }

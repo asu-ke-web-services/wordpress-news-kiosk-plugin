@@ -43,6 +43,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $this->add_shortcode( 'kiosk-tweets', $this, 'kiosk_tweets' );
   }
 
+  /**
+   * create_base_url( $baseURI, $method, $params ) helper to create encoded url with given parameters
+   * @return string
+   */
   function create_base_url( $baseURI, $method, $params ) {
     $r = array();
     ksort( $params );
@@ -52,6 +56,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     return $method . '&' . rawurlencode( $baseURI ) . '&' . rawurlencode( implode( '&', $r ) );
   }
 
+  /**
+  * create_request_header( $oauth ) creates a Header for authentication to invoke twitter streaming API
+  * @return string
+  */
   function create_request_header( $oauth ) {
     $r = 'Authorization: OAuth ';
     $values = array();
@@ -62,41 +70,77 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     return $r;
   }
 
-  function kiosk_parse_tweets( $decode ){
+  /**
+   * time_short_form($ptime) Helper function to
+   * update tweet time relative to current time in case of
+   * less than 24 hours as hours ago
+   * or less than 1 hour as minutes ago
+   * or less than 1 minute as seconds ago
+   * @return string
+   */
+  function time_short_form( $ptime ) {
+    $etime = time() - strtotime( $ptime );
+    if ( $etime < 1 ) {
+        return 'now';
+    }
+    $a = array(
+          1                       => 's',
+          60                      => 'm',
+          60 * 60                 => 'h',
+    );
+
+    foreach ( $a as $secs => $str ) {
+      $d = $etime / $secs;
+      if ( 'h' == $str && $d < 24 || 'm' == $str && $d < 60 || 's' == $str && $d < 60 ) {
+          $r = round( $d );
+          return $r . $str;
+      }
+    }
+    return date_format( date_create( $ptime ),'d M' );
+  }
+
+  /**
+   * kiosk_parse_tweets( $decode, $limit )
+   * Accepts the json formatted string and the limit on number of tweets
+   * Creates a div block with all the tweets and by converting the hash tags and @ and urls to hyperlinks
+   * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted.
+   * @return string
+   */
+  function kiosk_parse_tweets( $decode, $limit ){
     $kiosk_tweets_header_template = <<<HTML
-    <div class="kiosk_tweets_timelineHeader">
-       <h1 class="kiosk_tweets_timelineTitle kiosk_tweets_header_font_style">Tweets</h1>
-        <a class="kiosk_tweets_twitterLogo" href="https://twitter.com/" title="Twitter" target="_blank">Twitter</a>
+    <div class="kiosk-tweets_timeline-header">
+       <b class="kiosk-tweets_timeline-header__title">Tweets</b>
+       <p class="kiosk-tweets_timeline-header__twitter-logo"  title="Twitter" target="_blank">Twitter</p>
     </div>
-    <div id="kiosk_tweets_scrollContainer" class="kiosk_tweets_scrollContainer">
-      <ol class="kiosk_tweets_list" id="kiosk_tweets_list">
+    <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets_scroll-container">
+      <ol class="kiosk-tweets__list" id="kiosk_tweets_list">
 HTML;
     $kiosk_tweets_item_template = <<<HTML
-        <li class="kiosk_tweet kiosk_tweets_item kiosk_tweets_separator">
-          <div class="kiosk_tweets_avatar">
-            <a target="_blank" href="https://twitter.com/%s">
-              <img src="%s" class="kiosk_tweets_profile-image kiosk_tweets_large" alt="">
-            </a>
+        <li class="kiosk-tweets__tweet">
+          <div class="kiosk-tweets__tweet__avatar">
+              <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
           </div>
-          <div class="kiosk_tweets_details">
-            <a target="_blank" href="https://twitter.com/%s/status/%s" class="kiosk_tweets_permalink kiosk_tweets_timestamp_font_style">
-              <time class="date">%s</time>
-            </a>
-            <div class="kiosk_tweets_header">
-              <a target="_blank" href="https://twitter.com/%s">
-               <span class="kiosk_tweets_fullName kiosk_tweets_font_style">%s</span>
-               <span class="kiosk_tweets_userName kiosk_tweets_font_style">@%s</span>
-              </a>
+          <div class="kiosk-tweets__tweet__details">
+            <div class="kiosk-tweets__tweet__details_permalink kiosk-tweets__tweet__font-style">
+              <div>%s</div>
+              <div class="kiosk-tweets__tweet__details__actual-tweet-time">%s</div>
             </div>
-            <div class="kiosk_tweets_content">
-              <div class="kiosk_tweets_text kiosk_tweets_font_style"> %s </div> %s
+            <div class="kiosk-tweets__tweet__details__header">
+               <div class="kiosk-tweets__tweet__details__header__full-name">%s</div>
+               <div class="kiosk-tweets__tweet__details__header__user-name">@%s</div>
+            </div>
+            <div>
+              <div class="kiosk-tweets__tweet__details__text kiosk-tweets__tweet__font-style"> %s </div> 
+              <div>%s</div>
             </div>
           </div>
         </li>
 HTML;
     $kiosk_tweets_retweet_template = <<<HTML
-        <div class="kiosk_tweets_retweet kiosk_tweets_font_style">
-          <i class="kiosk_tweets_retweetIcon"></i>Retweeted by <a target="_blank" href="%s" class="kiosk_tweets_font_style"> %s </a>
+        <div class="kiosk-tweets__tweet__retweet kiosk-tweets__tweet__font-style">
+          <i class="kiosk-tweets__tweet__retweet__icon"></i>
+          Retweeted by
+          <a target="_blank" href="%s" class="kiosk-tweets__tweet__font-style"> %s </a>
         </div>
 HTML;
     $kiosk_tweets_footer_template = <<<HTML
@@ -107,22 +151,29 @@ HTML;
     $reg_exHash           = '/#([a-z_0-9]+)/i';
     $reg_exUser           = '/@([a-z_0-9]+)/i';
     $kisok_tweet_items    = '';
+    $num_of_items         = 0;
     foreach ( $decode as $tweet ) {
-        $tweet_text         = $tweet['text']; //get the tweet
-        $tweet_screen_name  = $tweet['user']['screen_name'];
-        $tweet_full_name    = $tweet['user']['name'];
-        $tweet_profile_pic  = $tweet['user']['profile_image_url'];
-        $tweet_date_time    = date_format( date_create( $tweet['created_at'] ),'d M' );
-        $tweet_status_link  = $tweet['id_str'];
+      if ( ++$num_of_items > $limit ){
+        break;
+      }
+      $tweet_text              = array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
+      $tweet_screen_name       = array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
+      $tweet_full_name         = array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
+      $tweet_profile_pic       = array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
+      $tweet_date_time         = array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
+      $tweet_date_time_actual  = strtotime( $tweet['created_at'] );
+      $tweet_status_link       = array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
 
-      if ( 0 != $tweet['retweet_count'] && 1 <= count( $tweet['retweeted_status'] ) ){
+      if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ){
         $tweet_screen_name       = $tweet['retweeted_status']['user']['screen_name'];
         $tweet_full_name         = $tweet['retweeted_status']['user']['name'];
         $tweet_profile_pic       = $tweet['retweeted_status']['user']['profile_image_url'];
-        $tweet_date_time         = date_format( date_create( $tweet['retweeted_status']['created_at'] ),'d M' );
+        //$tweet_date_time       = date_format( date_create( $tweet['retweeted_status']['created_at'] ),'d M' );
+        $tweet_date_time         = $this->time_short_form( $tweet['retweeted_status']['created_at'] );
+        $tweet_date_time_actual  = strtotime( $tweet['retweeted_status']['created_at'] );
         $tweet_status_link       = $tweet['retweeted_status']['id_str'];
         $tweet_text_retweet_link = $tweet['retweeted_status']['user']['profile_image_url'];
-        $tweet_text_retweet_by   = $tweet['retweeted_status']['user']['screen_name'];
+        $tweet_text_retweet_by   = $tweet['user']['screen_name'];
         $kiosk_tweets_retweet    = sprintf(
             $kiosk_tweets_retweet_template,
             $tweet_text_retweet_link,
@@ -134,25 +185,26 @@ HTML;
       // make links link to URL
       if ( preg_match( $reg_exUrl, $tweet_text, $url ) ) {
         // make the urls hyper links
-        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk_tweets_font_style\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exUrl, "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
       }
       if ( preg_match( $reg_exHash, $tweet_text, $hash ) ) {
         // make the hash tags hyper links
-        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk_tweets_font_style\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+        $tweet_text = preg_replace( $reg_exHash, "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
         // swap out the # in the URL to make %23
         $tweet_text = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
       }
       if ( preg_match( $reg_exUser, $tweet_text, $user ) ) {
-        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk_tweets_font_style\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
+        $tweet_text = preg_replace( '/@([a-z_0-9]+)/i', "<a class=\"kiosk-tweets__tweet__font-style kiosk-tweets__tweet__link\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
       }
       $kisok_tweet = sprintf(
           $kiosk_tweets_item_template,
-          $tweet_screen_name,
+          //$tweet_screen_name,
           $tweet_profile_pic,
-          $tweet_screen_name,
-          $tweet_status_link,
+          //$tweet_screen_name,
+          //$tweet_status_link,
           $tweet_date_time,
-          $tweet_screen_name,
+          $tweet_date_time_actual,
+          //$tweet_screen_name,
           $tweet_full_name,
           $tweet_screen_name,
           $tweet_text,
@@ -174,7 +226,30 @@ HTML;
    *
    */
   public function kiosk_tweets( $atts, $content = null ) {
+    $atts                  = shortcode_atts(
+        array(
+          'limit'  => '20',
+        ),
+        $atts
+    );
 
+    $json   = $this->kiosk_tweets_json( $atts, $content );
+    $decode = json_decode( $json, true ); //getting the file content as array
+    if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){
+      $kiosk_tweets_div = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
+    } else {
+      $kiosk_tweets_div = '<div class="kiosk-tweets">' . $this->kiosk_parse_tweets( $decode, $atts['limit'] ) . '</div>';
+    }
+    return $kiosk_tweets_div;
+  }
+
+  /**
+   * kiosk_tweets_json( $atts, $content ) Connects to twitter streaming API using given credentails
+   * and creates a json formatted string with all the given limit of tweets
+   * This function returns mock up data incase of unit testing.
+   * @return string
+   */
+  public function kiosk_tweets_json( $atts, $content ){
     $twitter_handle            = $this->localsettings['twitter_handle'];
     $oauth_access_token        = $this->localsettings['oauth_access_token'];
     $oauth_access_token_secret = $this->localsettings['oauth_access_token_secret'];
@@ -189,6 +264,8 @@ HTML;
      'oauth_timestamp'        => time(),
      'oauth_version'          => '1.0',
      'screen_name'            => $twitter_handle,
+     'count'                  => $atts['limit'],
+     'include_rts'            => 1,
     );
 
     $base_info        = $this->create_base_url( $twitter_api_url, 'GET', $oauth );
@@ -205,7 +282,7 @@ HTML;
     $options = array(
       CURLOPT_HTTPHEADER     => $header,
       CURLOPT_HEADER         => false,
-      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle,
+      CURLOPT_URL            => $twitter_api_url . '?screen_name=' . $twitter_handle . '&count=' . $atts['limit'] . '&include_rts=1',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_SSL_VERIFYPEER => false,
     );
@@ -213,8 +290,7 @@ HTML;
     curl_setopt_array( $feed, $options );
     $json   = curl_exec( $feed );
     curl_close( $feed );
-    $decode = json_decode( $json, true ); //getting the file content as array
-    $kiosk_tweets_div = '<div class="kiosk_tweets">' . $this->kiosk_parse_tweets( $decode ) . '</div>';
-    return $kiosk_tweets_div;
+    return $json;
   }
+
 }

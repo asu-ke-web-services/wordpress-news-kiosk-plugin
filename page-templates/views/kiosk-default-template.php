@@ -12,7 +12,7 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 wp_head(); ?>
 
-<div class="kisok_page_template widecolumn">
+<div class="kiosk-page-template widecolumn">
 <?php if ( have_posts() ) : while ( have_posts() ) : the_post();
     the_content();
 endwhile; endif; ?>
