@@ -23,13 +23,13 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
     $content = $stub->kiosk_tweets( '' );
-    $this->assertContains( 'kiosk_tweets_item', $content, 'Should return all current tweets item max default 20' );
+    $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return all current tweets item max default 20' );
 
     $number_of_items = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 8, $number_of_items, 'There should be <= 8 news items' );
 
     $content = $stub->kiosk_tweets( array( 'limit' => 4 ) );
-    $this->assertContains( 'kiosk_tweets_item', $content, 'Should return current tweets item' );
+    $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return current tweets item' );
     $number_of_items = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 4, $number_of_items, 'There should be <= 4 news items' );
 

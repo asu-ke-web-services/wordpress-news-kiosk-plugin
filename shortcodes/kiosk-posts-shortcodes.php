@@ -122,8 +122,8 @@ HTML;
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $image_attributes[0],
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
             //Check if posts had images in its body
@@ -140,8 +140,8 @@ HTML;
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $pics[2][0],
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
             //Check if page_feature_image custom field has image and if it absolute else make absolute url from relative url //TO DO
@@ -158,8 +158,8 @@ HTML;
                 $kiosk_events_item_template,
                 $div_slider_active,
                 $page_feature_image,
-                $post->post_title,
-                apply_filters( 'the_title', $post->post_title )
+                $post->post_title
+                //apply_filters( 'the_title', $post->post_title )
             );
             $current_post_count++;
           }
@@ -185,10 +185,15 @@ HTML;
             $div_listitems_active,
             $k
         );
+        if ( parse_url( $default_image_array[ $k ], PHP_URL_SCHEME ) == '' ) {
+          $default_image_array[ $k ] = home_url( $default_image_array[ $k ] );
+        }
+
         $div_sliders   .= sprintf(
             $kiosk_events_item_template,
             $div_slider_active,
-            trim( $default_image_array[ $k ] )
+            trim( $default_image_array[ $k ] ),
+            ''
         );
         $current_post_count++;
 

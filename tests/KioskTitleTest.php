@@ -16,6 +16,6 @@ class KioskTitleTest extends WP_UnitTestCase {
     $this->assertTrue( shortcode_exists( 'kiosk-title' ) );
 
     $content = do_shortcode( '[kiosk-title]' );
-    $this->assertContains( 'kiosk_asu_school_sustaintabilty_logo', $content, 'Should return title image' );
+    $this->assertContains( 'kiosk-title__logo', $content, 'Should return title image' );
   }
 }

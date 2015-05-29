@@ -45,7 +45,6 @@ class CSS_Styles extends Base_Registrar {
   public function define_hooks() {
     $this->add_action( 'wp_enqueue_scripts',  $this,'kiosk_scripts' );
     $this->add_action( 'wp_enqueue_scripts', $this, 'wp_enqueue_scripts' );
-    
   }
 
   /**
