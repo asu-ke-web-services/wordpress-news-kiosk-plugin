@@ -44,15 +44,6 @@ class CSS_Styles extends Base_Registrar {
    */
   public function define_hooks() {
     $this->add_action( 'wp_enqueue_scripts',  $this,'kiosk_scripts' );
-    $this->add_action( 'wp_enqueue_scripts', $this, 'wp_enqueue_scripts' );
-  }
-
-  /**
-   * Enqueue the CSS
-   * Hooks onto `wp_enqueue_scritps`.
-   */
-  public function wp_enqueue_scripts() {
-    wp_enqueue_style( $this->plugin_slug, $this->css, array(), $this->version );
   }
   /**
   * Enqueue scripts and styles.
@@ -69,7 +60,6 @@ class CSS_Styles extends Base_Registrar {
     wp_enqueue_script( 'bootstrap-js', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
     wp_enqueue_script( 'kiosk-helper', $plugin_dir_url . '/assets/js/kiosk-helper.js', array( 'jquery' ), '1.0', true );
     wp_enqueue_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
-    //wp_enqueue_style( 'base-wordpress-theme', $plugin_dir_url . '/style.css', array(), false, 'all' );
-
+    wp_enqueue_style( $this->plugin_slug, $this->css, array(), $this->version);
   }
 }

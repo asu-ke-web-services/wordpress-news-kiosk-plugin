@@ -107,10 +107,12 @@ function kioskTweetTime() {
  *
  */
 function reSizeTweetsEventsNews() {
-  var screen_height = window.screen.height; 
-   var screen_width = window.screen.width; 
-  $('.col-md-3').width(window.screen.width*0.28);
-  $('.col-md-6').width(window.screen.width*0.36);
+  var screen_height = window.screen.height-50; 
+   var screen_width = window.screen.width-135; 
+   var side_width = screen_width*0.29;
+   var middle_width = screen_width - 2*side_width;
+  $('.col-md-3.outer').width(side_width);
+  $('.col-md-6.outer').width(middle_width);
   $('.kiosk-tweets').height(screen_height - $('.kiosk-tweets').offset().top);
   $('.kiosk-tweets_scroll-container').height($('.kiosk-tweets').height() - 120);
   $('.kiosk-asu-news').height(screen_height - $('.kiosk-asu-news').offset().top);
@@ -125,6 +127,6 @@ $(document).ready(function() {
 });
 $(document).ready(function() {
   kioskTweetTime();
-  reSizeTweetsEventsNews();
+  //reSizeTweetsEventsNews();
   kioskTime();
 });
