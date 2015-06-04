@@ -121,6 +121,12 @@ HTML;
   }
 
   public function kiosk_tweets( $atts, $content = null ) {
+    if ( ! is_array( $atts ) ) {
+      $atts = array( 'limit' => 20 );
+    } else if ( ! array_key_exists( 'limit', $atts ) ){
+        $atts['limit'] = 20;
+    }
+
     $twitter_api_params = array(
       'twitter_handle'            => $this->localsettings['twitter_handle'],
       'oauth_access_token'        => $this->localsettings['oauth_access_token'],
@@ -129,7 +135,7 @@ HTML;
       'consumer_secret'           => $this->localsettings['consumer_secret'],
       'limit'                     => $atts['limit'],
       );
-    $json = $this->twitter_helper->tweets_json( $twitter_api_params );
+    $json = $this->get_tweets_json( $twitter_api_params );
     if ( empty( $json ) ){
       if ( $this->request_not_from_wp ){
         $kiosk_tweets_div = '';
@@ -146,10 +152,19 @@ HTML;
         }
       } else {
         $kiosk_tweets_div = '';
-        error_log( basename( __FILE__ ) .' Twitter API error: JSON ' . json_last_error_msg() . "\n" , 3, $this->log_file );
+        error_log( basename( __FILE__ ) .' Twitter API error: JSON ' . json_last_error_msg() . "\n" );
       }
     }
     return $kiosk_tweets_div;
   }
-
+  /**
+   * get_tweets_json( $twitter_api_params ) is being used as part of unit test cases to mock
+   * up data it written separately.
+   * @param array
+   * @return JSON object
+   */
+  public function get_tweets_json( $twitter_api_params ){
+    $json = $this->twitter_helper->tweets_json( $twitter_api_params );
+    return $json;
+  }
 }

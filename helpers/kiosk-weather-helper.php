@@ -11,7 +11,6 @@ namespace Kiosk_WP;
  * Collection of helper functions for determining base paths
  */
 class Kiosk_Weather_Helper {
-  public $log_file = '/tmp/kiosk.log';
   public $request_not_from_wp = false;
   public $weather_helper;
   public function __construct()  {
@@ -80,7 +79,7 @@ HTML;
 
   public function kiosk_weather( $atts, $content = null ) {
 
-    $json = $this->weather_helper->get_weather_json( 'tempe, az' );
+    $json = $this->get_weather_json( 'tempe, az' );
     if ( empty( $json ) ){
       if ( $this->request_not_from_wp ){
         $kiosk_weather_div = '';
@@ -94,9 +93,19 @@ HTML;
         $kiosk_weather_div = '<div class="kiosk-weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
       } else {
         $kiosk_weather_div = '';
-        error_log( basename( __FILE__ ) .'Weather API error: JSON ' . json_last_error_msg() . "\n", 3, $this->log_file );
+        error_log( basename( __FILE__ ) .'Weather API error: JSON ' . json_last_error_msg() . "\n" );
       }
     }
     return $kiosk_weather_div;
+  }
+  /**
+   * get_weather_json( $location ) is being used as part of unit test case to mock up test data
+   * so it is written separate
+   * @param string
+   * @return json
+   */
+  public function get_weather_json( $location ){
+    $json = $this->weather_helper->get_weather_json( $location );
+    return $json;
   }
 }

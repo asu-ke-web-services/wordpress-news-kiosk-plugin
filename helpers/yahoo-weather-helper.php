@@ -45,13 +45,13 @@ class Yahoo_Weather_Api_Helper {
       'current_weather_image'  => '',
       'current_weather_unit'   => '',
       'current_weather_temp'   => '',
-      );
+    );
     $forecast_weather_details = array(
       'date'  => '',
       'image' => '',
       'low'   => '',
       'high'  => '',
-      );
+    );
     $yahoo_weather_icon_url = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
     $location_city = $json_weather['query']['results']['channel']['location']['city'];
     $location_region = $json_weather['query']['results']['channel']['location']['region'];

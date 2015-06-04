@@ -28,7 +28,6 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
 require_once $_tests_dir . '/includes/bootstrap.php';
 require_once dirname( __FILE__ ) . '/data-loader.php';
-print_r( ABSPATH . 'wp-includes/feed.php' );
 require_once ABSPATH . 'wp-includes/class-simplepie.php';
 require_once ABSPATH . 'wp-includes/feed.php'; // include the required file to pull feed
 

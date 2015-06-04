@@ -16,17 +16,17 @@ class KioskTweetsTest extends WP_UnitTestCase {
     $this->assertTrue( shortcode_exists( 'kiosk-tweets' ) );
 
     // Test with mockup data
-    $stub = $this->getMock( 'Kiosk_WP\Kiosk_Tweets_Shortcodes', array( 'kiosk_tweets_json' ) );
+    $stub = $this->getMock( 'Kiosk_WP\Kiosk_Tweets_Helper', array( 'get_tweets_json' ) );
 
     $stub->expects( $this->any() )
-         ->method( 'kiosk_tweets_json' )
+         ->method( 'get_tweets_json' )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
     $content = $stub->kiosk_tweets( '' );
     $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return all current tweets item max default 20' );
 
     $number_of_items = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 20, $number_of_items, 'There should be <= 20 news items' );
+    $this->assertLessThanOrEqual( 8, $number_of_items, 'There should be <= 8 news items' );
 
     $content = $stub->kiosk_tweets( array( 'limit' => 4 ) );
     $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return current tweets item' );

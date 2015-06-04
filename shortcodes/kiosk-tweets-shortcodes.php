@@ -19,14 +19,14 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
 
   protected $plugin_slug;
   protected $version;
-  protected $tweet_helper;
+  protected $kiosk_tweet_helper;
   protected $localsettings = array();
 
   public function __construct()  {
     $this->plugin_slug = 'kiosk-tweets-shortcodes';
     $this->version     = '0.1';
     $this->define_hooks();
-    $this->tweet_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
+    $this->kiosk_tweet_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
   }
 
 
@@ -51,6 +51,6 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    return $this->tweet_helper->kiosk_tweets( $atts, $content );
+    return $this->kiosk_tweet_helper->kiosk_tweets( $atts, $content );
   }
 }

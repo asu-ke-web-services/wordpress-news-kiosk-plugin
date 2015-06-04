@@ -18,10 +18,10 @@ class KioskWeatherTest extends WP_UnitTestCase {
     // Test no atributes
     //$content = do_shortcode( '[kiosk-weather]' );
     // Test with mockup data
-    $stub = $this->getMock( 'Kiosk_WP\Kiosk_Weather_Shortcodes', array( 'kiosk_weather_json' ) );
+    $stub = $this->getMock( 'Kiosk_WP\Kiosk_Weather_Helper', array( 'get_weather_json' ) );
 
     $stub->expects( $this->any() )
-         ->method( 'kiosk_weather_json' )
+         ->method( 'get_weather_json' )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
     $content = $stub->kiosk_weather( '' );
