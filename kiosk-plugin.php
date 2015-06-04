@@ -34,6 +34,10 @@ function setup_kiosk_wp_plugin() {
   // Mo version checking for now
   // Require all the files for the Kiosk plugin
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/twitter-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/yahoo-weather-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
@@ -45,6 +49,8 @@ function setup_kiosk_wp_plugin() {
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'page-templates/kiosk-page-templates.php';
+  require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-tweets-page.php';
+  require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-weather-page.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
   require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
 
@@ -53,6 +59,11 @@ function setup_kiosk_wp_plugin() {
   // ===================
   $plugin = new \Kiosk_WP\Kiosk_Plugin();
   $plugin->run();
+
+  //Tweets helper
+  $kiosk_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
+  //Weather helper
+  $kiosk_helper = new \Kiosk_WP\Kiosk_Weather_Helper();
 
   // ==========
   // Shortcodes
@@ -79,6 +90,15 @@ function setup_kiosk_wp_plugin() {
   $posts_shortcodes->run();
 
   // =====
+  // Pages
+  // =====
+  $kiosk_pages = new \Kiosk_WP\Kiosk_Tweets_Page();
+  $kiosk_pages->run();
+
+  $kiosk_pages = new \Kiosk_WP\Kiosk_Weather_Page();
+  $kiosk_pages->run();
+
+  // =====
   // Admin
   // =====
   $general_admin    = new \Kiosk_WP\General_Admin();
@@ -97,6 +117,5 @@ function setup_kiosk_wp_plugin() {
   // =============
   $css_styles = new \Kiosk_WP\CSS_Styles();
   $css_styles->run();
-
 }
 setup_kiosk_wp_plugin();

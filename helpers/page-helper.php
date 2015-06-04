@@ -9,7 +9,7 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
   exit();
 }
 
-class Page_Helper {
+public class Page_Helper {
   // Send header data if we have it
   public static function include_headers( $header_data = array() ) {
     if ( ! headers_sent() ) {

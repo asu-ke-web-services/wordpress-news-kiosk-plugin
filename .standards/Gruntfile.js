@@ -49,6 +49,7 @@
       pages: {
         dir: [
         '../pages/*.php',
+        '../pages/*/*.php',
         ]
       },
 
@@ -76,8 +77,7 @@
         bin: './vendor/bin/phpcs',
         standard: [
           'WordPress-Core'
-        ],
-        ignore: 'header-asu.php'
+        ]
       }
     },
     

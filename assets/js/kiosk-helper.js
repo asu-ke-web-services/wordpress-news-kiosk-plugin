@@ -1,132 +1,164 @@
 /*! kisok v1.0 
- * Scrolls tweets with slideDown effect and a delay of 5 seconds. 
- **/
-$(document).ready(function() {
-  setInterval(function scrollTweets() {
-    $('.kiosk-tweets__list li:last-child').slideDown('slow', function() {
-      $(this).prependTo($('.kiosk-tweets__list')).show();
-    });
-  }, 5000);
-});
-
-/*
+ */
+/**
  * Invokes itself with 5 seconds interval and updates the time
  *
  */
-function kioskTime() {
+function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   var date = new Date();
   var hours = date.getHours();
   var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'PM' : 'AM'
+  var date_string = date.toString()
+  var month = date_string.substring(4, 7);
+  var date = date_string.substring(8, 10);
+  var ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
-  document.getElementById('kiosk_display_time').innerHTML = strTime;
+  $(time_selector).html(strTime);
+  $(cal_selector_mon).html(month);
+  $(cal_selector_date).html(date);
   var t = setTimeout(function() {
-    kioskTime();
-  }, 5000);
-
+    updateKioskTime(time_selector, cal_selector_mon, cal_selector_date);
+  }, 5000 /* 5 seconds */ );
 }
 
-/*
- * Invokes ajax call to server every 5 minutes and 
- * replaces tweets block and weather block
- *
- */
-$(document).ready(function() {
-  setInterval(function() {
-    $.ajax({
-      url: $(location).attr("href"),
-      success: function(response) {
-        result_kiosk_tweets = $(".kiosk-tweets", response);
-        $(".kiosk-tweets").replaceWith(result_kiosk_tweets);
-        result_kiosk_weather = $(".kiosk-weather", response);
-        $(".kiosk-weather").replaceWith(result_kiosk_weather);
-        reSizeTweetsEventsNews();
-      }
-    })
-  }, 300000);
-});
-
-
-/*
+/**
  * To update tweet time relative to current time every 10 seconds
  * For each tweet read the actual time got from server and update the tweet time
  * relative to the current time every 10 seconds interval
+ */
+function setRelativeTweetTime(old_time_selector, actual_time_selector) {
+  var $formated_time = $(old_time_selector);
+  $(actual_time_selector).each(function(index, time_tag) {
+    var old_time = $formated_time.eq(index).html();
+    if (old_time.length <= 3) {
+      var actual_time = $(time_tag).html();
+      var relative_time = calculateRelativeTime(actual_time);
+      $formated_time.eq(index).html(relative_time);
+    }
+  });
+  var t = setTimeout(function() {
+    setRelativeTweetTime(old_time_selector, actual_time_selector);
+  }, 10000 /* 10 seconds */ );
+}
+
+/**
+ * calculateRelativeTime(tweet_time)
+ * tweet_time is Unix timestamp (the number of seconds since January 1 1970 00:00:00 GMT).
  * If less than 1 second show as now
  * If less than minute display as seconds ago
  * If less than hours display as minutes ago
  * If less than 24 hours display as hours ago
- * Otherwise leave it as set by server.
+ * Otherwise return in days. This is duplicate functionality of php to update relative time
+ * @see Kiosk_WP::Twitter_Api_Helper::time_short_form
  */
-function kioskTweetTime() {
-  var time = Math.round(+new Date() / 1000);
-  var formated_time = $('.kiosk_date');
-  $('.kiosk_actualtweettime').each(function(index, timeTag) {
-    var oldTime = formated_time[index].innerHTML;
-    var lastChar = oldTime.charAt(oldTime.length - 1);
-    if (oldTime.length <= 3) {
-      var actualTime = timeTag.innerHTML;
-      var etime = time - actualTime;
-      if (etime < 1) {
-        formated_time[index].innerHTML = 'now';
-      }
-      var a = [];
-      a.push({
-        secs: 1,
-        str: 's'
-      });
-      a.push({
-        secs: 60,
-        str: 'm',
-      });
-      a.push({
-        secs: 60 * 60,
-        str: 'h',
-      });
 
-      for (i = 0; i < a.length; i++) {
-        var d = etime / Number(a[i].secs);
-        if (d >= 1 && (a[i].str == 'h' && d < 24 || a[i].str == 'm' && d < 60 || a[i].str == 's' && d < 60)) {
-          r = Math.round(d);
-          formated_time[index].innerHTML = r + a[i].str;
-        }
+function calculateRelativeTime(tweet_time) {
+  var time = Math.round(+new Date() / 1000);
+  var elapsed_time = time - tweet_time;
+  var temp = '0h';
+  if (elapsed_time < 1) {
+    return 'now';
+  }
+  var a = [];
+  a.push({
+    secs: 1,
+    unit: 's'
+  });
+  a.push({
+    secs: 60,
+    unit: 'm'
+  });
+  a.push({
+    secs: 60 * 60,
+    unit: 'h'
+  });
+  a.push({
+    secs: 24 * 60 * 60,
+    unit: 'd'
+  });
+
+  for (var i = 0; i < a.length; i++) {
+    var ratio_elapsed_to_unit = elapsed_time / a[i].secs;
+    var rounded_time = Math.round(ratio_elapsed_to_unit);
+    temp = rounded_time + a[i].unit;
+    var not_a_fractional_unit = ratio_elapsed_to_unit >= 1;
+    var less_than_one_day = a[i].unit == 'h' && ratio_elapsed_to_unit < 24;
+    var less_than_one_hour = a[i].unit == 'm' && ratio_elapsed_to_unit < 60;
+    var less_than_one_minute = a[i].unit == 's' && ratio_elapsed_to_unit < 60;
+    if (not_a_fractional_unit && (less_than_one_day || less_than_one_hour || less_than_one_minute)) {
+      return temp;
+    }
+  }
+  return temp;
+}
+
+setRelativeTweetTime('.kiosk-tweets__tweet__details__tweet-time', '.kiosk-tweets__tweet__details__actual-tweet-time');
+updateKioskTime('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong', '.kiosk-date-time__calendar-icon span');
+
+/**
+ * set carousel effect to 10 seconds
+ */
+$('.carousel').carousel({
+  interval: 10000
+});
+
+/**
+ * Invokes ajax call to server every 5 minutes and
+ * replaces tweets block and weather block
+ *
+ */
+var site_url = $(location).attr("href");
+var tweets_limit = 20;
+var tweets_url = site_url + 'kiosk/twitter/limit/' + tweets_limit;
+var weather_url = site_url + 'kiosk/weather';
+setInterval(function() {
+  $.ajax({
+    url: tweets_url,
+    success: function(response) {
+      var $response_tweets = $(".kiosk-tweets", response);
+      if ($response_tweets.length) {
+        $(".kiosk-tweets").replaceWith($response_tweets);
       }
     }
   });
-  var t = setTimeout(function() {
-    kioskTweetTime();
-  }, 10000);
 
-}
+  $.ajax({
+    url: weather_url,
+    success: function(response) {
+      $response_weather = $(".kiosk-weather", response);
+      if ($response_weather.length) {
+        $(".kiosk-weather").replaceWith($response_weather);
+      }
+    }
+  });
+}, 300000 /* 5 minutes */ );
 
 /**
- *reSizeTweetsEventsNews() changes the size of Tweets, asu-news and events block according to background image height of 1080px.
- *
+ * every 10 seconds, move
+ * the first tweet up. After animation, reset list,
+ * and move first tweet to the end of the list
  */
-function reSizeTweetsEventsNews() {
-  var screen_height = window.screen.height-50; 
-   var screen_width = window.screen.width-135; 
-   var side_width = screen_width*0.29;
-   var middle_width = screen_width - 2*side_width;
-  $('.col-md-3.outer').width(side_width);
-  $('.col-md-6.outer').width(middle_width);
-  $('.kiosk-tweets').height(screen_height - $('.kiosk-tweets').offset().top);
-  $('.kiosk-tweets_scroll-container').height($('.kiosk-tweets').height() - 120);
-  $('.kiosk-asu-news').height(screen_height - $('.kiosk-asu-news').offset().top);
-  $('.kiosk-events').height(screen_height - $('.kiosk-events').offset().top);
-  $('.kiosk-events__slider__image').height(screen_height - $('.kiosk-events__slider__image').offset().top);
-  $('.kiosk-events__slider__image').width(($('.kiosk-events').width()>$('.kiosk-events__slider').width()?$('.kiosk-events').width():$('.kiosk-events__slider').width()));
-}
-$(document).ready(function() {
-  $('.carousel').carousel({
-    interval: 10000
-  })
-});
-$(document).ready(function() {
-  kioskTweetTime();
-  //reSizeTweetsEventsNews();
-  kioskTime();
-});
+var $tweet_list = $('.kiosk-tweets__list');
+setInterval(function tweetAnimate() {
+  var $first_tweet = $tweet_list.find('li:first');
+  $tweet_list.find('li').animate({
+    top: (-1 * $first_tweet.outerHeight(true)) + 'px' // calculate height of first element
+  }, 2000, function() {
+    $first_tweet.appendTo($tweet_list);
+    $first_tweet.show();
+    $tweet_list.find('li').css({
+      'top': '0px'
+    });
+  });
+}, 10000 /* 10 seconds */ );
+
+/**
+ * reloads page every day
+ */
+setTimeout(function() {
+  location.reload()
+}, 24 * 60 * 60 * 1000 /* 24 hours */ );

@@ -26,7 +26,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
     $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return all current tweets item max default 20' );
 
     $number_of_items = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 8, $number_of_items, 'There should be <= 8 news items' );
+    $this->assertLessThanOrEqual( 20, $number_of_items, 'There should be <= 20 news items' );
 
     $content = $stub->kiosk_tweets( array( 'limit' => 4 ) );
     $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return current tweets item' );
