@@ -66,10 +66,10 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $current_post_count = 0;
     $kiosk_gallery_slider_template      = '<li %s data-target="#kiosk_gallery_slider" data-slide-to="%d"></li>';
     $kiosk_gallery_slider_item_template = <<<HTML
-    <div class="item %s">
+    <div class="item %s kiosk-gallery__slider__image">
       <img src="%s" class="img-responsive center-block" alt="%s">
       <div class="kiosk-gallery__slider-caption carousel-caption">
-       <h3>%s</h3>
+       <h3><strong>%s</strong></h3>
       </div>
     </div>
 HTML;

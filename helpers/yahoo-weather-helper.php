@@ -57,7 +57,7 @@ class Yahoo_Weather_Api_Helper {
     $location_region = $json_weather['query']['results']['channel']['location']['region'];
     $forecast = $json_weather['query']['results']['channel']['item']['forecast'];
     $yahoo_weather_code = $json_weather['query']['results']['channel']['item']['condition']['code'];
-    $weather_details['location_title'] = $location_city.' , '.$location_region;
+    $weather_details['location_title'] = $location_city . ', ' . $location_region;
     $weather_details['current_weather_image'] = sprintf(
         $yahoo_weather_icon_url,
         $yahoo_weather_code

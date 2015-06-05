@@ -66,7 +66,8 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
     $kiosk_events_item_template = <<<HTML
     <div class="item %s center-block kiosk-events__slider__image">
-      <img src="%s" class="img-responsive center-block " alt="%s">
+    <span class="helper"></span>
+      <img src="%s" class="img-responsive center-block vertical_center" alt="%s">
     </div>
 HTML;
 

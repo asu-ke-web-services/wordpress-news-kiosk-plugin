@@ -19,10 +19,9 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
 
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-news-shortcodes';
     $this->version     = '0.1';
-
     $this->load_dependencies();
     $this->define_hooks();
   }
