@@ -87,10 +87,8 @@ HTML;
       }
     } else {
       // Convert JSON to PHP array
-	     $json = str_replace( '&quot;', '"', $json );
+      $json = Json_Decode_Helper::remove_unwanted_chars( $json );
       $json_weather = json_decode( $json, true );
-		    print_r( $json );
-		    print_r( $json_weather );
       if ( $json_weather != null && json_last_error() === JSON_ERROR_NONE ) {
         $kiosk_weather_div = '<div class="kiosk-weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
       } else {

@@ -141,7 +141,7 @@ HTML;
         $kiosk_tweets_div = '<div class="kiosk-tweets">Twitter API Errored</div>';
       }
     } else {
-	     $json = str_replace( '&quot;', '"', $json );
+      $json = Json_Decode_Helper::remove_unwanted_chars( $json );
       $decode = json_decode( $json, true ); //getting the file content as array
       if ( $decode != null && json_last_error( ) === JSON_ERROR_NONE ) {
         if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ){

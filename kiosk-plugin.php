@@ -38,6 +38,7 @@ function setup_kiosk_wp_plugin() {
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/twitter-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/yahoo-weather-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/json-decode-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
