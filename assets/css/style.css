@@ -7,38 +7,158 @@
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 100%;
   color: #333;
-  height: 1080px;
-  width: 1920px;
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px 30px;
+  height: 100vh;
+  width: 100vw;
+  flex: auto;
+  vertical-align: middle;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
 }
 
 .kiosk-page-template h1 {
   font-weight: normal;
 }
 
+.kiosk-layout-column--1 {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-wrap: wrap;
+  flex: auto;
+  height: 100%;
+  width: 26%;
+  vertical-align: middle;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.kiosk-layout-column--2 {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 43%;
+  flex: auto;
+  padding: 10px 30px 0px 30px;
+  vertical-align: middle;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.kiosk-layout-column--3 {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  width: 26%;
+  flex: auto;
+  vertical-align: middle;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.kiosk-layout-title{
+  height: 13vh;
+  width: 100%;
+  padding: 0px 0px 15px 0px;
+
+}
+.kiosk-layout-weather{
+  height: 25vh;
+  width: 100%;
+  padding: 15px 0px 15px 0px;
+
+}
+.kiosk-layout-tweets{
+  height: 55vh;
+  width: 100%;
+  padding: 15px 0px 10px 0px;
+}
+.kiosk-layout-events{
+  height: 100vh;
+  width: 100%;
+}
+.kiosk-layout-time{
+  height: 13vh;
+  width: 100%;
+  padding: 0px 0px 15px 0px;
+}
+.kiosk-layout-gallery{
+  height: 32vh;
+  width: 100%;
+  padding: 15px 0px 15px 0px;
+
+}
+.kiosk-layout-asu-news{
+  height: 47vh;
+  width: 100%;
+  padding: 15px 0px 0px 0px;
+}
+
 .kiosk-title {
-  height: 151px;
+  /*height: 151px;
   left: 40px;
   position: absolute;
   top: 40px;
   width: 495px;
-  z-index: 15;
+  z-index: 15;*/
+  
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.kiosk-title__logo{
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-align-items: center;
+  align-items: center;
 }
 
 .kiosk-weather {
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
   border-radius: 25px;
-  overflow: hidden;
   background: none repeat scroll 0% 0% rgba(106, 168, 79, 0.76);
-  height: 240px;
+  /*height: 240px;
   left: 40px;
   position: absolute;
   top: 200px;
   width: 495px;
-  z-index: 4;
+  z-index: 4;*/
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  
+  vertical-align: middle;
 }
 
 .kiosk-weather [class*='kiosk-weather__forecast']:not(:first-child) {
@@ -48,7 +168,11 @@
 .kiosk-weather [class*='kiosk-weather__forecast']:not(:last-child) {
   padding-right: 0;
 }
-
+.kiosk-weather_vertical-center{
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
 .kiosk-weather__forecast__item {
   text-align: center;
 }
@@ -86,22 +210,26 @@
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
   border-radius: 25px;
-  overflow: hidden;
   background: none repeat scroll 0% 0% rgba(68, 68, 68, 0.6);
   color: #fff;
-  height: 550px;
+  /*height: 550px;
   left: 40px;
   position: absolute;
   top: 490px;
   width: 495px;
-  z-index: 3;
+  z-index: 3;*/
+  width: 100%;
   padding: 20px;
+  height: 100%;
+  
+  overflow: hidden;
 }
 
 .kiosk-tweets_scroll-container {
   position: relative;
   overflow: hidden;
-  height: 420px;
+  padding-bottom: 10px;
+  height: 86%;
 }
 /* Header */
 
@@ -109,7 +237,7 @@
   position: relative;
   color: #fff;
   margin-bottom: 10px;
-  height: 60px;
+  height: 13%;
 }
 
 .kiosk-tweets_timeline-header__title {
@@ -128,7 +256,6 @@
   background: transparent url('../images/twitter-bird.png') no-repeat center;
   background-size: 100%;
   color: #fff;
-  z-index: -1;
 }
 
 .kiosk-tweets__tweet__font-style {
@@ -149,9 +276,8 @@
 
 .kiosk-tweets__list {
   position: relative;
-  height: 420px;
-  padding-left: 0px;
-  overflow: hidden;
+  padding-left: 20px;
+  height: 100% ;
 }
 
 .kiosk-tweets__tweet__avatar {
@@ -160,13 +286,11 @@
 
 .kiosk-tweets__tweet__details {
   overflow: hidden;
-  -- padding-left: 10px;
 }
 
 .kiosk-tweets__tweet__details_permalink {
   position: relative;
   float: right;
-  z-index: 10;
 }
 
 .kiosk-tweets__tweet__details__header {
@@ -203,7 +327,6 @@
 .kiosk-tweets__tweet__retweet__icon {
   width: 14px;
   height: 16px;
-  --margin-right: 4px;
   display: inline-block;
   vertical-align: middle;
   background: transparent url('../images/retweet.png') no-repeat center;
@@ -218,30 +341,62 @@
 }
 
 .kiosk-events {
-  height: 1019px;
+  /*height: 1019px;
   left: 592px;
   position: absolute;
   top: 55px;
   visibility: visible;
   width: 759px;
-  z-index: 18;
+  z-index: 18;*/
+  
+  overflow: hidden;
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-align-items: center;
+  align-items: center;
 }
-
-.kiosk-events__slider__image {
-  vertical-align: middle;
+.kiosk-events__slider__image{
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.kiosk-events__slider__image img{
+  max-width: 100%;
 }
 
 .kiosk-date-time {
   visibility: visible;
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  -webkit-justify-content: center;
+  justify-content: center;
+  
 }
-
 .kiosk-date-time__calendar {
-  width: 151px;
-  height: 151px;
-  left: 1458px;
+  width: 25%;
+  height: 25%;
+  /*left: 1458px;
   top: 26px;
-  position: absolute;
-  z-index: 16;
+  position: absolute;*/
+  
+  --z-index: 16;
+  margin: 0px 10px 0px 10px;
 }
 
 .kiosk-date-time__calendar-icon {
@@ -249,8 +404,9 @@
   background-color: #FFF;
   border-radius: 0.1em;
   border: 0.3em solid #818486;
-  top: 26px;
-  position: absolute;
+  /*top: 26px;
+  position: absolute;*/
+  
   overflow: hidden;
 }
 
@@ -280,24 +436,12 @@
 }
 
 .kiosk-date-time__time {
-  font-size: 1em;
-  /* change kiosk_calendar_icon size */
-  
-  height: 79px;
-  left: 1644px;
-  position: absolute;
-  top: 86px;
-  visibility: visible;
-  width: 195px;
-  z-index: 17;
-}
-
-.kiosk-date-time__time p {
   font-family: Verdana, Verdana, Geneva, sans-serif;
   color: #900;
   font-size: 2em;
   font-weight: bold;
   letter-spacing: -0.05em;
+  margin: 30px 10px 10px 10px;
 }
 
 .kiosk-gallery__slider-caption h3 {
@@ -311,18 +455,30 @@
 .kiosk-gallery {
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.75);
   border: 5px solid #FFB310;
-  height: 359px;
+  /*height: 359px;
   left: 1398px;
   position: absolute;
   top: 188px;
   visibility: visible;
   width: 478px;
-  z-index: 10;
+  z-index: 10;*/
+  
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  vertical-align: middle;
 }
 
-.kiosk-gallery__slider__image {
-  width: 478px;
-  height: 359px;
+.kiosk-gallery__slider {
+  vertical-align: middle;
+  overflow: hidden;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  -webkit-align-items: center;
+  align-items: center;
 }
 
 .kiosk-asu-news__slider__carousel-indicators {
@@ -338,12 +494,18 @@
   background-repeat: no-repeat;
   background-position: 10px 20px, center bottom;
   background-size: auto, 100% 20%;
-  height: 465px;
+  /*height: 465px;
   left: 1395px;
   position: absolute;
   top: 575px;
   width: 480px;
-  z-index: 2;
+  z-index: 2;*/
+  
+  display: -webkit-flex;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  
 }
 
 .kiosk-asu-news h3 {
@@ -359,3 +521,10 @@
 .kiosk-asu-news__slider {
   overflow: hidden;
 }
+.tweet-text-hyperlink{
+  color: #029;
+  text-decoration: none;
+  border-bottom: 1px;
+}
+
+

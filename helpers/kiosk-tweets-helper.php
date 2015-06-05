@@ -14,12 +14,9 @@ namespace Kiosk_WP;
  */
 class Kiosk_Tweets_Helper {
   protected $localsettings = array();
-  public $log_file = '/tmp/kiosk.log';
   public $request_not_from_wp = false;
-  protected $twitter_helper;
   public function __construct()  {
     $this->load_dependencies();
-    $this->twitter_helper = new \Kiosk_WP\Twitter_Api_Helper();
   }
   /**
    * @override
@@ -95,7 +92,8 @@ HTML;
       if ( ++$num_of_items > $limit ){
         break;
       }
-      $tweet_details = $this->twitter_helper->extract_tweet_details( $tweet );
+      $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
+      $tweet_details = $twitter_api_helper->extract_tweet_details( $tweet );
       if ( ! empty( $tweet_details['tweet_text_retweet_by'] ) ) {
         $kiosk_tweets_retweet    = sprintf(
             $kiosk_tweets_retweet_template,
@@ -164,7 +162,8 @@ HTML;
    * @return JSON object
    */
   public function get_tweets_json( $twitter_api_params ){
-    $json = $this->twitter_helper->tweets_json( $twitter_api_params );
+    $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
+    $json = $twitter_api_helper->tweets_json( $twitter_api_params );
     return $json;
   }
 }

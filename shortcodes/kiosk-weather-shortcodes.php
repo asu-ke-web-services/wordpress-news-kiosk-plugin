@@ -19,13 +19,10 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
 
   protected $plugin_slug;
   protected $version;
-  protected $weather_helper;
-
   public function __construct()  {
     $this->plugin_slug = 'kiosk-weather-shortcodes';
     $this->version     = '0.1';
     $this->define_hooks();
-    $this->weather_helper = new \Kiosk_WP\Kiosk_Weather_Helper();
   }
 
   public function define_hooks() {
@@ -40,6 +37,7 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_weather( $atts, $content = null ) {
-    return $this->weather_helper->kiosk_weather( $atts );
+    $kiosk_weather_helper = new \Kiosk_WP\Kiosk_Weather_Helper();
+    return $kiosk_weather_helper->kiosk_weather( $atts );
   }
 }

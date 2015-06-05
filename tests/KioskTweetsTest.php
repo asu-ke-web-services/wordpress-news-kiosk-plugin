@@ -17,7 +17,6 @@ class KioskTweetsTest extends WP_UnitTestCase {
 
     // Test with mockup data
     $stub = $this->getMock( 'Kiosk_WP\Kiosk_Tweets_Helper', array( 'get_tweets_json' ) );
-
     $stub->expects( $this->any() )
          ->method( 'get_tweets_json' )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );

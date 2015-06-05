@@ -12,12 +12,10 @@ namespace Kiosk_WP;
  */
 class Kiosk_Weather_Helper {
   public $request_not_from_wp = false;
-  public $weather_helper;
   public function __construct()  {
     if ( ! function_exists( 'plugin_dir_path' ) ){
       $this->request_not_from_wp = true ;
     }
-    $this->weather_helper = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
   }
    /**
   * kiosk_parse_weather( $json_weather ) takes a json formatted string and retrieves the current and forecast data
@@ -37,7 +35,8 @@ HTML;
         <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
       </div>
 HTML;
-    $weather_details = $this->weather_helper->extract_weather_data( $json_weather );
+    $yahoo_weather_helper = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
+    $weather_details = $yahoo_weather_helper->extract_weather_data( $json_weather );
     $location_title = $weather_details['location_title'];
     $current_weather_div = sprintf(
         $current_weather_div_template,
@@ -58,7 +57,7 @@ HTML;
       );
     }
     $weather_div = <<<HTML
-      <div class="row">
+      <div class="row center-block kiosk-weather_vertical-center">
           <div class="kiosk-weather__current col-xs-3">
           %s
           </div>
@@ -105,7 +104,8 @@ HTML;
    * @return json
    */
   public function get_weather_json( $location ){
-    $json = $this->weather_helper->get_weather_json( $location );
+    $yahoo_weather_helper = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
+    $json = $yahoo_weather_helper->get_weather_json( $location );
     return $json;
   }
 }

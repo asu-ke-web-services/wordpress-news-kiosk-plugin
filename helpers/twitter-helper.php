@@ -148,7 +148,7 @@ class Twitter_Api_Helper {
         // make links link to URL
     if ( preg_match( $regex_url, $tweet_text, $url ) ) {
       // make the urls hyper links
-      $tweet_text = preg_replace( $regex_url, "<a href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+      $tweet_text = preg_replace( $regex_url, "<a class=\"tweet-text-hyperlink\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
     }
     return $tweet_text;
   }
@@ -161,7 +161,7 @@ class Twitter_Api_Helper {
     $regex_hash = '/#([a-z_0-9]+)/i';
     if ( preg_match( $regex_hash, $tweet_text, $hash ) ) {
       // make the hash tags hyper links
-      $tweet_text = preg_replace( $regex_hash, "<a href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+      $tweet_text = preg_replace( $regex_hash, "<a class=\"tweet-text-hyperlink\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
       // swap out the # in the URL to make %23
       $tweet_text = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
     }
@@ -175,7 +175,7 @@ class Twitter_Api_Helper {
   public function convert_twitter_handle_text_to_hyperlink( $tweet_text ){
     $regex_user = '/@([a-z_0-9]+)/i';
     if ( preg_match( $regex_user, $tweet_text, $user ) ) {
-      $tweet_text = preg_replace( $regex_user , "<a href='http://twitter.com/$1'>$0</a >", $tweet_text );
+      $tweet_text = preg_replace( $regex_user , "<a class=\"tweet-text-hyperlink\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
     }
     return $tweet_text;
   }

@@ -52,8 +52,8 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
             <span>%s</span>
           </div>
         </div>
-        <div class="kiosk-date-time__time">
-          <p id="kiosk_display_time">%s</p>
+        <div class="kiosk-date-time__time" id="kiosk_display_time">
+          %s
         </div>
 HTML;
     date_default_timezone_set( 'America/Phoenix' );
