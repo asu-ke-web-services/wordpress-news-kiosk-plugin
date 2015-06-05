@@ -19,7 +19,7 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
 
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-title-shortcodes';
     $this->version     = '0.1';
 
@@ -45,8 +45,8 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_title( $atts, $content = null ) {
-    $site_url = get_site_url();
-    $asu_title = <<<HTML
+    $site_url   = get_site_url();
+    $asu_title  = <<<HTML
     <div class="kiosk-title__logo">
       <img src="{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png" class="img-responsive">
       </div>

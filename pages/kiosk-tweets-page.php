@@ -14,12 +14,12 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Tweets_Page extends Base_Registrar {
-  public static $page_name                  = 'kiosk';
-  public static $param_slug                 = 'twitter';
-  public static $extra_params               = array( 'limit' );
+  public static $page_name          = 'kiosk';
+  public static $param_slug         = 'twitter';
+  public static $extra_params       = array( 'limit' );
 
-  protected $page_data = null;
-  public function __construct()  {
+  protected $page_data              = null;
+  public function __construct() {
     $this->define_hooks();
   }
   /**

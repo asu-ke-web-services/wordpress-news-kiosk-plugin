@@ -14,11 +14,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Weather_Page extends Base_Registrar {
-  public static $page_name                  = 'kiosk';
-  public static $param_slug                 = 'weather';
+  public static $page_name    = 'kiosk';
+  public static $param_slug   = 'weather';
 
-  protected $page_data = null;
-  public function __construct()  {
+  protected $page_data        = null;
+  public function __construct() {
     $this->define_hooks();
   }
   /**

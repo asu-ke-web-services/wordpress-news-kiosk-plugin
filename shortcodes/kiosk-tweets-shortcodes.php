@@ -21,7 +21,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   protected $version;
   protected $localsettings = array();
 
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-tweets-shortcodes';
     $this->version     = '0.1';
     $this->define_hooks();
@@ -43,13 +43,13 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_tweets( $atts, $content = null ) {
-    $atts                  = shortcode_atts(
+    $atts                   = shortcode_atts(
         array(
-          'limit'  => '20',
+          'limit'           => '20',
         ),
         $atts
     );
-    $kiosk_tweet_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
+    $kiosk_tweet_helper     = new \Kiosk_WP\Kiosk_Tweets_Helper();
     return $kiosk_tweet_helper->kiosk_tweets( $atts, $content );
   }
 }

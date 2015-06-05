@@ -52,7 +52,7 @@
   -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
-  padding:10px;
+  padding: 10px;
 }
 
 .kiosk-layout-column--2 {
@@ -71,7 +71,7 @@
   -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
-  padding:10px;
+  padding: 10px;
 }
 
 .kiosk-layout-column--3 {
@@ -90,7 +90,7 @@
   -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
-  padding:10px;
+  padding: 10px;
 }
 
 .kiosk-layout-title {
@@ -346,7 +346,6 @@
 }
 
 .kiosk-events {
-
   overflow: hidden;
   display: block;
 }
@@ -382,7 +381,6 @@
 .kiosk-date-time__calendar {
   width: 25%;
   height: 25%;
-
   margin: 0px 10px 0px 10px;
 }
 
@@ -391,7 +389,6 @@
   background-color: #FFF;
   border-radius: 0.1em;
   border: 0.3em solid #818486;
-  
   overflow: hidden;
 }
 
@@ -503,14 +500,15 @@
   text-decoration: none;
   border-bottom: 1px;
 }
-@media screen and (max-width:1000px){
-  .kiosk-layout-column--1{
-    order:1;
+
+@media screen and (max-width: 1000px) {
+  .kiosk-layout-column--1 {
+    order: 1;
   }
-  .kiosk-layout-column--2{
-    order:3;
+  .kiosk-layout-column--2 {
+    order: 3;
   }
-  .kiosk-layout-column--3{
-    order:2;
+  .kiosk-layout-column--3 {
+    order: 2;
   }
 }

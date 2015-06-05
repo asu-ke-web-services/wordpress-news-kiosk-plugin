@@ -19,7 +19,7 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
 
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-time-shortcodes';
     $this->version     = '0.1';
 
@@ -57,10 +57,10 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
         </div>
 HTML;
     date_default_timezone_set( 'America/Phoenix' );
-    $month = date( 'M' );
-    $dayOfMonth = date( 'd' );
-    $current_time = date( 'h:i A' );
-    $calender_time = sprintf(
+    $month          = date( 'M' );
+    $dayOfMonth     = date( 'd' );
+    $current_time   = date( 'h:i A' );
+    $calender_time  = sprintf(
         $calender_template,
         $month,
         $dayOfMonth,

@@ -19,7 +19,7 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
 
   protected $plugin_slug;
   protected $version;
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-weather-shortcodes';
     $this->version     = '0.1';
     $this->define_hooks();

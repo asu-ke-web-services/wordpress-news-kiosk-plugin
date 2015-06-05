@@ -103,7 +103,7 @@ updateKioskTime('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong',
  * set carousel effect to 10 seconds
  */
 $('.carousel').carousel({
-  interval: 1000
+  interval: 10000
 });
 
 /**
@@ -167,6 +167,9 @@ setTimeout(function() {
  * Hide page scroll bars when current page template is set to KIOSK
  *
  */
-if($('.kiosk-page-template').length){
-  $('html').css({'overflow-y': 'hidden', 'overflow-x': 'hidden'});
+if ($('.kiosk-page-template').length) {
+  $('html').css({
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden'
+  });
 }

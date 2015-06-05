@@ -30,7 +30,7 @@ class CSS_Styles extends Base_Registrar {
   /**
    * Setup plugin and versioning.
    */
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-css-styles';
     $this->version     = '0.1';
     $this->css         = plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/style.css';
