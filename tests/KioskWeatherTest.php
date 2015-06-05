@@ -22,6 +22,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
 
     $stub->expects( $this->any() )
          ->method( 'get_weather_json' )
+		  ->with( 'tempe, az' )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
     $content = $stub->kiosk_weather( '' );
