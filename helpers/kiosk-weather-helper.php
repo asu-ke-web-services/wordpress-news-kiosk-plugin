@@ -87,6 +87,7 @@ HTML;
       }
     } else {
       // Convert JSON to PHP array
+	     $json = str_replace( '&quot;', '"', $json );
       $json_weather = json_decode( $json, true );
 		    print_r( $json );
 		    print_r( $json_weather );
