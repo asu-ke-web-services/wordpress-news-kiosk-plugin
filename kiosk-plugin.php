@@ -124,7 +124,7 @@ function setup_kiosk_wp_plugin() {
   // ===================
   $plugin = new \Kiosk_WP\Kiosk_Plugin();
   $plugin->run();
-  
+
   // Intialize the dependent classes
   run_loaded_classes();
 }
