@@ -52,31 +52,22 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
    * or image with custom field and not expired
    */
   public function kiosk_posts( $atts, $content = null ) {
-    $current_post_count    = 0;
-    $limit                 = 20;
-    $cureent_offset_posts  = 0;
-    $atts                  = shortcode_atts(
+    $current_post_count     = 0;
+    $limit                  = 20;
+    $cureent_offset_posts   = 0;
+    $atts                   = shortcode_atts(
         array(
-          'tags'          => '',
-          'default_image' => '',
+          'tags'            => '',
+          'default_image'   => '',
         ),
         $atts
     );
-    $default_image              = $atts['default_image'];
-    $kiosk_events_template      = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
-    $kiosk_events_item_template = <<<HTML
-    <div class="item %s center-block kiosk-events__slider__image">
-    <span class="helper"></span>
-      <img src="%s" class="img-responsive center-block vertical_center" alt="%s">
-    </div>
-HTML;
-
+    $default_image          = $atts['default_image'];
+    $div_list_items          = $this->get_posts_block_tags( 'carousel_div_start' ) . $this->get_posts_block_tags( 'carousel_ol_tag_start' );
+    $carousel_li_tag        = $this->get_posts_block_tags( 'carousel_li_tag' );
+    $carousel_div_item      = $this->get_posts_block_tags( 'carousel_div_item' );
     // Prepare carousel
-    $div_listitems = <<<HTML
-      <div id="kiosk_events_slider" class="kiosk-events__slider carousel slide" data-ride="carousel">
-         <ol class="kiosk-events__slider__carousel-indicators carousel-indicators">
-HTML;
-    $div_sliders            = '<div class="carousel-inner" role="listbox">';
+    $div_sliders            = $this->get_posts_block_tags( 'carousel_div_sliders_start' );
     $exit_while             = false;
     while ( ! $exit_while ) {
       $query_post_options   = array(
@@ -106,21 +97,23 @@ HTML;
             continue;
           }
           if ( 0 == $current_post_count ) {
-            $div_listitems_active = ' class = "active" ';
+            $div_li_active        = ' class = "active" ';
             $div_slider_active    = ' active ';
           }else {
-            $div_listitems_active = '';
+            $div_li_active        = '';
             $div_slider_active    = '';
           }
           //Check if featured image is present or not
           if ( $image_attributes ) {
-            $div_listitems .= sprintf(
-                $kiosk_events_template,
-                $div_listitems_active,
+            // Append new li item carousel
+            $div_list_items .= sprintf(
+                $carousel_li_tag,
+                $div_li_active,
                 $current_post_count
             );
+            // Append new div item to carousel realted to li
             $div_sliders   .= sprintf(
-                $kiosk_events_item_template,
+                $carousel_div_item,
                 $div_slider_active,
                 $image_attributes[0],
                 $post->post_title
@@ -129,16 +122,18 @@ HTML;
             $current_post_count++;
             //Check if posts had images in its body
           }else if ( ! empty($pics[2]) ) {
-            $div_listitems .= sprintf(
-                $kiosk_events_template,
-                $div_listitems_active,
+            // Append new li item carousel
+            $div_list_items .= sprintf(
+                $carousel_li_tag,
+                $div_li_active,
                 $current_post_count
             );
             if ( parse_url( $pics[2][0], PHP_URL_SCHEME ) == '' ) {
               $pics[2][0] = home_url( $pics[2][0] );
             }
+            // Append new div item to carousel realted to li
             $div_sliders   .= sprintf(
-                $kiosk_events_item_template,
+                $carousel_div_item,
                 $div_slider_active,
                 $pics[2][0],
                 $post->post_title
@@ -149,13 +144,15 @@ HTML;
             if ( parse_url( $page_feature_image, PHP_URL_SCHEME ) == '' ) {
               $page_feature_image = home_url( $page_feature_image );
             }
-            $div_listitems .= sprintf(
-                $kiosk_events_template,
-                $div_listitems_active,
+            // Append new li item carousel
+            $div_list_items .= sprintf(
+                $carousel_li_tag,
+                $div_li_active,
                 $current_post_count
             );
+            // Append new div item to carousel realted to li
             $div_sliders   .= sprintf(
-                $kiosk_events_item_template,
+                $carousel_div_item,
                 $div_slider_active,
                 $page_feature_image,
                 $post->post_title
@@ -172,36 +169,83 @@ HTML;
       $default_image_array = explode( ',', $default_image );
       for ( $k = 0 ; $k < count( $default_image_array ); $k++ ) {
         if ( 0 == $k ) {
-          $div_listitems_active = ' class = "active" ';
+          $div_li_active        = ' class = "active" ';
           $div_slider_active    = ' active ';
         }else {
-          $div_listitems_active = '';
+          $div_li_active        = '';
           $div_slider_active    = '';
         }
-        $div_listitems .= sprintf(
-            $kiosk_events_template,
-            $div_listitems_active,
+        // Append new li item carousel
+        $div_list_items .= sprintf(
+            $carousel_li_tag,
+            $div_li_active,
             $k
         );
         if ( parse_url( $default_image_array[ $k ], PHP_URL_SCHEME ) == '' ) {
           $default_image_array[ $k ] = home_url( $default_image_array[ $k ] );
         }
-
+        // Append new div item to carousel realted to li
         $div_sliders   .= sprintf(
-            $kiosk_events_item_template,
+            $carousel_div_item,
             $div_slider_active,
             trim( $default_image_array[ $k ] ),
             ''
         );
         $current_post_count++;
-
       }
     }
-    $div_listitems    .= '</ol>';
-    $div_listitems    .= $div_sliders;
-    $div_listitems    .= '</div>';
-    $div_listitems    .= '</div>';
-    $kiosk_events_div  = '<div class="kiosk-events">' . $div_listitems . '</div>';
+    // Close the ol tag
+    $div_list_items    .= $this->get_posts_block_tags( 'carousel_ol_end_tag' );
+    // Append all the div sliders for each li item in ol tag
+    $div_list_items    .= $div_sliders;
+    // Close div sliders
+    $div_list_items    .= $this->get_posts_block_tags( 'carousel_div_slider_end' );
+    // Close the main carousel div
+    $div_list_items    .= $this->get_posts_block_tags( 'carousel_div_end' );
+    $kiosk_events_div  = '<div class="kiosk-events">' . $div_list_items . '</div>';
     return ( 0 == $current_post_count ? '' : $kiosk_events_div );
+  }
+  /**
+   * get_posts_block_tags( $tag_name ) returns the tags requested to create the events
+   * div block using carousel effect
+   * @param string
+   * @return string
+   */
+  function get_posts_block_tags( $tag_name ){
+    switch ( $tag_name ){
+      case 'carousel_div_start':
+        $carousel_template = '<div id="kiosk_events_slider" class="kiosk-events__slider carousel slide" data-ride="carousel">';
+        break;
+      case 'carousel_ol_tag_start':
+        $carousel_template = '<ol class="kiosk-events__slider__carousel-indicators carousel-indicators">';
+        break;
+      case 'carousel_ol_end_tag':
+        $carousel_template = '</ol>';
+        break;
+      case 'carousel_li_tag':
+        $carousel_template = '<li %s data-target="#kiosk_events_slider" data-slide-to="%d"></li>';
+        break;
+      case 'carousel_div_sliders_start':
+        $carousel_template        = '<div class="carousel-inner" role="listbox">';
+        break;
+      case 'carousel_div_item':
+        $carousel_template = <<<HTML
+          <div class="item %s center-block kiosk-events__slider__image">
+            <span class="helper"></span>
+            <img src="%s" class="img-responsive center-block vertical_center" alt="%s">
+          </div>
+HTML;
+  break;
+      case 'carousel_div_slider_end':
+        $carousel_template = '</div>';
+        break;
+      case 'carousel_div_end':
+        $carousel_template = '</div>';
+        break;
+      default:
+        $carousel_template = '';
+        break;
+    }
+    return $carousel_template;
   }
 }

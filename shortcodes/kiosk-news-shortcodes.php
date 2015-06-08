@@ -170,22 +170,22 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
       $item  = $items[ $current_feed ];
       // Set active for the 1st element of li
       if ( 0 == $current_post_count ) {
-        $carousel_div_li_active = ' class = "active" ';
-        $carousel_div_item_active    = ' active ';
+        $div_li_active = ' class = "active" ';
+        $div_item_active    = ' active ';
       }else {
-        $carousel_div_li_active = '';
-        $carousel_div_item_active    = '';
+        $div_li_active = '';
+        $div_item_active    = '';
       }
       // Append new li item carousel
       $div_list_items .= sprintf(
           $carousel_li_tag,
-          $carousel_div_li_active,
+          $div_li_active,
           $current_post_count
       );
       // Append new div item to carousel realted to li
       $carousel_div_sliders  .= sprintf(
           $carousel_div_item,
-          $carousel_div_item_active,
+          $div_item_active,
           $item->get_permalink(),
           $item->get_title(),
           $item->get_title(),

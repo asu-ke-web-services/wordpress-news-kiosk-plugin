@@ -8,7 +8,7 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   var date = new Date();
   var hours = date.getHours();
   var minutes = date.getMinutes();
-  var date_string = date.toString()
+  var date_string = date.toString();
   var month = date_string.substring(4, 7);
   var current_date = date_string.substring(8, 10);
   var ampm = hours >= 12 ? 'PM' : 'AM';
@@ -20,7 +20,7 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   $(time_selector).html(strTime);
   $(cal_selector_mon).html(month);
   $(cal_selector_date).html(current_date);
-  var t = setTimeout(function() {
+  setTimeout(function() {
     updateKioskTime(time_selector, cal_selector_mon, cal_selector_date);
   }, 5000 /* 5 seconds */ );
 }
@@ -40,7 +40,7 @@ function setRelativeTweetTime(old_time_selector, actual_time_selector) {
       $formated_time.eq(index).html(relative_time);
     }
   });
-  var t = setTimeout(function() {
+  setTimeout(function() {
     setRelativeTweetTime(old_time_selector, actual_time_selector);
   }, 10000 /* 10 seconds */ );
 }
@@ -63,32 +63,32 @@ function calculateRelativeTime(tweet_time) {
   if (elapsed_time < 1) {
     return 'now';
   }
-  var a = [];
-  a.push({
+  var time_conversion = [];
+  time_conversion.push({
     secs: 1,
     unit: 's'
   });
-  a.push({
+  time_conversion.push({
     secs: 60,
     unit: 'm'
   });
-  a.push({
+  time_conversion.push({
     secs: 60 * 60,
     unit: 'h'
   });
-  a.push({
+  time_conversion.push({
     secs: 24 * 60 * 60,
     unit: 'd'
   });
 
-  for (var i = 0; i < a.length; i++) {
-    var ratio_elapsed_to_unit = elapsed_time / a[i].secs;
+  for (var i = 0; i < time_conversion.length; i++) {
+    var ratio_elapsed_to_unit = elapsed_time / time_conversion[i].secs;
     var rounded_time = Math.round(ratio_elapsed_to_unit);
-    temp = rounded_time + a[i].unit;
+    temp = rounded_time + time_conversion[i].unit;
     var not_a_fractional_unit = ratio_elapsed_to_unit >= 1;
-    var less_than_one_day = a[i].unit == 'h' && ratio_elapsed_to_unit < 24;
-    var less_than_one_hour = a[i].unit == 'm' && ratio_elapsed_to_unit < 60;
-    var less_than_one_minute = a[i].unit == 's' && ratio_elapsed_to_unit < 60;
+    var less_than_one_day = time_conversion[i].unit == 'h' && ratio_elapsed_to_unit < 24;
+    var less_than_one_hour = time_conversion[i].unit == 'm' && ratio_elapsed_to_unit < 60;
+    var less_than_one_minute = time_conversion[i].unit == 's' && ratio_elapsed_to_unit < 60;
     if (not_a_fractional_unit && (less_than_one_day || less_than_one_hour || less_than_one_minute)) {
       return temp;
     }
@@ -129,7 +129,7 @@ setInterval(function() {
   $.ajax({
     url: weather_url,
     success: function(response) {
-      $response_weather = $(".kiosk-weather", response);
+      var $response_weather = $(".kiosk-weather", response);
       if ($response_weather.length) {
         $(".kiosk-weather").replaceWith($response_weather);
       }
