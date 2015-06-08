@@ -45,12 +45,12 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * Excerpt. Uses the excerpt if it is set, otherwise uses the main body if it is
    * less than 50 words.
    */
-  public function content_excerpt( $contentExcerpt, $words = 50 ) {
+  private function content_excerpt( $contentExcerpt, $words = 50 ) {
     $content = strip_tags( $contentExcerpt );
-    if ( true == strpos( $content, 'Article source:' ) ){
+    if ( true === strpos( $content, 'Article source:' ) ){
       $content = substr_replace( $content,'',strpos( $content, 'Article source:' ) );
     }
-    if ( true == strpos( $content, 'read more' ) ) {
+    if ( true === strpos( $content, 'read more' ) ) {
       $content = substr_replace( $content,'',strpos( $content, 'read more' ) );
     }
     $content = trim( $content );
@@ -97,7 +97,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     }
     return ( $a_startDate < $b_startDate ) ? 1 : -1;
   }
-  public function remove_duplicates_rss( $rss ) {
+  private function remove_duplicates_rss( $rss ) {
     /* new length of modified array */
     $newlength = 1;
     $length    = count( $rss );
@@ -214,7 +214,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * Returns a SimplePie object type
    * @return SimplePie.
    */
-  function kiosk_news_fetch_feed( $feed_url ) {
+  private function kiosk_news_fetch_feed( $feed_url ) {
     return fetch_feed( $feed_url ); // specify the source feed
   }
   /**
@@ -223,7 +223,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * @param string
    * @return string
    */
-  function get_asu_news_block_tags( $tag_name ){
+  private function get_asu_news_block_tags( $tag_name ){
     switch ( $tag_name ) {
       case 'carousel_div_start':
         $carousel_template      = '<div id="kiosk_asu_news_slider" class="carousel slide 

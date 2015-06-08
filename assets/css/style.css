@@ -10,10 +10,8 @@
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  display: -webkit-flex;
   display: flex;
   flex-direction: row;
-  -webkit-flex-direction: row;
   flex-wrap: wrap;
   padding: 30px 0px;
   /*  min-height: 100vh;
@@ -21,13 +19,10 @@
   min-width: 100vw;
   max-width: 1920px;*/
   
-  --height: 100%;
   width: 100%;
   flex: auto;
   vertical-align: middle;
-  -webkit-justify-content: center;
   justify-content: center;
-  -webkit-align-items: center;
   align-items: center;
   align-content: center;
 }
@@ -37,57 +32,45 @@
 }
 
 .kiosk-layout-column--1 {
-  display: -webkit-flex;
   display: flex;
   flex-direction: column;
-  -webkit-flex-direction: column;
   flex-wrap: wrap;
   flex: auto;
   height: 100%;
   max-width: 570px;
   min-width: 500px;
   vertical-align: middle;
-  -webkit-justify-content: space-around;
   justify-content: space-around;
-  -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
   padding: 10px;
 }
 
 .kiosk-layout-column--2 {
-  display: -webkit-flex;
   display: flex;
   flex-direction: column;
-  -webkit-flex-direction: column;
   flex-wrap: wrap;
   height: 100%;
   max-width: 761px;
   min-width: 500px;
   flex: auto;
   vertical-align: middle;
-  -webkit-justify-content: space-around;
   justify-content: space-around;
-  -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
   padding: 10px;
 }
 
 .kiosk-layout-column--3 {
-  display: -webkit-flex;
   display: flex;
   flex-direction: column;
-  -webkit-flex-direction: column;
   flex-wrap: wrap;
   height: 100%;
   max-width: 570px;
   min-width: 500px;
   flex: auto;
   vertical-align: middle;
-  -webkit-justify-content: space-around;
   justify-content: space-around;
-  -webkit-align-items: center;
   align-items: center;
   align-content: space-around;
   padding: 10px;
@@ -141,22 +124,17 @@
 }
 
 .kiosk-title {
-  display: -webkit-flex;
   display: flex;
   height: 100%;
   width: 100%;
 }
 
 .kiosk-title__logo {
-  display: -webkit-inline-flex;
   display: inline-flex;
   height: 100%;
   width: 100%;
-  -webkit-justify-content: center;
   justify-content: center;
-  -webkit-align-items: center;
   align-items: center;
-  -webkit-align-items: center;
   align-items: center;
 }
 
@@ -201,7 +179,6 @@
 
 .kiosk-weather__current__item-image {
   width: 90%;
-  --height: 5em;
   margin-top: 3em;
 }
 
@@ -369,12 +346,10 @@
 
 .kiosk-date-time {
   visibility: visible;
-  display: -webkit-flex;
   display: flex;
   height: 100%;
   width: 100%;
   overflow: hidden;
-  -webkit-justify-content: center;
   justify-content: center;
 }
 

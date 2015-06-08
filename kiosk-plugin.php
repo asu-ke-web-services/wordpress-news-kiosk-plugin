@@ -22,16 +22,9 @@ define( 'KIOSK_WP_VERSION', '1.1' );
 define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
 
 /**
- * Register your files here!
+ * load all the dependent files to use kisok plugin
  */
-function setup_kiosk_wp_plugin() {
-  // =================
-  // Load Dependencies
-  // =================
-  // No Depencies for now
-
-  // Verify kiosk api version
-  // Mo version checking for now
+function load_dependencies(){
   // Require all the files for the Kiosk plugin
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
@@ -54,13 +47,11 @@ function setup_kiosk_wp_plugin() {
   require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-weather-page.php';
   require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
   require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
-
-  // ===================
-  // Plugin Registration
-  // ===================
-  $plugin = new \Kiosk_WP\Kiosk_Plugin();
-  $plugin->run();
-
+}
+/**
+ * Initialize the required classes for kiosk plugin
+ */
+function run_loaded_classes(){
   //Tweets helper
   $kiosk_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
   //Weather helper
@@ -118,5 +109,23 @@ function setup_kiosk_wp_plugin() {
   // =============
   $css_styles = new \Kiosk_WP\CSS_Styles();
   $css_styles->run();
+}
+/**
+ * Register your files here!
+ */
+function setup_kiosk_wp_plugin() {
+  // =================
+  // Load Dependencies
+  // =================
+  load_dependencies();
+
+  // ===================
+  // Plugin Registration
+  // ===================
+  $plugin = new \Kiosk_WP\Kiosk_Plugin();
+  $plugin->run();
+  
+  // Intialize the dependent classes
+  run_loaded_classes();
 }
 setup_kiosk_wp_plugin();

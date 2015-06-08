@@ -232,7 +232,7 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
         $carousel_template = <<<HTML
           <div class="item %s center-block kiosk-events__slider__image">
             <span class="helper"></span>
-            <img src="%s" class="img-responsive center-block vertical_center" alt="%s">
+            <img src="%s" class="img-responsive center-block" alt="%s">
           </div>
 HTML;
   break;
