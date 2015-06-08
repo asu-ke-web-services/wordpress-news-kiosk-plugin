@@ -117,21 +117,21 @@ class Twitter_Api_Helper {
     if ( $elapsed_time < 1 ) {
         return 'now';
     }
-    $a                            = array(
+    $time_conversion                            = array(
           1                       => 's',
           60                      => 'm',
           60 * 60                 => 'h',
           24 * 60 * 60            => 'd',
     );
 
-    foreach ( $a as $secs => $unit ) {
-      $ratio_elapsed_to_unit  = $elapsed_time / $secs;
-      $not_a_fractional_unit  = $ratio_elapsed_to_unit >= 1;
-      $less_than_one_day      = 'h' == $unit && $ratio_elapsed_to_unit < 24;
-      $less_than_one_hour     = 'm' == $unit && $ratio_elapsed_to_unit < 60;
-      $less_than_one_minute   = 's' == $unit && $ratio_elapsed_to_unit < 60;
-      if ( $not_a_fractional_unit &&( $less_than_one_day || $less_than_one_hour || $less_than_one_minute ) ) {
-          $rounded_time       = round( $ratio_elapsed_to_unit );
+    foreach ( $time_conversion as $secs => $unit ) {
+      $elapsed_time_to_unit   = $elapsed_time / $secs;
+      $not_fractional_unit    = $elapsed_time_to_unit >= 1;
+      $less_than_one_day      = 'h' == $unit && $elapsed_time_to_unit < 24;
+      $less_than_one_hour     = 'm' == $unit && $elapsed_time_to_unit < 60;
+      $less_than_one_minute   = 's' == $unit && $elapsed_time_to_unit < 60;
+      if ( $not_fractional_unit && ( $less_than_one_day || $less_than_one_hour || $less_than_one_minute ) ) {
+          $rounded_time       = round( $elapsed_time_to_unit );
           return $rounded_time . $unit;
       }
     }

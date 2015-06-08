@@ -46,34 +46,34 @@ class Yahoo_Weather_Api_Helper {
       'current_weather_unit'  => '',
       'current_weather_temp'  => '',
     );
-    $forecast_weather_details = array(
+    $forecast_details = array(
       'date'                  => '',
       'image'                 => '',
       'low'                   => '',
       'high'                  => '',
     );
-    $yahoo_weather_icon_url   = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
+    $weather_icon   = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
     $location_city            = $json_weather['query']['results']['channel']['location']['city'];
     $location_region          = $json_weather['query']['results']['channel']['location']['region'];
     $forecast                 = $json_weather['query']['results']['channel']['item']['forecast'];
     $yahoo_weather_code       = $json_weather['query']['results']['channel']['item']['condition']['code'];
     $weather_details['location_title']          = $location_city . ', ' . $location_region;
     $weather_details['current_weather_image']   = sprintf(
-        $yahoo_weather_icon_url,
+        $weather_icon,
         $yahoo_weather_code
     );
     $weather_details['current_weather_unit']    = $json_weather['query']['results']['channel']['units']['temperature'];
     $weather_details['current_weather_temp']    = $json_weather['query']['results']['channel']['item']['condition']['temp'];
     for ( $i = 0; $i < 3; $i++ ) {
-      $forecast_weather_details[ $i ]['date']   = date_format( date_create( $forecast[ $i ]['date'] ), 'l' );
-      $forecast_weather_details[ $i ]['image']  = sprintf(
-          $yahoo_weather_icon_url,
+      $forecast_details[ $i ]['date']   = date_format( date_create( $forecast[ $i ]['date'] ), 'l' );
+      $forecast_details[ $i ]['image']  = sprintf(
+          $weather_icon,
           $forecast[ $i ]['code']
       );
-      $forecast_weather_details[ $i ]['low']    = $forecast[ $i ]['low'];
-      $forecast_weather_details[ $i ]['high']   = $forecast[ $i ]['high'];
+      $forecast_details[ $i ]['low']    = $forecast[ $i ]['low'];
+      $forecast_details[ $i ]['high']   = $forecast[ $i ]['high'];
     }
-    $weather_details['forecast']                = $forecast_weather_details;
+    $weather_details['forecast']                = $forecast_details;
     return $weather_details;
   }
 }

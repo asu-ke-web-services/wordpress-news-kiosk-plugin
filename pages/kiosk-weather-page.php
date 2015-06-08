@@ -52,11 +52,11 @@ class Kiosk_Weather_Page extends Base_Registrar {
     // ======================================================
     // Rule: /kiosk/weather => wp-content/plugins/pages/views/kiosk-weather-presenter.php
     // ======================================================
-    $from = Kiosk_Weather_Page::$page_name . '/' . Kiosk_Weather_Page::$param_slug .'?$';
-    $to   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
-    $to  .= '/views/kiosk-weather-presenter.php' . '?';
+    $from_url = Kiosk_Weather_Page::$page_name . '/' . Kiosk_Weather_Page::$param_slug .'?$';
+    $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
+    $to_url  .= '/views/kiosk-weather-presenter.php' . '?';
 
-    add_rewrite_rule( $from, $to, 'top' );
+    add_rewrite_rule( $from_url, $to_url, 'top' );
 
     // Flush them!
     // TODO move this to register_activation_hook when rules are set in stone

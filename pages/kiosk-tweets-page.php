@@ -55,11 +55,11 @@ class Kiosk_Tweets_Page extends Base_Registrar {
     // ======================================================
     // Rule: /kiosk/twitter/limit/{20} => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
     // ======================================================
-    $from = Kiosk_Tweets_Page::$page_name . '/' . Kiosk_Tweets_Page::$param_slug . '/'. Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]+)?$';
-    $to   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
-    $to  .= '/views/kiosk-tweets-presenter.php' . '?' . Kiosk_Tweets_Page::$extra_params[0] . '=$1';
+    $from_url = Kiosk_Tweets_Page::$page_name . '/' . Kiosk_Tweets_Page::$param_slug . '/'. Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]+)?$';
+    $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
+    $to_url  .= '/views/kiosk-tweets-presenter.php' . '?' . Kiosk_Tweets_Page::$extra_params[0] . '=$1';
 
-    add_rewrite_rule( $from, $to, 'top' );
+    add_rewrite_rule( $from_url, $to_url, 'top' );
 
     // Flush them!
     // TODO move this to register_activation_hook when rules are set in stone

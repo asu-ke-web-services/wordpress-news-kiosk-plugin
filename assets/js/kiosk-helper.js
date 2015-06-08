@@ -10,7 +10,7 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   var minutes = date.getMinutes();
   var date_string = date.toString()
   var month = date_string.substring(4, 7);
-  var date = date_string.substring(8, 10);
+  var current_date = date_string.substring(8, 10);
   var ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
@@ -19,7 +19,7 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   $(time_selector).html(strTime);
   $(cal_selector_mon).html(month);
-  $(cal_selector_date).html(date);
+  $(cal_selector_date).html(current_date);
   var t = setTimeout(function() {
     updateKioskTime(time_selector, cal_selector_mon, cal_selector_date);
   }, 5000 /* 5 seconds */ );

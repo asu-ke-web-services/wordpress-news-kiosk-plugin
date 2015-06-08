@@ -127,55 +127,28 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_asu_news( $atts, $content = null ) {
-    $total_feed_count = 0;
-
-    $atts             = shortcode_atts(
+    $total_feed_count      = 0;
+    $atts                  = shortcode_atts(
         array(
-          'feed'          => '153,178,358,40',
-          'limit'         => '20',
-          'content_limit' => '50',
+          'feed'           => '153,178,358,40',
+          'limit'          => '20',
+          'content_limit'  => '50',
         ),
         $atts
     );
-
-    $feed           = explode( ',', $atts['feed'] );
-    $limit          = $atts['limit'];
-    $content_limit  = $atts['content_limit'];
-
-    for ( $i = 0 ; $i < count( $feed ); $i++ ) {
-      $feed_number = $feed[ $i ];
-      $feed_urls_array[ $i ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
-    }
-
-    $current_post_count           = 0;
-    $kiosk_asu_news_template      = '<li %s data-target="#kiosk_asu_news_slider" data-slide-to="%d"></li>';
-    $kiosk_asu_news_item_template = <<<HTML
-    <div class="item %s">
-      <div class="kiosk-asu-news__slider__header">
-        <a href="%s" title="%s"><h3><p>%s</p></h3></a>
-        </div>
-      <div class="kiosk-asu-news__slider__time">
-        <p>%s</p>
-      </div>
-      <div class="kiosk-asu-news__slider__content">
-        <p>%s</p>
-      </div>
-    </div>
-HTML;
-
-    // Prepare carousel
-    $div_listitems      = <<<HTML
-      <div id="kiosk_asu_news_slider" class="carousel slide 
-      kiosk-asu-news__slider" data-ride="carousel">
-         <ol class="kiosk-asu-news__slider__carousel-indicators 
-         carousel-indicators">
-HTML;
-
-    $div_sliders        = '<div class="carousel-inner" role="listbox">';
-
-    $items              = [];
-    for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ) {
-      $feed             = $this->kiosk_news_fetch_feed( $feed_urls_array[ $feed_element ] );
+    $feed                  = explode( ',', $atts['feed'] );
+    $limit                 = $atts['limit'];
+    $content_limit         = $atts['content_limit'];
+    $current_post_count    = 0;
+    $div_list_items        = $this->get_asu_news_block_tags( 'carousel_div_start' ) . $this->get_asu_news_block_tags( 'carousel_ol_tag_start' );
+    $carousel_li_tag       = $this->get_asu_news_block_tags( 'carousel_li_tag' );
+    $carousel_div_sliders  = $this->get_asu_news_block_tags( 'carousel_div_sliders_start' );
+    $carousel_div_item     = $this->get_asu_news_block_tags( 'carousel_div_item' );
+    $items                 = [];
+    for ( $feed_element = 0 ; $feed_element < count( $feed ); $feed_element++ ) {
+      $feed_number                      = $feed[ $feed_element ];
+      $feed_urls_array[ $feed_element ] = "https://asunews.asu.edu/taxonomy/term/$feed_number/all/feed";
+      $feed                             = $this->kiosk_news_fetch_feed( $feed_urls_array[ $feed_element ] );
       if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
         $items            = array_merge( $items, $feed->get_items( 0 ) ); // create an array of items
         $total_feed_count = $total_feed_count + count( $items );
@@ -184,7 +157,7 @@ HTML;
       // unavailable else try next feed url
       if ( 0 == $total_feed_count ){
         if ( $feed_element == count( $feed_urls_array ) - 1 ){
-          $div_sliders    .= '<div>The feed is either empty or unavailable.</div>';
+          $carousel_div_sliders    .= '<div>The feed is either empty or unavailable.</div>';
         }else {
           continue;
         }
@@ -195,23 +168,24 @@ HTML;
     $new_total_feed_count = count( $items );
     for ( $current_feed = 0; ( $current_feed < $limit ) && $new_total_feed_count > 0 && ( $current_feed < $new_total_feed_count ); $current_feed++ ) {
       $item  = $items[ $current_feed ];
+      // Set active for the 1st element of li
       if ( 0 == $current_post_count ) {
-        $div_listitems_active = ' class = "active" ';
-        $div_slider_active    = ' active ';
+        $carousel_div_li_active = ' class = "active" ';
+        $carousel_div_item_active    = ' active ';
       }else {
-        $div_listitems_active = '';
-        $div_slider_active    = '';
+        $carousel_div_li_active = '';
+        $carousel_div_item_active    = '';
       }
-
-      $div_listitems .= sprintf(
-          $kiosk_asu_news_template,
-          $div_listitems_active,
+      // Append new li item carousel
+      $div_list_items .= sprintf(
+          $carousel_li_tag,
+          $carousel_div_li_active,
           $current_post_count
       );
-
-      $div_sliders  .= sprintf(
-          $kiosk_asu_news_item_template,
-          $div_slider_active,
+      // Append new div item to carousel realted to li
+      $carousel_div_sliders  .= sprintf(
+          $carousel_div_item,
+          $carousel_div_item_active,
           $item->get_permalink(),
           $item->get_title(),
           $item->get_title(),
@@ -221,11 +195,15 @@ HTML;
 
       $current_post_count++;
     }
-     $div_listitems     .= '</ol>';
-     $div_listitems     .= $div_sliders;
-     $div_listitems     .= '</div>';
-     $div_listitems     .= '</div>';
-     $kiosk_asu_news_div = '<div class="kiosk-asu-news">' . $div_listitems . '</div>';
+     // Close the ol tag
+     $div_list_items     .= $this->get_asu_news_block_tags( 'carousel_ol_end_tag' );
+     // Append all the div sliders for each li item in ol tag
+     $div_list_items     .= $carousel_div_sliders;
+     // Close div sliders
+     $div_list_items     .= $this->get_asu_news_block_tags( 'carousel_div_slider_end' );
+     // Close the main carousel div
+     $div_list_items     .= $this->get_asu_news_block_tags( 'carousel_div_end' );
+     $kiosk_asu_news_div = '<div class="kiosk-asu-news">' . $div_list_items . '</div>';
     return $new_total_feed_count > 0 ? $kiosk_asu_news_div : '';
   }
 
@@ -238,5 +216,57 @@ HTML;
    */
   function kiosk_news_fetch_feed( $feed_url ) {
     return fetch_feed( $feed_url ); // specify the source feed
+  }
+  /**
+   * get_asu_news_block_tags( $tag_name ) returns the tags requested to create the news
+   * div block using carousel effect
+   * @param string
+   * @return string
+   */
+  function get_asu_news_block_tags( $tag_name ){
+    switch ( $tag_name ) {
+      case 'carousel_div_start':
+        $carousel_template      = '<div id="kiosk_asu_news_slider" class="carousel slide 
+          kiosk-asu-news__slider" data-ride="carousel">';
+        break;
+      case 'carousel_ol_tag_start' :
+        $carousel_template      = '<ol class="kiosk-asu-news__slider__carousel-indicators 
+             carousel-indicators">';
+        break;
+      case 'carousel_ol_end_tag':
+        $carousel_template = '</ol>';
+        break;
+      case 'carousel_li_tag':
+        $carousel_template     = '<li %s data-target="#kiosk_asu_news_slider" data-slide-to="%d"></li>';
+        break;
+      case 'carousel_div_sliders_start':
+        $carousel_template        = '<div class="carousel-inner" role="listbox">';
+        break;
+      case 'carousel_div_item':
+        $carousel_template = <<<HTML
+          <div class="item %s">
+            <div class="kiosk-asu-news__slider__header">
+              <a href="%s" title="%s"><h3><p>%s</p></h3></a>
+            </div>
+            <div class="kiosk-asu-news__slider__time">
+              <p>%s</p>
+            </div>
+            <div class="kiosk-asu-news__slider__content">
+              <p>%s</p>
+            </div>
+          </div>
+HTML;
+        break;
+      case 'carousel_div_slider_end':
+          $carousel_template = '</div>';
+        break;
+      case 'carousel_div_end':
+          $carousel_template = '</div>';
+        break;
+      default:
+        $carousel_template = '';
+        break;
+    }
+    return $carousel_template;
   }
 }
