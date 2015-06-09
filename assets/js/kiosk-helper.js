@@ -167,9 +167,9 @@ setTimeout(function() {
  * Hide page scroll bars when current page template is set to KIOSK
  *
  */
-if ($('.kiosk-page-template').length) {
-  $('html').css({
-    'overflow-y': 'hidden',
-    'overflow-x': 'hidden'
-  });
-}
+// if ($('.kiosk-page-template').length) {
+//   $('html').css({
+//     'overflow-y': 'hidden',
+//     'overflow-x': 'hidden'
+//   });
+// }

@@ -15,25 +15,34 @@ class KioskSliderTest extends WP_UnitTestCase {
   function test_kiosk_slider_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-slider' ) );
     // Test with mockup data
-    $stub = $this->getMock( 'Kiosk_WP\Kiosk_Slider_Shortcodes', array( 'kiosk_slider_fetch_feed' ) );
+    // $stub = $this->getMock( 'Kiosk_WP\Kiosk_Slider_Shortcodes', array( 'kiosk_slider_fetch_feed' ) );
+    // $stub->expects( $this->any() )
+    //      ->method( 'kiosk_slider_fetch_feed' )
+    //      ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
-    $stub->expects( $this->any() )
-         ->method( 'kiosk_slider_fetch_feed' )
+    $feed_stub = $this->getMock( 'Kiosk_WP\Feed_Helper', array( 'simple_pie_feed_fetch' ) );
+    $feed_stub->expects( $this->any() )
+         ->method( 'simple_pie_feed_fetch' )
+         ->with( $this->stringContains( 'flickr' ) )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
+    $stub = $this->getMockBuilder( 'Kiosk_WP\Kiosk_Slider_Shortcodes' )
+          ->setConstructorArgs( array( $feed_stub ) )
+          ->setMethods( null )
+          ->getMock();
 
     // Test no tags by default limit 20 image items if found
     $content = $stub->kiosk_slider( '' );
-    $this->assertContains( 'kiosk_gallery_slider', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 20 ) );
-    $this->assertContains( 'kiosk_gallery_slider', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 image items' );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 5 ) );
-    $this->assertContains( 'kiosk_gallery_slider', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 image items' );
   }

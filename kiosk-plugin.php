@@ -26,12 +26,16 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
  */
 function load_dependencies(){
   // Require all the files for the Kiosk plugin
+  require_once '/var/www/html/gios2-php/gios-api-v2.0.php';
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/twitter-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/yahoo-weather-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/json-decode-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/carousel-slider-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/feed-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
@@ -52,21 +56,22 @@ function load_dependencies(){
  * Initialize the required classes for kiosk plugin
  */
 function run_loaded_classes(){
-  //Tweets helper
-  $kiosk_helper = new \Kiosk_WP\Kiosk_Tweets_Helper();
-  //Weather helper
-  $kiosk_helper = new \Kiosk_WP\Kiosk_Weather_Helper();
+  // ==========
+  // Helpers
+  // ==========
+  $feed_helper = new \Kiosk_WP\Feed_Helper();
+  $kiosk_helper = new \Kiosk_WP\Kiosk_Helper();
 
   // ==========
   // Shortcodes
   // ==========
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes();
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes( $kiosk_helper );
   $posts_shortcodes->run();
 
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_News_Shortcodes();
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_News_Shortcodes( $feed_helper );
   $posts_shortcodes->run();
 
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_Slider_Shortcodes();
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Slider_Shortcodes( $feed_helper );
   $posts_shortcodes->run();
 
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Time_Shortcodes();

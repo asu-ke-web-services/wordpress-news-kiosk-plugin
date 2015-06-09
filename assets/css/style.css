@@ -327,13 +327,13 @@
   display: block;
 }
 
-.kiosk-events__slider__image {
+.kiosk-events__slider__div {
   overflow: hidden;
   display: block;
   height: 100%;
 }
 
-.kiosk-events__slider__image img {
+.kiosk-events__slider__div img {
   max-height: 100%;
   max-width: 100%;
   position: absolute;
@@ -424,11 +424,11 @@
   width: 100%;
 }
 
-.kiosk-gallery__slider__image {
+.kiosk-gallery__slider__div {
   height: 100%;
 }
 
-.kiosk-gallery__slider__image img {
+.kiosk-gallery__slider__div img {
   max-height: 100%;
   max-width: 100%;
   position: absolute;

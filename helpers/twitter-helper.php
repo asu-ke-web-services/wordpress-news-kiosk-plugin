@@ -196,28 +196,49 @@ class Twitter_Api_Helper {
       'tweet_text_retweet_link'                 => '',
       'tweet_text_retweet_by'                   => '',
       );
-    $tweet_details['tweet_text']                = array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
-    $tweet_details['tweet_screen_name']         = array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
-    $tweet_details['tweet_full_name']           = array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
-    $tweet_details['tweet_profile_pic']         = array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
-    $tweet_details['tweet_date_time']           = array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
-    $tweet_details['tweet_date_time_actual']    = strtotime( $tweet['created_at'] );
-    $tweet_details['tweet_status_link ']        = array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
+    $tweet_details['tweet_text']                = $this->get_tweet_text( $tweet );
+    $tweet_details['tweet_screen_name']         = $this->get_tweet_screen_name( $tweet );
+    $tweet_details['tweet_full_name']           = $this->get_tweet_full_name( $tweet );
+    $tweet_details['tweet_profile_pic']         = $this->get_tweet_profile_image( $tweet );
+    $tweet_details['tweet_date_time']           = $this->get_tweet_created_date_short_form( $tweet );
+    $tweet_details['tweet_date_time_actual']    = $this->get_tweet_created_date_actual( $tweet );
+    $tweet_details['tweet_status_link ']        = $this->get_tweet_status_link( $tweet );
 
     if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ) {
-      $tweet_details['tweet_screen_name']       = $tweet['retweeted_status']['user']['screen_name'];
-      $tweet_details['tweet_full_name']         = $tweet['retweeted_status']['user']['name'];
-      $tweet_details['tweet_profile_pic']       = $tweet['retweeted_status']['user']['profile_image_url'];
-      $tweet_details['tweet_date_time']         = $this->time_short_form( $tweet['retweeted_status']['created_at'] );
-      $tweet_details['tweet_date_time_actual']  = strtotime( $tweet['retweeted_status']['created_at'] );
-      $tweet_details['tweet_status_link']       = $tweet['retweeted_status']['id_str'];
-      $tweet_details['tweet_text_retweet_link'] = $tweet['retweeted_status']['user']['profile_image_url'];
-      $tweet_details['tweet_text_retweet_by']   = $tweet['user']['screen_name'];
+      $tweet_details['tweet_screen_name']       = $this->get_tweet_screen_name( $tweet['retweeted_status'] );
+      $tweet_details['tweet_full_name']         = $this->get_tweet_full_name( $tweet['retweeted_status'] );
+      $tweet_details['tweet_profile_pic']       = $this->get_tweet_profile_image( $tweet['retweeted_status'] );
+      $tweet_details['tweet_date_time']         = $this->get_tweet_created_date_short_form( $tweet['retweeted_status'] );
+      $tweet_details['tweet_date_time_actual']  = $this->get_tweet_created_date_actual( $tweet['retweeted_status'] );
+      $tweet_details['tweet_status_link']       = $this->get_tweet_status_link( $tweet['retweeted_status'] );
+      $tweet_details['tweet_text_retweet_link'] = $this->get_tweet_text( $tweet['retweeted_status'] );
+      $tweet_details['tweet_text_retweet_by']   = $this->get_tweet_text( $tweet['retweeted_status'] );
     }
 
     $tweet_details['tweet_text']                = $this->convert_url_text_to_hyperlink( $tweet_details['tweet_text'] );
     $tweet_details['tweet_text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['tweet_text'] );
     $tweet_details['tweet_text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['tweet_text'] );
     return $tweet_details ;
+  }
+  private function get_tweet_text( $tweet ) {
+    return array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
+  }
+  private function get_tweet_screen_name( $tweet ) {
+    return array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
+  }
+  private function get_tweet_full_name( $tweet ) {
+    return array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
+  }
+  private function get_tweet_profile_image( $tweet ) {
+    return array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
+  }
+  private function get_tweet_created_date_short_form( $tweet ) {
+    return array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
+  }
+  private function get_tweet_created_date_actual( $tweet ) {
+    return strtotime( $tweet['created_at'] );
+  }
+  private function get_tweet_status_link( $tweet ) {
+    return array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
   }
 }
