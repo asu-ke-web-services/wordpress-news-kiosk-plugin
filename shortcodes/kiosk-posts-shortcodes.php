@@ -18,16 +18,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 class Kiosk_Posts_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
-  protected $kiosk_helper;
-
-  public function __construct( $kiosk_helper ) {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-post-shortcodes';
     $this->version     = '0.1';
-
     $this->load_dependencies();
     $this->define_hooks();
-    //$this->kiosk_helper = new Kiosk_Helper();
-    $this->kiosk_helper = $kiosk_helper;
   }
 
   /**
@@ -65,10 +60,10 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     );
     $default_image          = $atts['default_image'];
     $tags                   = $atts['tags'];
-    $list_items             = $this->kiosk_helper->get_posts_items_from_db( $limit, $tags );
+    $list_items             = Kiosk_Helper::get_posts_items_from_db( $limit, $tags );
     $total_post_count       = count( $list_items );
     if ( 0 === $total_post_count ) {
-      $list_items = $this->kiosk_helper->get_default_images( $default_image );
+      $list_items = Kiosk_Helper::get_default_images( $default_image );
     }
     $carousel_slider        = $this->get_events_carousel_slider( $list_items );
     $kiosk_events_div       = '<div class="kiosk-events">' . $carousel_slider . '</div>';

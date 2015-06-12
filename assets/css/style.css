@@ -3,7 +3,7 @@
  * Copyright 2015 ASU
  * ======================================================================== */
 
-.kiosk-page-template {
+.kiosk-ground-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 100%;
   color: #333;
@@ -31,7 +31,7 @@
   font-weight: normal;
 }
 
-.kiosk-layout-column--1 {
+.kiosk-ground-floor-layout-column--1 {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -46,7 +46,7 @@
   padding: 10px;
 }
 
-.kiosk-layout-column--2 {
+.kiosk-ground-floor-layout-column--2 {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -61,7 +61,7 @@
   padding: 10px;
 }
 
-.kiosk-layout-column--3 {
+.kiosk-ground-floor-layout-column--3 {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -76,47 +76,47 @@
   padding: 10px;
 }
 
-.kiosk-layout-title {
+.kiosk-ground-floor-layout-title {
   height: 151px;
   width: 100%;
   max-width: 480px;
   padding: 0px 0px 15px 0px;
 }
 
-.kiosk-layout-weather {
+.kiosk-ground-floor-layout-weather {
   height: 300px;
   width: 100%;
   max-width: 480px;
   padding: 15px 0px 15px 0px;
 }
 
-.kiosk-layout-tweets {
+.kiosk-ground-floor-layout-tweets {
   height: 575px;
   width: 100%;
   max-width: 480px;
   padding: 15px 0px 10px 0px;
 }
 
-.kiosk-layout-events {
+.kiosk-ground-floor-layout-events {
   height: 1019px;
   width: 100%;
 }
 
-.kiosk-layout-time {
+.kiosk-ground-floor-layout-time {
   height: 140px;
   width: 100%;
   padding: 0px 0px 15px 0px;
   max-width: 480px;
 }
 
-.kiosk-layout-gallery {
+.kiosk-ground-floor-layout-gallery {
   height: 392px;
   width: 100%;
   padding: 15px 0px 15px 0px;
   max-width: 480px;
 }
 
-.kiosk-layout-asu-news {
+.kiosk-ground-floor-layout-asu-news {
   height: 500px;
   width: 100%;
   padding: 15px 0px 10px 0px;
@@ -486,4 +486,184 @@
   .kiosk-layout-column--3 {
     order: 2;
   }
+}
+
+.kiosk-people-slider__layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: space-around;
+  align-items: center;
+  overflow: hidden;
+  width: 1175px;
+  height: 915px;
+
+}
+
+.kiosk-people-slider__layout__row-top {
+  display: flex;
+  height: 165px;
+  width: 1175px;
+  justify-content: space-between;
+  align-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__row-middle {
+  display: flex;
+  height: 495px;
+  width: 1175px;
+  justify-content: space-between;
+  align-content: space-around;
+  align-items: center;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__row-bottom {
+  display: flex;
+  height: 165px;
+  width: 1175px;
+  justify-content: space-between;
+  align-content: space-around;
+  align-items: center;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__row-middle--col1 {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  width: 165px;
+  height: 495px;
+  justify-content: space-around;
+  align-content: space-around;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__row-middle--col2 {
+  display: flex;
+  flex-direction: row;
+  flex: auto;
+  width: 805px;
+  --max-width: 875px;
+  height: 495px;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__row-middle--col3 {
+  display: flex;
+  flex-direction: column;
+  flex: auto;
+  width: 165px;
+  height: 495px;
+  justify-content: space-around;
+  align-content: space-around;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__image {
+  display: block;
+  max-width: 100%;
+  width: 165px;
+  height: 165px;
+  --border: 5px solid #FFF;
+  padding: 5px;
+  overflow: hidden;
+}
+
+.kiosk-people-slider__layout__featured-image {
+  display: block;
+  --max-width: 100%;
+  --min-width: 70%;
+  width: 495px;
+  height: 495px;
+  max-height: 525px;
+  --border-top: 5px solid #FFF;
+  --border-bottom: 5px solid #FFF;
+  --border-left: 5px solid #FFF;
+  padding: 5px;
+  oveflow: hidden;
+}
+
+.kiosk-people-slider__layout__featured--col2 {
+  display: block;
+  align-self: center;
+  overflow: hidden;
+  --border-left: 5px solid #FFF;
+  --border-right: 5px solid #FFF;
+  max-height: 90%;
+  max-width: 30%;
+  width: 350px;
+  word-wrap: break-word;
+  padding: 2px 5px 5px 2px;
+  vertical-align: middle;
+}
+.kiosk-people-slider__slider__carousel-indicators {
+  visibility: hidden;
+}
+.kiosk-third-floor{
+  font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
+  font-size: 100%;
+  color: #333;
+  --background-image: url("../images/bg-display.jpg");
+  --background-repeat: no-repeat;
+  --background-size: cover;
+  background-color: #76E9FF;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  --padding: 30px 30px;
+  width: 100vw;
+  height: 100vh;
+  flex: auto;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+}
+.kiosk-third-floor-layout-col--1{
+  width:1225px;
+  height: 100%;
+}
+.kiosk-third-floor-layout-col--2{
+  height: 100%;
+}
+.kiosk-third-floor-layout-title{
+  height: 100px;
+  width: 100%;
+  max-width: 480px;
+  padding: 0px 0px 15px 0px;
+}
+.kiosk-third-floor-layout-people-slider{
+  width:100%;
+  height: 100%;
+  overflow: visible;
+}
+.kiosk-third-floor-layout-time{
+  height: 140px;
+  width: 100%;
+  padding: 0px 0px 15px 0px;
+  max-width: 480px;
+}
+.kiosk-third-floor-layout-weather{
+  height: 300px;
+  width: 100%;
+  max-width: 480px;
+  padding: 15px 0px 15px 0px;
+}
+.kiosk-third-floor-layout-tweets{
+  height: 575px;
+  width: 100%;
+  max-width: 480px;
+  padding: 15px 0px 10px 0px;
+}
+.kiosk-people-slider__layout__header{
+  margin-bottom: 10px;
+  margin-top: 0px;
 }

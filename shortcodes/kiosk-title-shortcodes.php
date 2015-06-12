@@ -38,17 +38,22 @@ class Kiosk_Title_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_title]
+   * [kiosk_title logo='url']
    *
-   * @param $atts array
    * Generates a <div> tag with asu_title from rss feed to display as asu_title
-   *
+   * @param $atts array
    */
   public function kiosk_title( $atts, $content = null ) {
     $site_url   = get_site_url();
+    $atts                   = shortcode_atts(
+        array(
+          'logo'            => "{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png",
+        ),
+        $atts
+    );
     $asu_title  = <<<HTML
     <div class="kiosk-title__logo">
-      <img src="{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png" class="img-responsive">
+      <img src="{$atts['logo']}" class="img-responsive">
       </div>
 HTML;
     $kiosk_title_div = '<div class="kiosk-title">' . $asu_title . '</div>';

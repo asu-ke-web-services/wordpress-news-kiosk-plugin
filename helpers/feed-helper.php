@@ -11,24 +11,28 @@ class Feed_Helper {
    * rss_sort_date_dsc( $a, $b ) compares two items
    * by date and returns 0 if they are equal else 1 or -1
    * Examples usage: usort( $items, array( 'Kiosk_Helper', 'rss_sort_date_dsc' ) )
-   * @param rss
+   * @param simplepie_object $a
+   * @param simplepie_object $b
    * @return int
    */
-  public function rss_sort_date_dsc( $a, $b )
-  {
-    $a_startDate = strtotime( $a->get_date() );
-    $b_startDate = strtotime( $b->get_date() );
-    if ( $a_startDate == $b_startDate ) {
+  public static function rss_sort_date_dsc( $a, $b ) {
+    $a_start_date = strtotime( $a->get_date() );
+    $b_start_date = strtotime( $b->get_date() );
+    if ( $a_start_date == $b_start_date ) {
       return 0;
     }
-    return ( $a_startDate < $b_startDate ) ? 1 : -1;
+    return ( $a_start_date < $b_start_date ) ? 1 : -1;
   }
-  public function remove_duplicates_rss( $rss ) {
+  /**
+   * remove_duplicate_rss_items( $rss ) removes duplicate items based on title
+   * @param array of simplepie objects $rss
+   * @return array
+   */
+  public static function remove_duplicate_rss_items( $rss ) {
     /* new length of modified array */
     $newlength = 1;
     $length    = count( $rss );
     for ( $i = 1; $i < $length; $i++ ) {
-
       for ( $j = 0; $j < $newlength ; $j++ ) {
         if ( $rss[ $i ]->get_title() == $rss[ $j ]->get_title() ) {
           break;
@@ -70,7 +74,11 @@ class Feed_Helper {
     return $items;
   }
   /**
-  *
+  * simple_pie_feed_fetch( $feed_url ) connects to url and fetches rss feed using
+  * simple pie for wordpress
+  * This method is not declared static to mock for unit test cases
+  * @param string $feed_url
+  * @return simple_pie object
   */
   public function simple_pie_feed_fetch( $feed_url ) {
     if ( function_exists( 'fetch_feed' ) ) {
@@ -81,7 +89,13 @@ class Feed_Helper {
     }
     return fetch_feed( $feed_url );
   }
-  public function extract_images_from_flicker_feed( $items, $limit ) {
+  /**
+   * extract_images_from_flicker_feed( $items, $limit )
+   * @param array of simple pie objects $items
+   * @param int $limit
+   * @return array with image_urls, alt text, title
+   */
+  public static function extract_images_from_flicker_feed( $items, $limit ) {
     $total_feed_count = count( $items );
     $list_item = null;
     for ( $i = 0; ( $i < $limit ) && $total_feed_count > 0 && ( $i <= $total_feed_count ); $i++ ) {
@@ -105,7 +119,7 @@ class Feed_Helper {
    * @param string string array
    * @return array
    */
-  public function extract_news_from_rss_feed( $limit, $content_limit, $items ){
+  public static function extract_news_from_rss_feed( $limit, $content_limit, $items ){
     $count_after_remove_duplicates  = count( $items );
     $list_items = array();
     $current_post_count = 0;
@@ -117,7 +131,7 @@ class Feed_Helper {
         $list_item[]  = $item->get_title();
         $list_item[]  = $item->get_title();
         $list_item[]  = $item->get_date( 'j F Y @ g:i a' );
-        $list_item[]  = $this->content_excerpt( $item->get_description(), $content_limit );
+        $list_item[]  = Feed_Helper::content_excerpt( $item->get_description(), $content_limit );
         $list_items[] = $list_item;
         $current_post_count++;
       }
@@ -127,8 +141,10 @@ class Feed_Helper {
   /**
    * Excerpt. Uses the excerpt if it is set, otherwise uses the main body if it is
    * less than 50 words.
+   * @param string $contentExcerpt
+   * @return int $words
    */
-  public function content_excerpt( $contentExcerpt, $words = 50 ) {
+  public static function content_excerpt( $contentExcerpt, $words = 50 ) {
     $content = strip_tags( $contentExcerpt );
     if ( true === strpos( $content, 'Article source:' ) ){
       $content = substr_replace( $content,'',strpos( $content, 'Article source:' ) );

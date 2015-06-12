@@ -196,25 +196,19 @@ class Twitter_Api_Helper {
       'tweet_text_retweet_link'                 => '',
       'tweet_text_retweet_by'                   => '',
       );
-    $tweet_details['tweet_text']                = $this->get_tweet_text( $tweet );
-    $tweet_details['tweet_screen_name']         = $this->get_tweet_screen_name( $tweet );
-    $tweet_details['tweet_full_name']           = $this->get_tweet_full_name( $tweet );
-    $tweet_details['tweet_profile_pic']         = $this->get_tweet_profile_image( $tweet );
-    $tweet_details['tweet_date_time']           = $this->get_tweet_created_date_short_form( $tweet );
-    $tweet_details['tweet_date_time_actual']    = $this->get_tweet_created_date_actual( $tweet );
-    $tweet_details['tweet_status_link ']        = $this->get_tweet_status_link( $tweet );
-
+    $parse_tweet = $tweet;
     if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ) {
-      $tweet_details['tweet_screen_name']       = $this->get_tweet_screen_name( $tweet['retweeted_status'] );
-      $tweet_details['tweet_full_name']         = $this->get_tweet_full_name( $tweet['retweeted_status'] );
-      $tweet_details['tweet_profile_pic']       = $this->get_tweet_profile_image( $tweet['retweeted_status'] );
-      $tweet_details['tweet_date_time']         = $this->get_tweet_created_date_short_form( $tweet['retweeted_status'] );
-      $tweet_details['tweet_date_time_actual']  = $this->get_tweet_created_date_actual( $tweet['retweeted_status'] );
-      $tweet_details['tweet_status_link']       = $this->get_tweet_status_link( $tweet['retweeted_status'] );
-      $tweet_details['tweet_text_retweet_link'] = $this->get_tweet_text( $tweet['retweeted_status'] );
-      $tweet_details['tweet_text_retweet_by']   = $this->get_tweet_text( $tweet['retweeted_status'] );
+      $parse_tweet = $tweet['retweeted_status'];
+      $tweet_details['tweet_text_retweet_link'] = $this->get_tweet_profile_image( $parse_tweet );
+      $tweet_details['tweet_text_retweet_by']   = $this->get_tweet_screen_name( $parse_tweet );
     }
-
+    $tweet_details['tweet_text']                = $this->get_tweet_text( $parse_tweet );
+    $tweet_details['tweet_screen_name']         = $this->get_tweet_screen_name( $parse_tweet );
+    $tweet_details['tweet_full_name']           = $this->get_tweet_full_name( $parse_tweet );
+    $tweet_details['tweet_profile_pic']         = $this->get_tweet_profile_image( $parse_tweet );
+    $tweet_details['tweet_date_time']           = $this->get_tweet_created_date_short_form( $parse_tweet );
+    $tweet_details['tweet_date_time_actual']    = $this->get_tweet_created_date_actual( $parse_tweet );
+    $tweet_details['tweet_status_link ']        = $this->get_tweet_status_link( $parse_tweet );
     $tweet_details['tweet_text']                = $this->convert_url_text_to_hyperlink( $tweet_details['tweet_text'] );
     $tweet_details['tweet_text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['tweet_text'] );
     $tweet_details['tweet_text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['tweet_text'] );

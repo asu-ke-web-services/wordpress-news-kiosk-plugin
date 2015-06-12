@@ -26,6 +26,7 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
  */
 function load_dependencies(){
   // Require all the files for the Kiosk plugin
+  set_include_path( get_include_path() . PATH_SEPARATOR . $_SERVER['DOCUMENT_ROOT'] );
   require_once '/var/www/html/gios2-php/gios-api-v2.0.php';
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
@@ -36,6 +37,7 @@ function load_dependencies(){
   require_once plugin_dir_path( __FILE__ ) . 'helpers/carousel-slider-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/feed-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-helper.php';
+  require_once plugin_dir_path( __FILE__ ) . 'helpers/people-slider-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
@@ -46,6 +48,7 @@ function load_dependencies(){
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-title-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-people-slider-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'page-templates/kiosk-page-templates.php';
   require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-tweets-page.php';
   require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-weather-page.php';
@@ -59,13 +62,13 @@ function run_loaded_classes(){
   // ==========
   // Helpers
   // ==========
-  $feed_helper = new \Kiosk_WP\Feed_Helper();
-  $kiosk_helper = new \Kiosk_WP\Kiosk_Helper();
+  $feed_helper          = new \Kiosk_WP\Feed_Helper();
+  $people_slider_helper = new \Kiosk_WP\People_Slider_Helper();
 
   // ==========
   // Shortcodes
   // ==========
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes( $kiosk_helper );
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Posts_Shortcodes();
   $posts_shortcodes->run();
 
   $posts_shortcodes = new \Kiosk_WP\Kiosk_News_Shortcodes( $feed_helper );
@@ -84,6 +87,9 @@ function run_loaded_classes(){
   $posts_shortcodes->run();
 
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Weather_Shortcodes();
+  $posts_shortcodes->run();
+
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_People_Slider_Shortcodes( $people_slider_helper );
   $posts_shortcodes->run();
 
   // =====

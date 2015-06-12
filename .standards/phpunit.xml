@@ -32,6 +32,7 @@
 <filter>
   <whitelist processUncoveredFilesFromWhitelist="true">
     <directory suffix=".php">../shortcodes</directory>
+    <directory suffix=".php">../helpers</directory>
   </whitelist>
 </filter>
 <logging>

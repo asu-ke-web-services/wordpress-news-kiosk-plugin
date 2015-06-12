@@ -65,16 +65,22 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     $content_limit         = $atts['content_limit'];
     $items                 = $this->feed_helper->get_feed_data( $feed_urls_array );
     // sorts the news ordered by date using helper function in Feed_Helper class
-    usort( $items, array( $this->feed_helper, 'rss_sort_date_dsc' ) );
+    usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
     // remove the duplicate items based on title
-    $items  = $this->feed_helper->remove_duplicates_rss( $items );
+    $items  = Feed_Helper::remove_duplicate_rss_items( $items );
     // extract the required content from the feed
-    $list_items            = $this->feed_helper->extract_news_from_rss_feed( $limit, $content_limit, $items );
+    $list_items            = Feed_Helper::extract_news_from_rss_feed( $limit, $content_limit, $items );
     // get the carousel slider
     $carousel_slider    = $this->get_carousel_slider( $list_items );
     $kiosk_asu_news_div = '<div class="kiosk-asu-news">' . $carousel_slider . '</div>';
     return $kiosk_asu_news_div;
   }
+  /**
+   * get_carousel_slider( $list_items )
+   * creates a carousel slider and returns it for the given items
+   * @param array $list_items
+   * @return string
+   */
   private function get_carousel_slider( $list_items ){
     $carousel_slider = '';
     $prefix = 'kiosk-asu-news';

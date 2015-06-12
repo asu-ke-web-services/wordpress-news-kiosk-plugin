@@ -13,7 +13,7 @@ class Kiosk_Helper {
    * @param string string
    * @return array
    */
-  public function get_posts_items_from_db( $limit, $tags ){
+  public static function get_posts_items_from_db( $limit, $tags ){
      $exit_while             = false;
      $cureent_offset_posts   = 0;
      $list_items = array();
@@ -30,7 +30,7 @@ class Kiosk_Helper {
       $cureent_offset_posts = $cureent_offset_posts + $limit;
       $posts                = get_posts( $query_post_options );
       if ( $posts ) {
-        $next_list_items = $this->check_for_image( $posts );
+        $next_list_items = Kiosk_Helper::check_for_image( $posts );
         if ( null != $next_list_items ) {
           $list_items = array_merge( $list_items, $next_list_items );
         }
@@ -45,19 +45,19 @@ class Kiosk_Helper {
    * check_for_image( $posts ) check for images that are as attachment
    * or content or page_feature_image attribute and if found returns and array
    * with image_url and alt text
-   * @param $posts
+   * @param array $posts
    * @return array
    */
-  public function check_for_image( $posts ){
+  public static function check_for_image( $posts ){
     $list_items = null;
     foreach ( $posts as $post ) {
-      if ( $this->check_post_expiry( $post ) ){
+      if ( Kiosk_Helper::check_post_expiry( $post ) ){
         continue;
       }
       //Check if featured image is present or not
-      $image_from_attachment                = $this->get_attachment_image_src( $post );
-      $image_from_content                   = $this->get_image_from_content( $post );
-      $image_from_page_feature_attribute    = $this->get_image_from_page_feature_attribute( $post );
+      $image_from_attachment                = Kiosk_Helper::get_attachment_image_src( $post );
+      $image_from_content                   = Kiosk_Helper::get_image_from_content( $post );
+      $image_from_page_feature_attribute    = Kiosk_Helper::get_image_from_page_feature_attribute( $post );
       if ( null != $image_from_attachment ) {
         $list_items[]  = $image_from_attachment;
         //Check if posts had images in its body
@@ -77,7 +77,7 @@ class Kiosk_Helper {
    * @param $post
    * @return boolean
    */
-  public function check_post_expiry( $post ){
+  public static function check_post_expiry( $post ){
     $kiosk_end_date     = get_post_meta( $post->ID, 'kiosk-end-date', true );
     $today              = strtotime( date( 'd-m-Y' ) );
     $expiration_date    = strtotime( $kiosk_end_date );
@@ -94,7 +94,7 @@ class Kiosk_Helper {
    * @param $post
    * @return array
    */
-  public function get_attachment_image_src( $post ){
+  public static function get_attachment_image_src( $post ){
     $list_item          = null;
     $image_attributes   = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ) );
     if ( $image_attributes ) {
@@ -109,7 +109,7 @@ class Kiosk_Helper {
    * @param $post
    * @return array
    */
-  public function get_image_from_content( $post ){
+  public static function get_image_from_content( $post ){
     $content    = $post->post_content;
     $list_item  = null;
     // Take the image tag src attribute from the content and store it in pics variable
@@ -130,7 +130,7 @@ class Kiosk_Helper {
    * @param $post
    * @return array
    */
-  public function get_image_from_page_feature_attribute( $post ){
+  public static function get_image_from_page_feature_attribute( $post ){
     $list_item          = null;
     $page_feature_image = get_post_meta( $post->ID, 'page_feature_image', true );
     if ( ! empty( $page_feature_image ) ) {
@@ -147,7 +147,7 @@ class Kiosk_Helper {
    * @param string
    * @return array
    */
-  public function get_default_images( $default_image ){
+  public static function get_default_images( $default_image ){
     $list_item  = null;
     if ( ! empty( $default_image ) ) {
       $default_image_array = explode( ',', $default_image );
@@ -159,5 +159,62 @@ class Kiosk_Helper {
       }
     }
     return $list_item;
+  }
+  /**
+   * generate_unique_random_int_in_range( $start, $end, $quantity )
+   * @param int $start
+   * @param int $end
+   * @param int $quantity
+   * @param array $random_int_exlusion
+   * @return array
+   */
+  public static function generate_unique_random_int_in_range( $start, $end, $quantity, $random_int_exlusion ) {
+    $numbers = array_diff( range( $start, $end ), $random_int_exlusion );
+    shuffle( $numbers );
+    return array_slice( $numbers, 0, $quantity );
+  }
+  /**
+   * in_arrayi($needle, $haystack)
+   * case insensitive in_array
+   * @param string $needle
+   * @param array $haystack
+   * @return bool
+   */
+  public static function in_arrayi( $needle, $haystack ) {
+    return in_array( strtolower( $needle ), array_map( 'strtolower', $haystack ) );
+  }
+  /**
+  * Case in-sensitive array_search() with partial matches
+  *
+  * @param string $needle The string to search for.
+  * @param array $haystack The array to search in.
+  *
+  * @author Bran van der Meer <branmovic@gmail.com>
+  * @since 29-01-2010
+  * http://bran.name/dump/array-find-case-insensitive-array-search-with-partial-matches/
+  */
+  public static function array_find( $needle, array $haystack )
+  {
+    foreach ( $haystack as $key => $value ) {
+      if ( false !== stripos( $needle, $value ) ) {
+          return $key;
+      }
+    }
+    return false;
+  }
+  /**
+   * rel2abs( $url )
+   * If url is not absolute prefix with gios_url as hostname and returns
+   * @param string
+   * @return string
+   */
+  public static function relative_to_absolute_url( $url, $prefix )
+  {
+    /* return if already absolute URL */
+    if ( parse_url( $url, PHP_URL_SCHEME ) != '' ) {
+      return $url;
+    } else {
+      return $prefix . $url;
+    }
   }
 }
