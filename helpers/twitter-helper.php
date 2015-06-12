@@ -74,6 +74,9 @@ class Twitter_Api_Helper {
      'include_rts'            => 1,
     );
 
+    // TODO support general Twitter queries. The oauth requires "q" parameter
+    // and the CURLOPT_URL will need a "q=" request
+
     $base_url                 = $this->create_base_url( $twitter_api_url, 'GET', $oauth );
     $composite_key            = rawurlencode( $consumer_secret ) . '&' . rawurlencode( $oauth_access_token_secret );
     $oauth_signature          = base64_encode( hash_hmac( 'sha1', $base_url, $composite_key, true ) );

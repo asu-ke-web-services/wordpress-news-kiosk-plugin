@@ -27,7 +27,7 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
 function load_dependencies(){
   // Require all the files for the Kiosk plugin
   set_include_path( get_include_path() . PATH_SEPARATOR . $_SERVER['DOCUMENT_ROOT'] );
-  require_once '/var/www/html/gios2-php/gios-api-v2.0.php';
+  require_once 'gios-api-v2.0.php';
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
@@ -39,13 +39,11 @@ function load_dependencies(){
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/people-slider-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
-  require_once plugin_dir_path( __FILE__ ) . 'admin/general-admin.php';
-  require_once plugin_dir_path( __FILE__ ) . 'admin/posts-admin.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-posts-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-news-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-slider-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-time-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-title-shortcodes.php';
+  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-logo-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
   require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-people-slider-shortcodes.php';
@@ -80,7 +78,7 @@ function run_loaded_classes(){
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Time_Shortcodes();
   $posts_shortcodes->run();
 
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_Title_Shortcodes();
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_Logo_Shortcodes();
   $posts_shortcodes->run();
 
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Tweets_Shortcodes();
@@ -100,14 +98,6 @@ function run_loaded_classes(){
 
   $kiosk_pages = new \Kiosk_WP\Kiosk_Weather_Page();
   $kiosk_pages->run();
-
-  // =====
-  // Admin
-  // =====
-  $general_admin    = new \Kiosk_WP\General_Admin();
-  $posts_admin      = new \Kiosk_WP\Posts_Admin( $general_admin );
-  $general_admin->run();
-  $posts_admin->run();
 
   // ==============
   // Page Templates

@@ -47,24 +47,68 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * categories
    */
   public function kiosk_people_slider( $atts, $content = null ) {
+    $data_sections          = array();
     $atts                   = shortcode_atts(
         array(
           'gios_url'        => 'https://sustainability.asu.edu',
         ),
         $atts
     );
-    $this->gios_url           = $atts['gios_url'];
-    $persons_images_category  = $this->people_slider_helper
-                                      ->get_persons_images_category_keywords();
-    $keyword_slug_quote       = $this->parse_content( $content );
-    $keyword_slug_quote_image = $this->people_slider_helper->get_content_images(
-        $keyword_slug_quote
-    );
+    $this->gios_url = $atts['gios_url'];
+    $parsed_content = $this->parse_content( $content );
+
+    // Get all the keywords
+    $keywords = $this->people_slider_helper->get_keywords();
+
+    foreach ( $keywords as $keyword ) {
+      $featured_image = false;
+      // Get all the images for the people in those keywords  
+      $people = $this->people_slider_helper->get_people( $keyword );
+      $images = array();
+
+      foreach ( $people as $person ) {
+        $image = $person->photo_url();
+
+        if ( $image !== false ) {
+          $images[] = $image;
+        }
+      }
+
+      // Match the quote to the keyword
+      $quote          = false;
+      $person_slug    = false;
+      foreach ( $parsed_content as $part ) {
+        if ( ( array_key_exists( 'keyword', $part ) &&
+               $part['keyword'] === $keyword->keyword ) ||
+             ( array_key_exists( 'keyword-slug', $part ) &&
+               $part['keyword-slug'] === $keyword->slug ) ) {
+          $quote       = $part['quote'];
+          $person_slug = $part['person-slug'];
+
+          foreach ( $people as $person ) {
+            $image = $person->photo_url();
+
+            if ( $image !== false && $person->slug === $person_slug ) {
+              $featured_image = $image;
+            }
+          }
+
+          break;
+        }
+      }
+
+      $data_sections[] = array(
+        'keyword' => $keyword->keyword,
+        'people-images' => $images,
+        'quote' => $quote,
+        'person-slug' => $person_slug,
+        'featured-image' => $featured_image
+      );
+    }
 
     $carousel_slider          = $this->get_carousel_slider(
         People_Slider_Helper::get_sliders(
-            $persons_images_category,
-            $keyword_slug_quote_image,
+            $data_sections,
             $this->gios_url
         )
     );
@@ -78,16 +122,12 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * @return array
    */
   public function parse_content( $content ) {
-    $keyword_slug_quote = array();
-    if ( empty( $content ) ) {
-      return $keyword_slug_quote;
-    }
-    //split by delimit as <br> or <br/> or <br > or <br /> or <br / >  or < br / >
-    $keyword_slug_quote = People_Slider_Helper::prepare_keyword_slug_quote_by_delimit(
-        $content,
-        '/<\s*br\s*\/?\s*>/'
-    );
-    return $keyword_slug_quote;
+    $content = str_replace( '&#8220;', "\"", $content );
+    $content = str_replace( '&#8221;', "\"", $content );
+    $content = str_replace( '&#8217;', "'", $content );
+    $content = str_replace( '&#8216;', "'", $content );
+    
+    return json_decode( trim( $content ), true );
   }
 
   /**
