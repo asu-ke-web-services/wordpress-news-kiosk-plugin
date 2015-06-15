@@ -76,9 +76,9 @@ HTML;
     return sprintf( $weather_div, $current_weather_div, $location_title, $forecast_weather_block );
   }
 
-  public function kiosk_weather( $atts, $content = null ) {
+  public function kiosk_weather( $location ) {
 
-    $json = $this->get_weather_json( 'tempe, az' );
+    $json = $this->get_weather_json( $location );
     if ( empty( $json ) ) {
       if ( $this->request_not_from_wp ) {
         $kiosk_weather_div = '';

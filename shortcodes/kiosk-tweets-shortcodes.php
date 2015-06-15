@@ -33,9 +33,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_tweets]
+   * [kiosk_tweets limit="20" query_string="#sustainabity" user_timeline="asugreen"]
    *
    * @param $atts array
+   * specifying user_timeline overrides the query_string for search and displays user timeline
    * Generates a <div> tag with tweets
    * update twitter_handle, oauth_access_token, oauth_access_token_secret,
    * consumer_key,consumer_secret
