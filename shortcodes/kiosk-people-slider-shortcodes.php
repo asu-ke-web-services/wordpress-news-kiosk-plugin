@@ -76,6 +76,9 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * @return array
    */
   public function parse_content( $content ) {
+    if ( empty( $content ) ) {
+      return array();
+    }
     $content = str_replace(
         array( '&#8220;', '&#8221;', '&#8217;', '&#8216;', ),
         array( '"', '"', '\'', '\'', ),

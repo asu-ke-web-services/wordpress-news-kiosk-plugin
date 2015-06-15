@@ -39,6 +39,7 @@ class People_Slider_Helper {
       $featured_image = false;
       // Get all the images for the people in those keywords
       $people = $this->get_people( $keyword );
+      //var_dump($people);
       $images = array();
 
       foreach ( $people as $person ) {
@@ -52,7 +53,8 @@ class People_Slider_Helper {
       // Match the quote to the keyword
       $quote          = false;
       $person_slug    = false;
-      foreach ( $parsed_content as $part ) {
+      for ( $i = 0; $i < count( $parsed_content ); $i++ ) {
+        $part = $parsed_content[ $i ];
         if ( ( array_key_exists( 'keyword', $part ) &&
                0 == strcasecmp( $part['keyword'], $keyword->keyword ) )
              || ( array_key_exists( 'keyword-slug', $part ) &&

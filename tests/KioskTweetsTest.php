@@ -21,7 +21,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->method( 'get_tweets_json' )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
-    $content = $stub->kiosk_tweets( '' );
+    $content = $stub->kiosk_tweets( array() );
     $this->assertContains( 'kiosk-tweets__tweet', $content, 'Should return all current tweets item max default 20' );
 
     $number_of_items = substr_count( $content, '<li' );

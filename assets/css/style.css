@@ -76,7 +76,7 @@
   padding: 10px;
 }
 
-.kiosk-ground-floor-layout-title {
+.kiosk-ground-floor-layout-logo {
   height: 151px;
   width: 100%;
   max-width: 480px;
@@ -123,13 +123,13 @@
   max-width: 480px;
 }
 
-.kiosk-title {
+.kiosk-logo {
   display: flex;
   height: 100%;
   width: 100%;
 }
 
-.kiosk-title__logo {
+.kiosk-logo__logo {
   display: inline-flex;
   height: 100%;
   width: 100%;
@@ -634,7 +634,7 @@
 .kiosk-third-floor-layout-col--2{
   height: 100%;
 }
-.kiosk-third-floor-layout-title{
+.kiosk-third-floor-layout-logo{
   height: 100px;
   width: 100%;
   max-width: 480px;
