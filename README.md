@@ -23,7 +23,8 @@ This plugin is set to replace our current RiseVision system. [Example](http://pr
     * `[kiosk-slider]`
     * `[kiosk-asu-news]`
     * `[kiosk-logo path='http://www.example.com/image.png']`
-    * ```[kiosk_people_slider gios_url='https://sustainability.asu.edu']
+    * ```html
+    [kiosk_people_slider gios_url='https://sustainability.asu.edu']
         [
           {
             "keyword":"Biodiversity and preservation of natural environment",
@@ -144,7 +145,7 @@ Kiosk ASU News Shortcode displays the news from the rss feed.
 limit attribute is optional and defaults to `20`.
 feed attribute is optional and defaults to `153,178,358,40`. Each of these numeric values correponds to part of below url.
 
-```Default feed urls
+```html
 https://asunews.asu.edu/taxonomy/term/153/all/feed
 https://asunews.asu.edu/taxonomy/term/178/all/feed
 https://asunews.asu.edu/taxonomy/term/358/all/feed
@@ -156,7 +157,8 @@ Displays a logo fecth from the given path.
 path attribute is optional and defaults to GIOS logo.
 
 #Kiosk People Slider Shortcode
-```[kiosk_people_slider gios_url='https://sustainability.asu.edu']
+```html
+[kiosk_people_slider gios_url='https://sustainability.asu.edu']
 [
   {
     "keyword":"Biodiversity and preservation of natural environment",
