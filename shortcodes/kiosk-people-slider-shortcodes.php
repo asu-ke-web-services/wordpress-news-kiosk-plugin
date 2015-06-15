@@ -62,14 +62,14 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
 
     foreach ( $keywords as $keyword ) {
       $featured_image = false;
-      // Get all the images for the people in those keywords  
+      // Get all the images for the people in those keywords
       $people = $this->people_slider_helper->get_people( $keyword );
       $images = array();
 
       foreach ( $people as $person ) {
         $image = $person->photo_url();
 
-        if ( $image !== false ) {
+        if ( false !== $image ) {
           $images[] = $image;
         }
       }
@@ -88,7 +88,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
           foreach ( $people as $person ) {
             $image = $person->photo_url();
 
-            if ( $image !== false && $person->slug === $person_slug ) {
+            if ( false !== $image && $person->slug === $person_slug ) {
               $featured_image = $image;
             }
           }
@@ -102,7 +102,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
         'people-images' => $images,
         'quote' => $quote,
         'person-slug' => $person_slug,
-        'featured-image' => $featured_image
+        'featured-image' => $featured_image,
       );
     }
 
@@ -122,11 +122,11 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * @return array
    */
   public function parse_content( $content ) {
-    $content = str_replace( '&#8220;', "\"", $content );
-    $content = str_replace( '&#8221;', "\"", $content );
+    $content = str_replace( '&#8220;', '"', $content );
+    $content = str_replace( '&#8221;', '"', $content );
     $content = str_replace( '&#8217;', "'", $content );
     $content = str_replace( '&#8216;', "'", $content );
-    
+
     return json_decode( trim( $content ), true );
   }
 
