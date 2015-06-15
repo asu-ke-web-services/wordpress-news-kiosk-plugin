@@ -114,51 +114,61 @@ To get the image from the post, check for the following in the following order:
 # The KioskWeather Shortcode
 
 `[kiosk-weather location='tempe,az']`
+
 Kiosk Weather shortcode pulls the weather forecast from the yahoo weather API. 
 
-location attribute is optional and defaults to Tempe, AZ.
+Attributes Description:
+
+ * location attribute is optional and defaults to Tempe, AZ.
 
 # The Kiosk Tweets Shortcode
 
 `[kiosk_tweets limit="20" query_string="#sustainabity" user_timeline="asugreen"]`
+
 Kiosk Tweets shorcode displays the tweets requested by the given search parameters.
 
 Attributes Description:
- limit attribute is optional and defaults to 20.
 
- Either one of the query_string or user_timeline attribute is required if both are specified user_timeline overrides the query_string for search and displays tweets from user timeline.
+ * limit attribute is optional and defaults to 20.
+
+ * Either one of the query_string or user_timeline attribute is required if both are specified user_timeline overrides the query_string for search and displays tweets from user timeline.
 
 Note:
- Make sure to update oauth_access_token, oauth_access_token_secret, consumer_key,consumer_secret with twitter account details in localsettings.php.
+
+ * Make sure to update oauth_access_token, oauth_access_token_secret, consumer_key,consumer_secret with twitter account details in localsettings.php.
 
 # The Kiosk Time Shortcode
 
 `[kiosk-time]`
-Displays the current time and date calendar
+
+ Displays the current time and date calendar
 
 # The Kiosk Slider Shortcode
 
 `[kiosk_slider limit='20' feed_urls='http:://www.example.com/1,http:://www.example.com/2']`
+
 Displays the images from the Flickr feed data.
 
 Attributes Description:
 
-limit attribute is optional and defaults to 20.
+* limit attribute is optional and defaults to 20.
 
-feed_urls is optional and defaults to GIOS flickr feed.
+* feed_urls is optional and defaults to GIOS flickr feed.
 
-Default feed url: 
+* Default feed url: 
+
 `https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200`
 
 # The Kiosk ASU News Shortcode
+
 `[kiosk_asu_news limit='20' feed='153,178,358,40' content_limit='50']`
 
 Kiosk ASU News Shortcode displays the news from the rss feed.
 
 Attributes Description:
-limit attribute is optional and defaults to `20`.
+* limit attribute is optional and defaults to `20`.
 
-feed attribute is optional and defaults to `153,178,358,40`. Each of these numeric values correponds to part of below url.
+* feed attribute is optional and defaults to `153,178,358,40`. Each of these numeric values correponds to part of below url.
 
 ```html
 https://asunews.asu.edu/taxonomy/term/153/all/feed
@@ -167,13 +177,17 @@ https://asunews.asu.edu/taxonomy/term/358/all/feed
 https://asunews.asu.edu/taxonomy/term/40/all/feed
 ```
 #Kiosk Logo Shortcode
+
 `[kiosk-logo path='http:://www.example.com/image.png']`
+
 Displays a logo fecth from the given path.
 
 Attributes Description:
-path attribute is optional and defaults to GIOS logo.
+
+* path attribute is optional and defaults to GIOS logo.
 
 #Kiosk People Slider Shortcode
+
 ```html
 [kiosk_people_slider gios_url='https://sustainability.asu.edu']
 [
@@ -195,15 +209,16 @@ path attribute is optional and defaults to GIOS logo.
 ]
 [/kiosk_people_slider]
 ```
+
 Attributes Description:
-Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available. 
+* Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available. 
 Json style synax should be given as part of content with keyword or keyword-slug, person-slug, quote.
 
-For the given keyword shortcode displays the person's image identified using person-slug is displayed as featued image for that keyword and given quote is shown next to it.
+* For the given keyword shortcode displays the person's image identified using person-slug is displayed as featued image for that keyword and given quote is shown next to it.
 
-Person-slug and quote attributes are optional and by default they are empty.
-Keyword is the category name they belong to 
-`For example Keyword can be: Energy or food systems but not deforestation`
+* Person-slug and quote attributes are optional and by default they are empty.
+* Keyword is the category name they belong to 
+  `For example Keyword can be: Energy or food systems but not deforestation`
 
 
 
