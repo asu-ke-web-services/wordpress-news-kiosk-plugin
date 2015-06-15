@@ -14,6 +14,9 @@ namespace Kiosk_WP;
  */
 class Kiosk_Tweets_Helper {
   protected $localsettings    = array();
+  protected $limit;
+  protected $query_string;
+  protected $user_timeline;
   public $request_not_from_wp = false;
   public function __construct() {
     $this->load_dependencies();
@@ -46,10 +49,32 @@ class Kiosk_Tweets_Helper {
    * Accepts the json formatted string and the limit on number of tweets
    * Creates a div block with all the tweets and by converting the hash tags and @ and urls to hyperlinks
    * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted.
-   * @return string
+   * @return array with profile_pic relative_date_time actual_date_time full_name screen_name
+   * text retweet_link retweet_by
    */
   private function kiosk_parse_tweets( $decode, $limit ) {
-    $kiosk_tweets_header_template   = <<<HTML
+    $kisok_tweet_items = array();
+    /* array will have 'statuses' as column name in case of search api to read actual
+      tweets take data from statutses column
+      For user timeline we do not have statuses column so read data as it comes form api */
+    if ( array_key_exists( 'statuses', $decode ) ) {
+      $decode = $decode['statuses'];
+    }
+    for ( $i = 0; $i < count( $decode ) && $i < $limit ; $i++ ) {
+      $twitter_api_helper   = new \Kiosk_WP\Twitter_Api_Helper();
+      $kisok_tweet_items[]  = $twitter_api_helper->extract_tweet_details( $decode[ $i ] );
+    }
+    return $kisok_tweet_items;
+  }
+  /**
+   * kiosk_tweets_block( $kisok_tweet_items )
+   * creates a div block with the tweets passed to it
+   * @param array with profile_pic relative_date_time actual_date_time full_name screen_name
+   * text retweet_link retweet_by
+   * @return string
+   */
+  private function kiosk_tweets_block( $kisok_tweet_items ) {
+    $div_start   = <<<HTML
     <div class="kiosk-tweets_timeline-header">
        <b class="kiosk-tweets_timeline-header__title">Tweets</b>
        <p class="kiosk-tweets_timeline-header__twitter-logo"  title="Twitter" target="_blank">Twitter</p>
@@ -57,7 +82,7 @@ class Kiosk_Tweets_Helper {
     <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets_scroll-container">
       <ul class="kiosk-tweets__list" id="kiosk_tweets_list">
 HTML;
-    $kiosk_tweets_item_template     = <<<HTML
+    $item_template     = <<<HTML
         <li class="kiosk-tweets__tweet">
           <div class="kiosk-tweets__tweet__avatar">
               <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
@@ -78,65 +103,53 @@ HTML;
           </div>
         </li>
 HTML;
-    $kiosk_tweets_retweet_template  = <<<HTML
+    $retweet_template  = <<<HTML
         <div class="kiosk-tweets__tweet__retweet kiosk-tweets__tweet__font-style">
           <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
           <a target="_blank" href="%s" class="kiosk-tweets__tweet__font-style"> %s </a>
         </div>
 HTML;
-    $kiosk_tweets_footer_template   = <<<HTML
-          </ul>
-       </div>
-HTML;
-    $kisok_tweet_items              = '';
-    $num_of_items                   = 0;
-    foreach ( $decode as $tweet ) {
-      if ( ++$num_of_items > $limit ) {
-        break;
-      }
-      $twitter_api_helper           = new \Kiosk_WP\Twitter_Api_Helper();
-      $tweet_details                = $twitter_api_helper->extract_tweet_details( $tweet );
-      if ( ! empty( $tweet_details['tweet_text_retweet_by'] ) ) {
-        $kiosk_tweets_retweet       = sprintf(
-            $kiosk_tweets_retweet_template,
-            $tweet_details['tweet_text_retweet_link'],
-            $tweet_details['tweet_text_retweet_by']
+    $div_end      = '</ul></div>';
+    $tweet_items  = '';
+    foreach ( $kisok_tweet_items as $item ) {
+      $retweet  = '';
+      if ( ! empty( $item['retweet_by'] ) ) {
+        $retweet = sprintf(
+            $retweet_template,
+            $item['retweet_link'],
+            $item['retweet_by']
         );
-      }else {
-        $kiosk_tweets_retweet       = '';
       }
-      $kisok_tweet                  = sprintf(
-          $kiosk_tweets_item_template,
-          $tweet_details['tweet_profile_pic'],
-          $tweet_details['tweet_date_time'],
-          $tweet_details['tweet_date_time_actual'],
-          $tweet_details['tweet_full_name'],
-          $tweet_details['tweet_screen_name'],
-          $tweet_details['tweet_text'],
-          $kiosk_tweets_retweet
+      $tweet_items .= sprintf(
+          $item_template,
+          $item['profile_pic'],
+          $item['relative_date_time'],
+          $item['actual_date_time'],
+          $item['full_name'],
+          $item['screen_name'],
+          $item['text'],
+          $retweet
       );
-      $kisok_tweet_items            = $kisok_tweet_items.$kisok_tweet;
     }
-    return $kiosk_tweets_header_template.$kisok_tweet_items.$kiosk_tweets_footer_template;
+    return $div_start . $tweet_items . $div_end;
   }
-
+  /**
+   * kiosk_tweets( $atts, $content = null )
+   * sets tweets limit, search string, user_timeline  and request to tweets helper
+   * to get the data and creates html to return
+   * @param array
+   * @return string
+   */
   public function kiosk_tweets( $atts, $content = null ) {
-    if ( ! is_array( $atts ) ) {
-      $atts = array( 'limit' => 20 );
-    } else if ( ! array_key_exists( 'limit', $atts ) ) {
-        $atts['limit'] = 20;
-    }
 
-    $twitter_api_params = array(
-      'twitter_handle'            => $this->localsettings['twitter_handle'],
-      'oauth_access_token'        => $this->localsettings['oauth_access_token'],
-      'oauth_access_token_secret' => $this->localsettings['oauth_access_token_secret'],
-      'consumer_key'              => $this->localsettings['consumer_key'],
-      'consumer_secret'           => $this->localsettings['consumer_secret'],
-      'limit'                     => $atts['limit'],
-      );
-    $json = $this->get_tweets_json( $twitter_api_params );
+    $this->limit          = array_key_exists( 'limit', $atts )
+                                ? $atts['limit'] : '20';
+    $this->query_string   = array_key_exists( 'query_string', $atts )
+                                ? $atts['query_string'] : '@asugreen';
+    $this->user_timeline  = array_key_exists( 'user_timeline', $atts )
+                                ? $atts['user_timeline'] : '';
+    $json = $this->get_tweets_json();
     if ( empty( $json ) ){
       if ( $this->request_not_from_wp ){
         $kiosk_tweets_div = '';
@@ -146,11 +159,13 @@ HTML;
     } else {
       $json = Json_Decode_Helper::remove_unwanted_chars( $json );
       $decode = json_decode( $json, true ); //getting the file content as array
+
       if ( $decode != null && json_last_error( ) === JSON_ERROR_NONE ) {
         if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ) {
-          $kiosk_tweets_div = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
+          $kiosk_tweets_div   = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
         } else {
-          $kiosk_tweets_div = '<div class="kiosk-tweets">' . $this->kiosk_parse_tweets( $decode, $atts['limit'] ) . '</div>';
+          $kisok_tweet_items  = $this->kiosk_parse_tweets( $decode, $this->limit );
+          $kiosk_tweets_div   = '<div class="kiosk-tweets">' .  $this->kiosk_tweets_block( $kisok_tweet_items ). '</div>';
         }
       } else {
         $kiosk_tweets_div   = '';
@@ -160,14 +175,22 @@ HTML;
     return $kiosk_tweets_div;
   }
   /**
-   * get_tweets_json( $twitter_api_params ) is being used as part of unit test cases to mock
+   * get_tweets_json() is being used as part of unit test cases to mock
    * up data it written separately.
-   * @param array
    * @return JSON object
    */
-  public function get_tweets_json( $twitter_api_params ) {
+  public function get_tweets_json() {
     $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
-    $json               = $twitter_api_helper->tweets_json( $twitter_api_params );
+    $json               = $twitter_api_helper->tweets_json(
+        $this->localsettings['oauth_access_token'],
+        $this->localsettings['oauth_access_token_secret'],
+        $this->localsettings['consumer_key'],
+        $this->localsettings['consumer_secret'],
+        $this->query_string,
+        $this->limit,
+        $this->user_timeline
+    );
+
     return $json;
   }
 }

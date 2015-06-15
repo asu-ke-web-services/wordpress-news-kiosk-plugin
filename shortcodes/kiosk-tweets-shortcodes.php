@@ -46,6 +46,8 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
     $atts                   = shortcode_atts(
         array(
           'limit'           => '20',
+          'query_string'    => '@asugreen',
+          'user_timeline'   => '',
         ),
         $atts
     );

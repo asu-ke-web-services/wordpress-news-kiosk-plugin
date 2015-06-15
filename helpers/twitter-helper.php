@@ -48,34 +48,53 @@ class Twitter_Api_Helper {
     return $encode_header;
   }
   /**
-   * tweets_json( $atts ) Connects to twitter streaming API using given credentails
+   * tweets_json(
+   * $oauth_access_token,
+   * $oauth_access_token_secret,
+   * $consumer_key,
+   * $consumer_secret,
+   * $query_string,
+   * $limit,
+   * $user_timeline ) Connects to twitter streaming API using given credentails
    * and creates a json formatted string with all the given limit of tweets
    * This function returns mock up data incase of unit testing.
-   * @param array
+   * @param string $oauth_access_token
+   * @param string $oauth_access_token_secret
+   * @param string $consumer_key
+   * @param string $consumer_secret
+   * @param string $query_string
+   * @param int $limit
+   * @param string $user_timeline
    * @return string
    *
    */
-  public function tweets_json( $atts ) {
-    $twitter_handle            = $atts['twitter_handle'];
-    $oauth_access_token        = $atts['oauth_access_token'];
-    $oauth_access_token_secret = $atts['oauth_access_token_secret'];
-    $consumer_key              = $atts['consumer_key'];
-    $consumer_secret           = $atts['consumer_secret'];
-    $twitter_api_url           = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-    $oauth                     = array(
+  public function tweets_json(
+    $oauth_access_token,
+    $oauth_access_token_secret,
+    $consumer_key,
+    $consumer_secret,
+    $query_string,
+    $limit,
+    $user_timeline ) {
+
+    if ( empty( $user_timeline ) ) {
+      $twitter_api_url        = 'https://api.twitter.com/1.1/search/tweets.json';
+    } else {
+      $twitter_api_url        = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+      //Override query_string with user_timeline to get user timeline
+      $query_string           = $user_timeline;
+    }
+    $oauth                    = array(
      'oauth_consumer_key'     => $consumer_key,
      'oauth_nonce'            => uniqid(),
      'oauth_signature_method' => 'HMAC-SHA1',
      'oauth_token'            => $oauth_access_token,
      'oauth_timestamp'        => time(),
      'oauth_version'          => '1.0',
-     'screen_name'            => $twitter_handle,
-     'count'                  => $atts['limit'],
+     'q'                      => $query_string,
+     'count'                  => $limit,
      'include_rts'            => 1,
     );
-
-    // TODO support general Twitter queries. The oauth requires "q" parameter
-    // and the CURLOPT_URL will need a "q=" request
 
     $base_url                 = $this->create_base_url( $twitter_api_url, 'GET', $oauth );
     $composite_key            = rawurlencode( $consumer_secret ) . '&' . rawurlencode( $oauth_access_token_secret );
@@ -91,7 +110,7 @@ class Twitter_Api_Helper {
     $curl_options             = array(
       CURLOPT_HTTPHEADER      => $header,
       CURLOPT_HEADER          => false,
-      CURLOPT_URL             => $twitter_api_url . '?screen_name=' . $twitter_handle . '&count=' . $atts['limit'] . '&include_rts=1',
+      CURLOPT_URL             => $twitter_api_url . '?q=' . rawurlencode( $query_string ) . '&count=' . $limit . '&include_rts=1',
       CURLOPT_RETURNTRANSFER  => true,
       CURLOPT_SSL_VERIFYPEER  => false,
     );
@@ -183,38 +202,39 @@ class Twitter_Api_Helper {
     return $tweet_text;
   }
   /**
-   * extract_tweet_details( $tweet ) creates a default tweet details tempalate
+   * extract_tweet_details( $tweet, $tweets_search_request ) creates a default tweet details tempalate
    * @param JSON object
-   * @return array
+   * @return arraywith profile_pic relative_date_time actual_date_time full_name screen_name
+   * text retweet_link retweet_by
    */
   public function extract_tweet_details( $tweet ) {
     $tweet_details                              = array(
-      'tweet_text'                              => '',
-      'tweet_screen_name'                       => '',
-      'tweet_full_name'                         => '',
-      'tweet_profile_pic'                       => '',
-      'tweet_date_time'                         => '',
-      'tweet_date_time_actual'                  => '',
-      'tweet_status_link'                       => '',
-      'tweet_text_retweet_link'                 => '',
-      'tweet_text_retweet_by'                   => '',
+      'text'                              => '',
+      'screen_name'                       => '',
+      'full_name'                         => '',
+      'profile_pic'                       => '',
+      'relative_date_time'                => '',
+      'actual_date_time'                  => '',
+      'status_link'                       => '',
+      'retweet_link'                      => '',
+      'retweet_by'                        => '',
       );
     $parse_tweet = $tweet;
     if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ) {
       $parse_tweet = $tweet['retweeted_status'];
-      $tweet_details['tweet_text_retweet_link'] = $this->get_tweet_profile_image( $parse_tweet );
-      $tweet_details['tweet_text_retweet_by']   = $this->get_tweet_screen_name( $parse_tweet );
+      $tweet_details['retweet_link']      = $this->get_tweet_profile_image( $tweet );
+      $tweet_details['retweet_by']        = $this->get_tweet_screen_name( $tweet );
     }
-    $tweet_details['tweet_text']                = $this->get_tweet_text( $parse_tweet );
-    $tweet_details['tweet_screen_name']         = $this->get_tweet_screen_name( $parse_tweet );
-    $tweet_details['tweet_full_name']           = $this->get_tweet_full_name( $parse_tweet );
-    $tweet_details['tweet_profile_pic']         = $this->get_tweet_profile_image( $parse_tweet );
-    $tweet_details['tweet_date_time']           = $this->get_tweet_created_date_short_form( $parse_tweet );
-    $tweet_details['tweet_date_time_actual']    = $this->get_tweet_created_date_actual( $parse_tweet );
-    $tweet_details['tweet_status_link ']        = $this->get_tweet_status_link( $parse_tweet );
-    $tweet_details['tweet_text']                = $this->convert_url_text_to_hyperlink( $tweet_details['tweet_text'] );
-    $tweet_details['tweet_text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['tweet_text'] );
-    $tweet_details['tweet_text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['tweet_text'] );
+    $tweet_details['text']                = $this->get_tweet_text( $parse_tweet );
+    $tweet_details['screen_name']         = $this->get_tweet_screen_name( $parse_tweet );
+    $tweet_details['full_name']           = $this->get_tweet_full_name( $parse_tweet );
+    $tweet_details['profile_pic']         = $this->get_tweet_profile_image( $parse_tweet );
+    $tweet_details['relative_date_time']           = $this->get_tweet_created_date_short_form( $parse_tweet );
+    $tweet_details['actual_date_time']    = $this->get_tweet_created_date_actual( $parse_tweet );
+    $tweet_details['status_link ']        = $this->get_tweet_status_link( $parse_tweet );
+    $tweet_details['text']                = $this->convert_url_text_to_hyperlink( $tweet_details['text'] );
+    $tweet_details['text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['text'] );
+    $tweet_details['text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['text'] );
     return $tweet_details ;
   }
   private function get_tweet_text( $tweet ) {
