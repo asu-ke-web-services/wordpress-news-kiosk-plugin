@@ -102,7 +102,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
   private function get_carousel_slider( $list_items ) {
     $carousel_slider = '';
     $prefix          = 'kiosk-people-slider';
-    $layout_template = '<div>%s</div>';
+    $layout_template = '%s';
     if ( count( $list_items ) > 0 ) {
       $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
     }

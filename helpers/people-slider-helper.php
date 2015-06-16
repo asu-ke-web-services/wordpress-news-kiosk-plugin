@@ -116,8 +116,8 @@ class People_Slider_Helper {
    */
   public static function create_slider_layout( $section, $gios_url ) {
     $layout_template = <<<HTML
+	<div class='kiosk-people-slider__layout__header'>%s</div>
     <div class="kiosk-people-slider__layout">
-      <h2 class='kiosk-people-slider__layout__header'>%s</h2>
       <div class="kiosk-people-slider__layout__row-top">
         %s
       </div>
@@ -156,7 +156,7 @@ HTML;
       %s
     </div>
 HTML;
-    $image_tag_template = '<img class="%s" src="%s">';
+    $image_tag_template = '<img class="img-responsive %s" src="%s">';
     if ( false === $section['featured-image'] ) {
       $content_image = end( $section['people-images'] );
     } else {
@@ -172,7 +172,7 @@ HTML;
     $center_right_column = '';
     $title               = $section['keyword'];
     $quote               = $section['quote'];
-    $images_to_display   = $count_images < 21 ? $count_images : 21;
+    $images_to_display   = $count_images < 23 ? $count_images : 21;
     for ( $i = 0; $i < $images_to_display - 1; $i++ ) {
       $surrond_image = sprintf(
           $image_tag_template,

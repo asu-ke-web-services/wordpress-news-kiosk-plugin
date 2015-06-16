@@ -103,7 +103,7 @@ updateKioskTime('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong',
  * set carousel effect to 10 seconds
  */
 $('.carousel').carousel({
-  interval: 10000
+  interval: 100000
 });
 
 /**
@@ -113,8 +113,9 @@ $('.carousel').carousel({
  */
 var site_url = $(location).attr("href");
 var tweets_limit = 20;
+var location = 'tempe,az';
 var tweets_url = site_url + 'kiosk/twitter/limit/' + tweets_limit;
-var weather_url = site_url + 'kiosk/weather';
+var weather_url = site_url + 'kiosk/weather/location='+ location;
 setInterval(function() {
   $.ajax({
     url: tweets_url,

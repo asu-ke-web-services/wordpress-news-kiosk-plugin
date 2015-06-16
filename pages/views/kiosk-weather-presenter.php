@@ -21,6 +21,7 @@ function load_dependencies() {
 }
 
 function do_request_processing() {
+  $location         = filter_input( INPUT_GET, 'location', FILTER_SANITIZE_STRING );
   $weather_helper   = new \Kiosk_WP\Kiosk_Weather_Helper();
-  echo $weather_helper->kiosk_weather( array( '' ) );
+  echo $weather_helper->kiosk_weather( $location );
 }
