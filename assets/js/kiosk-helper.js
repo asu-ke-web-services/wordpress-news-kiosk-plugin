@@ -113,10 +113,9 @@ $('.carousel').carousel({
  */
 var site_url = $(location).attr("href");
 var tweets_limit = 20;
-var weather_location = 'tempe,az';
+var $weather_location = $('.kiosk-weather__forecast__location').text();
 var tweets_url = site_url + 'kiosk/twitter/limit/' + tweets_limit;
-var weather_url = site_url + 'kiosk/weather/location='+ weather_location;
-alert(weather_url);
+var weather_url = site_url + 'kiosk/weather/location='+ $weather_location;
 setInterval(function() {
   $.ajax({
     url: tweets_url,
