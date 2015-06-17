@@ -5,7 +5,7 @@
 
 .kiosk-ground-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 1.6vmin;
+  font-size: 1.7vmin;
   color: #333;
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
@@ -178,9 +178,10 @@
 }
 
 .kiosk-weather__forecast__location {
-  font-size: 3vmin;
+  font-size: 2em;
   color: #fff;
   padding-left: 15px;
+  font-weight: bold;
 }
 
 .kiosk-weather__current__item-image {
@@ -199,6 +200,14 @@
 
 .kiosk-weather__forecast__item {
   color: #fff;
+}
+.kiosk-weather__forecast__item__header{
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 5px;
+}
+.kiosk-weather__forecast__item__text{
+  font-size: 1em;
 }
 
 .kiosk-tweets {
@@ -231,7 +240,7 @@
 .kiosk-tweets_timeline-header__title {
   position: relative;
   color: #fff;
-  font-size: 3.5vmin;
+  font-size: 2.5em;
 }
 
 .kiosk-tweets_timeline-header__twitter-logo {
@@ -291,11 +300,8 @@
 }
 
 .kiosk-tweets__tweet__avatar__image {
-  width: 73px;
-  height: 73px;
   margin-right: 15px;
 }
-
 .kiosk-tweets__tweet__details__header__full-name {
   padding-right: 10px;
 }
@@ -366,7 +372,7 @@
 }
 
 .kiosk-date-time__calendar-icon {
-  font-size: 1vmin;
+  font-size: 1em;
   background-color: #FFF;
   border-radius: 0.1em;
   border: 0.3em solid #818486;
@@ -376,7 +382,7 @@
 .kiosk-date-time__calendar-icon * {
   display: inline-block;
   width: 100%;
-  font-size: 2vmin;
+  font-size: 2em;
   font-weight: bold;
   font-style: normal;
   text-align: center;
@@ -385,14 +391,14 @@
 .kiosk-date-time__calendar-icon strong {
   padding: 3px;
   color: #FFF;
-  font-size: 2vmin;
+  font-size: 1.7em;
   background-color: #A20B09;
   border-bottom: 1px none;
   box-shadow: 0px 2px 0px;
 }
 
 .kiosk-date-time__calendar-icon span {
-  font-size: 4vmin;
+  font-size: 3em;
   letter-spacing: -0.05em;
   color: #2F2F2F;
   padding: 0px 5px;
@@ -401,7 +407,7 @@
 .kiosk-date-time__time {
   font-family: Verdana, Verdana, Geneva, sans-serif;
   color: #900;
-  font-size: 3vmin;
+  font-size: 2.5em;
   font-weight: bold;
   letter-spacing: -0.05em;
   margin: 30px 10px 10px 10px;
@@ -617,7 +623,7 @@
   word-wrap: break-word;
   padding: 5px 5px 5px 10px;
   vertical-align: middle;
-  font-size: 2vmin;
+  font-size: 1.2em;
 }
 
 .kiosk-people-slider__slider__carousel-indicators {
@@ -627,7 +633,7 @@
 .kiosk-people-slider__layout__header {
   margin-bottom: 5px;
   margin-top: 0px;
-  font-size: 3vmin;
+  font-size: 2em;
   text-align: center;
   font-weight: bold;
 }
@@ -732,7 +738,7 @@
   align-content: space-around;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1200px) {
   .kiosk-third-floor {
     flex-direction: column;
     flex-wrap:none;

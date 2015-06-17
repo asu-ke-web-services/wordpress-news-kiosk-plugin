@@ -84,8 +84,8 @@ class Kiosk_Tweets_Helper {
 HTML;
     $item_template     = <<<HTML
         <li class="kiosk-tweets__tweet">
-          <div class="kiosk-tweets__tweet__avatar">
-              <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
+          <div class="kiosk-tweets__tweet__avatar img-responsive center-block">
+              <img src="%s" class="kiosk-tweets__tweet__avatar__image img-responsive center-block" alt="">
           </div>
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details_permalink kiosk-tweets__tweet__font-style">

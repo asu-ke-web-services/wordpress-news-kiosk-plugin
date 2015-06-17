@@ -25,14 +25,14 @@ class Kiosk_Weather_Helper {
   function kiosk_parse_weather( $json_weather ) {
     $current_weather_div_template     = <<<HTML
       <img class='kiosk-weather__current__item-image center-block img-responsive' src='%s' >
-      <p><b>%s<sup>o</sup>%s</b></p>
+      <div class="kiosk-weather__forecast__item__text"><b>%s<sup>o</sup>%s</b></div>
 HTML;
 
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item col-xs-4'>
-        <h5>%s</h5>
+        <div class="kiosk-weather__forecast__item__header">%s</div>
         <img class='kiosk-weather_forecast__item_image center-block img-responsive' src='%s' >
-        <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
+        <div class="kiosk-weather__forecast__item__text"><b>%s<sup>o</sup> / %s<sup>o</sup></b></div>
       </div>
 HTML;
     $yahoo_weather_helper             = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
@@ -64,7 +64,7 @@ HTML;
           <div class="kiosk-weather__forecast col-xs-9">
             <div class ="row">
               <div class="kiosk-weather__forecast__location span12">
-                <b>%s</b>
+                %s
               </div>
             </div>
             <div class="row">
