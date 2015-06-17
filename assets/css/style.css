@@ -382,7 +382,7 @@
 .kiosk-date-time__calendar-icon * {
   display: inline-block;
   width: 100%;
-  font-size: 2em;
+  font-size: 1.7em;
   font-weight: bold;
   font-style: normal;
   text-align: center;
@@ -391,14 +391,14 @@
 .kiosk-date-time__calendar-icon strong {
   padding: 3px;
   color: #FFF;
-  font-size: 1.7em;
+  font-size: 1.3em;
   background-color: #A20B09;
   border-bottom: 1px none;
   box-shadow: 0px 2px 0px;
 }
 
 .kiosk-date-time__calendar-icon span {
-  font-size: 3em;
+  font-size: 2.5em;
   letter-spacing: -0.05em;
   color: #2F2F2F;
   padding: 0px 5px;
@@ -407,7 +407,7 @@
 .kiosk-date-time__time {
   font-family: Verdana, Verdana, Geneva, sans-serif;
   color: #900;
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: bold;
   letter-spacing: -0.05em;
   margin: 30px 10px 10px 10px;
@@ -624,6 +624,7 @@
   padding: 5px 5px 5px 10px;
   vertical-align: middle;
   font-size: 1.2em;
+  font-style: italic;
 }
 
 .kiosk-people-slider__slider__carousel-indicators {
@@ -643,11 +644,8 @@
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 1.6vmin;
   color: #333;
-  background-image: url("../images/bg-display.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-/*  background-color: #76E9FF;
-*/  display: flex;
+  background: linear-gradient(to bottom, #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 54%,#9fd8ef 58%,#2ab0ed 100%);
+  display: flex;
   padding: 20px;
   width: 100%;
   flex: auto;
@@ -737,7 +735,16 @@
   align-items: center;
   align-content: space-around;
 }
-
+.kiosk-third-floor .kiosk-weather {
+  border:0px;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, rgba(181,189,200,1) 5%,rgba(40,52,59,1) 94%);
+}
+.kiosk-third-floor .kiosk-tweets{
+  border:0px;
+  border-radius: 10px;
+  background: linear-gradient(to top, rgba(181,189,200,1) 5%,rgba(40,52,59,1) 94%);
+}
 @media screen and (max-width: 1200px) {
   .kiosk-third-floor {
     flex-direction: column;
