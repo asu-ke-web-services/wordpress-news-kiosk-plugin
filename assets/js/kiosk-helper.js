@@ -103,7 +103,7 @@ updateKioskTime('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong',
  * set carousel effect to 10 seconds
  */
 $('.carousel').carousel({
-  interval: 100000
+  interval: 10000
 });
 
 /**

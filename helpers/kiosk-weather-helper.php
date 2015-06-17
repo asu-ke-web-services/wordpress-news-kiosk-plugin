@@ -24,14 +24,14 @@ class Kiosk_Weather_Helper {
   */
   function kiosk_parse_weather( $json_weather ) {
     $current_weather_div_template     = <<<HTML
-      <img class='kiosk-weather__current__item-image center-block' src='%s' >
+      <img class='kiosk-weather__current__item-image center-block img-responsive' src='%s' >
       <p><b>%s<sup>o</sup>%s</b></p>
 HTML;
 
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item col-xs-4'>
         <h5>%s</h5>
-        <img class='kiosk-weather_forecast__item_image center-block' src='%s' >
+        <img class='kiosk-weather_forecast__item_image center-block img-responsive' src='%s' >
         <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
       </div>
 HTML;

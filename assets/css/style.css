@@ -5,7 +5,7 @@
 
 .kiosk-ground-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 100%;
+  font-size: 1.6vmin;
   color: #333;
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
@@ -178,7 +178,7 @@
 }
 
 .kiosk-weather__forecast__location {
-  font-size: 2em;
+  font-size: 3vmin;
   color: #fff;
   padding-left: 15px;
 }
@@ -231,7 +231,7 @@
 .kiosk-tweets_timeline-header__title {
   position: relative;
   color: #fff;
-  font-size: 2.5em;
+  font-size: 3.5vmin;
 }
 
 .kiosk-tweets_timeline-header__twitter-logo {
@@ -366,7 +366,7 @@
 }
 
 .kiosk-date-time__calendar-icon {
-  font-size: 1em;
+  font-size: 1vmin;
   background-color: #FFF;
   border-radius: 0.1em;
   border: 0.3em solid #818486;
@@ -376,23 +376,23 @@
 .kiosk-date-time__calendar-icon * {
   display: inline-block;
   width: 100%;
-  font-size: 1em;
+  font-size: 2vmin;
   font-weight: bold;
   font-style: normal;
   text-align: center;
 }
 
 .kiosk-date-time__calendar-icon strong {
-  padding: 5px;
+  padding: 3px;
   color: #FFF;
-  font-size: 24px;
+  font-size: 2vmin;
   background-color: #A20B09;
   border-bottom: 1px none;
   box-shadow: 0px 2px 0px;
 }
 
 .kiosk-date-time__calendar-icon span {
-  font-size: 48px;
+  font-size: 4vmin;
   letter-spacing: -0.05em;
   color: #2F2F2F;
   padding: 0px 5px;
@@ -401,7 +401,7 @@
 .kiosk-date-time__time {
   font-family: Verdana, Verdana, Geneva, sans-serif;
   color: #900;
-  font-size: 2em;
+  font-size: 3vmin;
   font-weight: bold;
   letter-spacing: -0.05em;
   margin: 30px 10px 10px 10px;
@@ -446,7 +446,7 @@
 }
 
 .kiosk-asu-news__slider__carousel-indicators {
-  visibility: hidden
+  visibility: hidden;
 }
 
 .kiosk-asu-news {
@@ -501,14 +501,33 @@
   align-content: center;
   align-items: center;
   overflow: hidden;
-  /* maintain 7:5 aspect ratio*/
-  width: 1050px;
-  height: 750px;
+  width: 100%;
+  height: 100%;
 
   /* maintain 7:5 aspect ratio*/
   /*height: 825px;
   width: calc( 825px * calc(7 / 5) ); */
 
+}
+.kiosk-people-slider__aspect-ratio {
+  position: relative;
+  padding-bottom: calc(100%*5/7);
+  height: 0;
+}
+.kiosk-people-slider__slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom:0;
+  right: 0;
+  width: 93%;
+  height: 93%; /* Due to header images pops out. To fit into outer div used space*/
+}
+.kiosk-people-slider{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .kiosk-people-slider__layout__row-top,
 .kiosk-people-slider__layout__row-bottom {
@@ -520,12 +539,12 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
-  max-height: 20%;
+  height: 20%;
 }
 
 .kiosk-people-slider__layout__row-middle {
   display: flex;
-  felx: auto;
+  flex: auto;
   width: 100%;
   justify-content: space-between;
   align-content: space-around;
@@ -533,7 +552,7 @@
   overflow: hidden;
   flex: auto;
   flex-direction: row;
-  max-height: 100%;
+  height: 60%;
 }
 
 .kiosk-people-slider__layout__row-middle--col1,
@@ -542,7 +561,7 @@
   flex-direction: column;
   flex: auto;
   width: calc(100% / 7);
-  max-height: 100%;
+  height: 100%;
   justify-content: space-around;
   align-content: flex-start;
   align-items: flex-start;
@@ -552,9 +571,9 @@
 .kiosk-people-slider__layout__row-middle--col2 {
   display: flex;
   flex-direction: row;
-  flex: 1 1 auto;
+  flex: auto;
   width: calc(100% / 7 * 5);
-  max-height: 100%;
+  height: 100%;
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
@@ -573,7 +592,7 @@
 .kiosk-people-slider__layout__featured-image {
   display: block;
   padding: 5px 0px 5px 5px;
-  oveflow: hidden;
+  overflow: hidden;
   width: 100%;
   align-self: center;
 }
@@ -598,6 +617,7 @@
   word-wrap: break-word;
   padding: 5px 5px 5px 10px;
   vertical-align: middle;
+  font-size: 2vmin;
 }
 
 .kiosk-people-slider__slider__carousel-indicators {
@@ -607,58 +627,55 @@
 .kiosk-people-slider__layout__header {
   margin-bottom: 5px;
   margin-top: 0px;
-  font-size: 2em;
+  font-size: 3vmin;
   text-align: center;
+  font-weight: bold;
 }
 
 
 .kiosk-third-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 100%;
+  font-size: 1.6vmin;
   color: #333;
-  --background-image: url("../images/bg-display.jpg");
-  --background-repeat: no-repeat;
-  --background-size: cover;
-  background-color: #76E9FF;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  background-image: url("../images/bg-display.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+/*  background-color: #76E9FF;
+*/  display: flex;
   padding: 20px;
   width: 100%;
-  height: 100%;
   flex: auto;
-  vertical-align: middle;
   justify-content: space-around;
   align-items: center;
-  align-content: center;
+  align-content: space-around;
 }
 
 .kiosk-third-floor-layout-col--1 {
-  max-width: 1241px;
-  min-width: 500px;
-  height: 100%;
+  width: 70%;
   display: flex;
+  height: 100%;
   flex-direction: column;
   flex: auto;
   justify-content: space-around;
   align-items: center;
   align-content: space-around;
+  padding-right: 5px;
 }
 
 .kiosk-third-floor-layout-col--2 {
-  height: 100%;
-  max-width: 570px;
-  min-width: 500px;
+  width: 30%;
   display: flex;
+  height: 100%;
   flex: auto;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   align-content: space-around;
+  padding-left: 5px;
 }
 
 .kiosk-third-floor-layout-logo {
-  height: 151px;
+  height: 15%;
   width: 100%;
   padding: 0px 0px 0px 0px;
   display: block;
@@ -667,10 +684,10 @@
 
 .kiosk-third-floor-layout-people-slider {
   width: 100%;
-  height: 875px;
+  height: 85%;
   display: flex;
   flex: auto;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
   align-content: space-around;
@@ -679,6 +696,7 @@
 .kiosk-third-floor-layout-time {
   height: 151px;
   width: 100%;
+  max-width: 580px;
   padding: 0px 0px 15px 0px;
   display: flex;
   flex: auto;
@@ -691,6 +709,7 @@
 .kiosk-third-floor-layout-weather {
   height: 300px;
   width: 100%;
+  max-width: 580px;
   padding: 15px 0px 15px 0px;
   display: flex;
   flex: auto;
@@ -703,6 +722,7 @@
 .kiosk-third-floor-layout-tweets {
   height: 575px;
   width: 100%;
+  max-width: 580px;
   padding: 15px 0px 10px 0px;
   display: flex;
   flex: auto;
@@ -712,24 +732,24 @@
   align-content: space-around;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1300px) {
   .kiosk-third-floor {
     flex-direction: column;
+    flex-wrap:none;
   }
   .kiosk-third-floor-layout-col--1 {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex: auto;
   justify-content: space-around;
   align-items: center;
   align-content: space-around;
+  padding-bottom: 20px;
 }
 
 .kiosk-third-floor-layout-col--2 {
   width: 100%;
-  height: 100%;
   display: flex;
   flex: auto;
   flex-direction: column;
