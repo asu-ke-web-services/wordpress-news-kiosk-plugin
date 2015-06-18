@@ -15,8 +15,7 @@ function _manually_load_plugin() {
 // Add the kiosk-php and the plugin root to the include path:
 $api_path         = dirname( dirname( __FILE__ ) ).'/.standards/kiosk-php';
 $plugin_path      = dirname( dirname( __FILE__ ) );
-$gios_api_path    = '/var/www/html/gios2-php';
-$new_include_path = get_include_path(). PATH_SEPARATOR . $plugin_path. PATH_SEPARATOR . $api_path. PATH_SEPARATOR .$gios_api_path;
+$new_include_path = get_include_path(). PATH_SEPARATOR . $plugin_path. PATH_SEPARATOR . $api_path;
 
 // @codingStandardsIgnoreStart
 // echo 'setting php include path to '.$new_include_path;

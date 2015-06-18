@@ -86,12 +86,8 @@ HTML;
     * @return mixed
     */
   function return_unit_test_data( $method_name ){
-    $person                 = new \Gios_Api\Person();
-    $keyword                = new \Gios_Api\Keyword();
-    $person->slug           = 'gregory-dawson';
-    $person->person_id      = '15998';
-    $person->person_values = array( 'photo_path' => '/people/gdawson.jpg' );
-    $keyword->keyword       = 'Biodiversity and preservation of natural environment';
+    $person                 = new Person();
+    $keyword                = new Keyword();
     if ( 'get_keywords' == $method_name ) {
       return array( $keyword, $keyword, $keyword, $keyword );
     } else if ( 'get_people' == $method_name ) {
@@ -99,4 +95,18 @@ HTML;
     }
     return null;
   }
+}
+/**
+ * Mocking up Person and Keyword class instead of depending on GIOS_API for unit test
+ */
+class Person {
+  public $slug           = 'gregory-dawson';
+  public $person_id      = '15998';
+  public $person_values  = array( 'photo_path' => '/people/gdawson.jpg' );
+  public function photo_url() {
+    return $this->person_values['photo_path'];
+  }
+}
+class Keyword {
+  public $keyword       = 'Biodiversity and preservation of natural environment';
 }

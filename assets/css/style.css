@@ -517,6 +517,7 @@
 }
 .kiosk-people-slider__aspect-ratio {
   position: relative;
+  /* maintain 7:5 aspect ratio*/
   padding-bottom: calc(100%*5/7);
   height: 0;
 }

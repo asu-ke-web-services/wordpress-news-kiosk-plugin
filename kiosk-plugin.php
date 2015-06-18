@@ -26,7 +26,9 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
  */
 function load_dependencies(){
   // Require all the files for the Kiosk plugin
-  require_once 'gios-api-v2.0.php';
+  if ( file_exists( 'gios-api-v2.0.php' )  ){
+    require_once 'gios-api-v2.0.php';
+  }
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
   require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
