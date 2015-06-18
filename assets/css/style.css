@@ -522,12 +522,11 @@
 }
 .kiosk-people-slider__slider {
   position: absolute;
-  top: 0;
   left: 0;
-  bottom:0;
   right: 0;
   width: 93%;
   height: 93%; /* Due to header images pops out. To fit into outer div used space*/
+  margin: auto;
 }
 .kiosk-people-slider{
   position: relative;
