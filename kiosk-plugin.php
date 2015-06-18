@@ -26,7 +26,8 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
  */
 function load_dependencies(){
   // Require all the files for the Kiosk plugin
-  if ( file_exists( 'gios-api-v2.0.php' )  ){
+  // for unit test this file will not be available so checking if exists in include path
+  if ( file_exists( stream_resolve_include_path( 'gios-api-v2.0.php' ) )  ) {
     require_once 'gios-api-v2.0.php';
   }
   require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
