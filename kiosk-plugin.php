@@ -16,7 +16,6 @@ if ( ! function_exists( 'add_filter' ) ) {
   header( 'HTTP/1.1 403 Forbidden' );
   exit();
 }
-
 define( 'KIOSK_WP_VERSION', '1.1' );
 // Until the next signification release!
 define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
@@ -30,40 +29,39 @@ function load_dependencies(){
   if ( file_exists( stream_resolve_include_path( 'gios-api-v2.0.php' ) )  ) {
     require_once 'gios-api-v2.0.php';
   }
-  require_once plugin_dir_path( __FILE__ ) . 'includes/base-registrar.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-tweets-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-weather-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/twitter-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/yahoo-weather-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/json-decode-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/carousel-slider-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/feed-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/kiosk-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'helpers/people-slider-helper.php';
-  require_once plugin_dir_path( __FILE__ ) . 'plugin/kiosk-plugin.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-posts-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-news-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-slider-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-time-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-logo-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-tweets-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-weather-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'shortcodes/kiosk-people-slider-shortcodes.php';
-  require_once plugin_dir_path( __FILE__ ) . 'page-templates/kiosk-page-templates.php';
-  require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-tweets-page.php';
-  require_once plugin_dir_path( __FILE__ ) . 'pages/kiosk-weather-page.php';
-  require_once plugin_dir_path( __FILE__ ) . 'globals/css-styles.php';
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'includes' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'helpers' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'plugin' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'admin' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'shortcodes' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'pages' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'page-templates' );
+  require_once_directory( plugin_dir_path( __FILE__ ) . 'globals' );
   require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
+}
+function require_once_directory( $directory ) {
+  $files = glob( $directory . '/*.php' );
+  foreach ( $files as $file ) {
+    require_once( $file );
+  }
 }
 /**
  * Initialize the required classes for kiosk plugin
  */
 function run_loaded_classes(){
+  $version = KIOSK_WP_VERSION;
   // ==========
   // Helpers
   // ==========
   $feed_helper          = new \Kiosk_WP\Feed_Helper();
   $people_slider_helper = new \Kiosk_WP\People_Slider_Helper();
+  // =====
+  // Admin
+  // =====
+  $general_admin        = new \Kiosk_WP\General_Admin( $version );
+  $posts_admin          = new \Kiosk_WP\Posts_Admin( $general_admin, $version );
+  $general_admin->run();
+  $posts_admin->run();
 
   // ==========
   // Shortcodes
