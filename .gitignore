@@ -9,3 +9,6 @@ vendor/*
 .standards/vendor/*
 .standards/npm-debug.log
 localsettings.php
+
+*/.sass-cache
+

@@ -1,0 +1,20 @@
+/*! ================================================
+    Scss Style for the GIOS WordPress powered Kiosks
+    MIT License Copyright ASU 2015
+    ================================================*/
+
+// =========
+// Bootstrap
+// =========
+@import 'bootstrap';
+
+// ====
+// Base
+// ====
+@import 'variables';
+@import 'scaffolding';
+
+// ==========
+// Components
+// ==========
+@import 'components';
