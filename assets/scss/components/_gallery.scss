@@ -1,0 +1,44 @@
+/* =======
+   Gallery
+   =======*/
+
+.kiosk-gallery {
+  @include boxify;
+
+  background: $kiosk-component-background;
+  height: 100%;
+  overflow: hidden;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-gallery__slider-caption h3 {
+  color: #fff;
+}
+
+.kiosk-gallery__slider {
+  overflow: hidden;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-gallery__slider__slider {
+  @include center-block;
+
+  height: 100%;
+
+  img {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.kiosk-gallery__slider__carousel-indicators {
+  visibility: hidden;
+}

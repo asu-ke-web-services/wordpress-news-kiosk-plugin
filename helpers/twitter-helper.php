@@ -164,13 +164,13 @@ class Twitter_Api_Helper {
    * @param string
    * @return string
    */
-  public function convert_url_text_to_hyperlink( $tweet_text ) {
+  public function convert_url_text_to_hyperlink( $tweet_text, $classes ) {
     //http://www.dynamicdrive.com/forums/archive/index.php/t-64387.html for regex url
     $regex_url    = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
         // make links link to URL
     if ( preg_match( $regex_url, $tweet_text, $url ) ) {
       // make the urls hyper links
-      $tweet_text = preg_replace( $regex_url, "<a class=\"tweet-text-hyperlink\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+      $tweet_text = preg_replace( $regex_url, "<a class=\"tweet-text-hyperlink " . $classes . "\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
     }
     return $tweet_text;
   }
@@ -179,11 +179,11 @@ class Twitter_Api_Helper {
    * @param string
    * @return string
    */
-  public function convert_hash_text_to_hyperlink( $tweet_text ) {
+  public function convert_hash_text_to_hyperlink( $tweet_text, $classes ) {
     $regex_hash     = '/#([a-z_0-9]+)/i';
     if ( preg_match( $regex_hash, $tweet_text, $hash ) ) {
       // make the hash tags hyper links
-      $tweet_text   = preg_replace( $regex_hash, "<a class=\"tweet-text-hyperlink\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+      $tweet_text   = preg_replace( $regex_hash, "<a class=\"tweet-text-hyperlink " . $classes . "\" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
       // swap out the # in the URL to make %23
       $tweet_text   = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
     }
@@ -194,10 +194,10 @@ class Twitter_Api_Helper {
    * @param string
    * @return string
    */
-  public function convert_twitter_handle_text_to_hyperlink( $tweet_text ) {
+  public function convert_twitter_handle_text_to_hyperlink( $tweet_text, $classes ) {
     $regex_user   = '/@([a-z_0-9]+)/i';
     if ( preg_match( $regex_user, $tweet_text, $user ) ) {
-      $tweet_text = preg_replace( $regex_user , "<a class=\"tweet-text-hyperlink\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
+      $tweet_text = preg_replace( $regex_user , "<a class=\"tweet-text-hyperlink " . $classes . "\" href='http://twitter.com/$1'>$0</a >", $tweet_text );
     }
     return $tweet_text;
   }
@@ -207,7 +207,7 @@ class Twitter_Api_Helper {
    * @return arraywith profile_pic relative_date_time actual_date_time full_name screen_name
    * text retweet_link retweet_by
    */
-  public function extract_tweet_details( $tweet ) {
+  public function extract_tweet_details( $tweet, $link_classes ) {
     $tweet_details                              = array(
       'text'                              => '',
       'screen_name'                       => '',
@@ -232,9 +232,9 @@ class Twitter_Api_Helper {
     $tweet_details['relative_date_time']           = $this->get_tweet_created_date_short_form( $parse_tweet );
     $tweet_details['actual_date_time']    = $this->get_tweet_created_date_actual( $parse_tweet );
     $tweet_details['status_link ']        = $this->get_tweet_status_link( $parse_tweet );
-    $tweet_details['text']                = $this->convert_url_text_to_hyperlink( $tweet_details['text'] );
-    $tweet_details['text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['text'] );
-    $tweet_details['text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['text'] );
+    $tweet_details['text']                = $this->convert_url_text_to_hyperlink( $tweet_details['text'], $link_classes );
+    $tweet_details['text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['text'], $link_classes );
+    $tweet_details['text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['text'], $link_classes );
     return $tweet_details ;
   }
   private function get_tweet_text( $tweet ) {

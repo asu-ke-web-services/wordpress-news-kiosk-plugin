@@ -96,7 +96,9 @@
       allFiles: [
         '../assets/scss/*.scss',
         '../assets/scss/components/*.scss',
-        '../assets/scss/variables/*.scss'
+        '../assets/scss/page-components/*.scss',
+        '../assets/scss/variables/*.scss',
+        '../assets/scss/mixins/*.scss'
       ],
       options: {
         config: '../assets/scss/.scss-lint.yml'
@@ -111,10 +113,19 @@
       },
       dist: {
         files: {
-          '../assets/css/wordpress-news-kios-plugin.css' : '../assets/scss/wordpress-news-kiosk-plugin.scss'
+          '../assets/css/wordpress-news-kiosk-plugin.css' : '../assets/scss/wordpress-news-kiosk-plugin.scss'
        }
       },
     },
+    watch: {
+      styles: {
+        files: ['<%= scsslint.allFiles %>'],
+        tasks: ['sass:dist'],
+        options: {
+          spawn: false,
+        },
+      },
+    }
   });
 
   // These plugins provide necessary tasks
@@ -122,6 +133,12 @@
   grunt.loadNpmTasks('grunt-phpunit');
   grunt.loadNpmTasks('grunt-scss-lint');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+  // Watch Styles
+  grunt.registerTask('watchStyles', [
+    'watch:styles'
+  ]);
 
   // Styles
   grunt.registerTask('styles', [
@@ -137,4 +154,3 @@
     'phpunit'
   ]);
 };
-

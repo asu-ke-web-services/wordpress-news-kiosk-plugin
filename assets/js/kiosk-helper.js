@@ -5,13 +5,13 @@
  *
  */
 function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
-  var date = new Date();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var date_string = date.toString();
-  var month = date_string.substring(4, 7);
+  var date         = new Date();
+  var hours        = date.getHours();
+  var minutes      = date.getMinutes();
+  var date_string  = date.toString();
+  var month        = date_string.substring(4, 7);
   var current_date = date_string.substring(8, 10);
-  var ampm = hours >= 12 ? 'PM' : 'AM';
+  var ampm         = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
   hours = hours < 10 ? '0' + hours : hours;
@@ -143,7 +143,7 @@ setInterval(function() {
  * the first tweet up. After animation, reset list,
  * and move first tweet to the end of the list
  */
-var $tweet_list = $('.kiosk-tweets__list');
+var $tweet_list = $('#kiosk-tweets__tweets');
 setInterval(function tweetAnimate() {
   var $first_tweet = $tweet_list.find('li:first');
   $tweet_list.find('li').animate({

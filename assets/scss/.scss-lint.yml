@@ -63,14 +63,14 @@ linters:
     force_nesting: true
 
   NameFormat:
-    enabled: true
+    enabled: false
     convention: hyphenated_lowercase # or 'BEM', or a regex pattern
 
   NestingDepth:
     enabled: false
 
   PlaceholderInExtend:
-    enabled: true
+    enabled: false
 
   PropertySortOrder:
     enabled: true
@@ -83,7 +83,7 @@ linters:
     enabled: false
 
   SelectorFormat:
-    enabled: true
+    enabled: false
     ignored_types : ['id']
     ignored_names : ['asu_search_box', 'asu_search_button']
 

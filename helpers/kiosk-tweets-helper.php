@@ -53,7 +53,7 @@ class Kiosk_Tweets_Helper {
    * text retweet_link retweet_by
    */
   private function kiosk_parse_tweets( $decode, $limit ) {
-    $kisok_tweet_items = array();
+    $kiosk_tweet_items = array();
     /* array will have 'statuses' as column name in case of search api to read actual
       tweets take data from statutses column
       For user timeline we do not have statuses column so read data as it comes form api */
@@ -62,33 +62,33 @@ class Kiosk_Tweets_Helper {
     }
     for ( $i = 0; $i < count( $decode ) && $i < $limit ; $i++ ) {
       $twitter_api_helper   = new \Kiosk_WP\Twitter_Api_Helper();
-      $kisok_tweet_items[]  = $twitter_api_helper->extract_tweet_details( $decode[ $i ] );
+      $kiosk_tweet_items[]  = $twitter_api_helper->extract_tweet_details( $decode[ $i ], 'kiosk-tweets__tweet__link' );
     }
-    return $kisok_tweet_items;
+    return $kiosk_tweet_items;
   }
   /**
-   * kiosk_tweets_block( $kisok_tweet_items )
+   * kiosk_tweets_block( $kiosk_tweet_items )
    * creates a div block with the tweets passed to it
    * @param array with profile_pic relative_date_time actual_date_time full_name screen_name
    * text retweet_link retweet_by
    * @return string
    */
-  private function kiosk_tweets_block( $kisok_tweet_items ) {
+  private function kiosk_tweets_block( $kiosk_tweet_items ) {
     $div_start   = <<<HTML
-    <div class="kiosk-tweets_timeline-header">
-       <b class="kiosk-tweets_timeline-header__title">Tweets</b>
-       <p class="kiosk-tweets_timeline-header__twitter-logo"  title="Twitter" target="_blank">Twitter</p>
+    <div class="kiosk-tweets__timeline__title">
+       <b class="kiosk-tweets__timeline__title__text">Tweets</b>
+       <p class="kiosk-tweets__timeline__title__logo"  title="Twitter" target="_blank">Twitter</p>
     </div>
-    <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets_scroll-container">
-      <ul class="kiosk-tweets__list" id="kiosk_tweets_list">
+    <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets__container">
+      <ul class="kiosk-tweets__tweets" id="kiosk-tweets__tweets">
 HTML;
     $item_template     = <<<HTML
-        <li class="kiosk-tweets__tweet">
-          <div class="kiosk-tweets__tweet__avatar img-responsive center-block">
+        <li class="kiosk-tweets__tweets__tweet">
+          <div class="kiosk-tweets__tweet__avatar">
               <img src="%s" class="kiosk-tweets__tweet__avatar__image img-responsive center-block" alt="">
           </div>
           <div class="kiosk-tweets__tweet__details">
-            <div class="kiosk-tweets__tweet__details_permalink kiosk-tweets__tweet__font-style">
+            <div class="kiosk-tweets__tweet__details__permalink">
               <div class="kiosk-tweets__tweet__details__tweet-time">%s</div>
               <div class="kiosk-tweets__tweet__details__actual-tweet-time">%s</div>
             </div>
@@ -97,22 +97,22 @@ HTML;
                <div class="kiosk-tweets__tweet__details__header__user-name">@%s</div>
             </div>
             <div>
-              <div class="kiosk-tweets__tweet__details__text kiosk-tweets__tweet__font-style"> %s </div> 
+              <div class="kiosk-tweets__tweet__details__text"> %s </div> 
               <div>%s</div>
             </div>
           </div>
         </li>
 HTML;
     $retweet_template  = <<<HTML
-        <div class="kiosk-tweets__tweet__retweet kiosk-tweets__tweet__font-style">
+        <div class="kiosk-tweets__tweet__retweet">
           <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
-          <a target="_blank" href="%s" class="kiosk-tweets__tweet__font-style"> %s </a>
+          <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> %s </a>
         </div>
 HTML;
     $div_end      = '</ul></div>';
     $tweet_items  = '';
-    foreach ( $kisok_tweet_items as $item ) {
+    foreach ( $kiosk_tweet_items as $item ) {
       $retweet  = '';
       if ( ! empty( $item['retweet_by'] ) ) {
         $retweet = sprintf(
@@ -164,8 +164,8 @@ HTML;
         if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ) {
           $kiosk_tweets_div   = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
         } else {
-          $kisok_tweet_items  = $this->kiosk_parse_tweets( $decode, $this->limit );
-          $kiosk_tweets_div   = '<div class="kiosk-tweets">' .  $this->kiosk_tweets_block( $kisok_tweet_items ). '</div>';
+          $kiosk_tweet_items  = $this->kiosk_parse_tweets( $decode, $this->limit );
+          $kiosk_tweets_div   = '<div class="kiosk-tweets">' .  $this->kiosk_tweets_block( $kiosk_tweet_items ). '</div>';
         }
       } else {
         $kiosk_tweets_div   = '';
