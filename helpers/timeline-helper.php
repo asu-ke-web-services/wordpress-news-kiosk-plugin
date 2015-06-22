@@ -9,7 +9,7 @@ class TimeLine_Helper {
   }
   /**
    * create_timeline( $data )
-   * @param array $data with 'start-date' 'end-date' 'label' in each row
+   * @param array $data with 'start-date' 'end-date' 'label' 'status' in each row
    * @return string
    */
   public static function create_timeline( $data ) {
@@ -26,12 +26,13 @@ class TimeLine_Helper {
     $timeline_start     = strtotime( 'Jan 1, ' . $start_year );
     $timeline_end       = strtotime( 'Dec 31, ' . $end_year );
     foreach ( $data as $row ) {
-      $row_start_time   = strtotime( $row['start-date'] );
-      $row_end_time     = strtotime( $row['end-date'] );
-      $row_label        = $row['label'];
-      $margin_left      = self::get_row_margin_percentage( $timeline_start, $row_start_time, $timeline_start, $timeline_end );
-      $margin_right     = self::get_row_margin_percentage( $row_end_time, $timeline_end, $timeline_start, $timeline_end );
-      $rows            .= self::create_row( $margin_left, $margin_right, $row_label , $row_start_time, $row_end_time );
+      $post_start_time   = strtotime( $row['start-date'] );
+      $post_end_time     = strtotime( $row['end-date'] );
+      $post_label        = $row['label'];
+      $post_status        = $row['status'];
+      $margin_left       = self::get_row_margin_percentage( $timeline_start, $post_start_time, $timeline_start, $timeline_end );
+      $row_width         = self::get_row_margin_percentage( $post_start_time, $post_end_time, $timeline_start, $timeline_end );
+      $rows             .= self::create_row( $margin_left, $row_width, $post_label , $post_start_time, $post_end_time, $post_status );
     }
     return '<div class="timeline-block">' . $timeline_header . $rows . '</div>';
   }
@@ -95,20 +96,23 @@ class TimeLine_Helper {
   public static function normalize( $max, $min, $value ){
     return ( $value - $min ) / ( $max - $min ) * 100;
   }
-  public static function create_row( $margin_left, $margin_right, $row_label, $row_start_time, $row_end_time ) {
+  public static function create_row( $margin_left, $row_width, $post_label, $post_start_time, $post_end_time, $post_status ) {
     $html = <<<HTML
-    <div  title="Start Date: %s End Date: %s" class="timeline-row-item" style="margin-left:%s;
-                margin-right:%s;
-                ">&nbsp;<div class="timeline-row-item--text">%s</div>
+    <div class="timeline-row-item">
+      <div class="timeline-row-item__margin" style="margin-left:%s;width:%s;">&nbsp;</div>
+      <div class="timeline-row-item__duration">%s to %s</div>
+      <div class="timeline-row-item__status">%s</div>
+      <div class="timeline-row-item__text">%s</div>
     </div>
 HTML;
     return sprintf(
         $html,
-        date( 'F j, Y', $row_start_time ),
-        date( 'F j, Y', $row_end_time ),
         $margin_left,
-        $margin_right,
-        $row_label
+        $row_width,
+        date( 'm/d/y', $post_start_time ),
+        date( 'm/d/y', $post_end_time ),
+        $post_status,
+        $post_label
     );
   }
 }

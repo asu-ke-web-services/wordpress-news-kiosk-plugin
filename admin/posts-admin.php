@@ -190,6 +190,7 @@ HTML;
         'start-date' => $item['post-date'],
         'end-date'   => $item['kiosk-end-date'],
         'label'      => $item['post-title'],
+        'status'     => $item['post-status'],
         );
     }
     if ( ! empty( $timeline ) ) {

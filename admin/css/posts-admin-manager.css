@@ -26,23 +26,41 @@
 .timeline-row-item{
   margin-top: 5px;
   margin-bottom: 5px;
-  border-radius: 10px;
   position: relative;
+  display: flex;
 }
-.timeline-row-item:nth-child(even){
+
+.timeline-row-item:nth-child(even) .timeline-row-item__margin{
   background: linear-gradient(to left, rgba(228,245,252,1) 0%,rgba(228,245,252,1) 29%,rgba(191,232,249,1) 50%,rgba(42,176,237,1) 100%);
-
+  border-radius: 10px;
 }
-
-.timeline-row-item:nth-child(odd){
-background: linear-gradient(to left, rgba(245,255,221,1) 0%,rgba(188,232,30,1) 100%);
+.timeline-row-item:nth-child(odd) .timeline-row-item__margin{
+  background: linear-gradient(to left, rgba(245,255,221,1) 0%,rgba(188,232,30,1) 100%);
+  border-radius: 10px;
 }
-.timeline-row-item--text{
+.timeline-row-item__text{
   position: absolute;
   top:0;
   left:0;
+  bottom:0;
+  text-align: center;
+  z-index: 10;
+}
+.timeline-row-item__duration{
+  position: absolute;
+  top:0;
   right: 0;
   bottom:0;
   text-align: center;
-
+  z-index: 10;
 }
+.timeline-row-item__status{
+  position: absolute;
+  top:0;
+  right: 0;
+  left: 0;
+  bottom:0;
+  text-align: center;
+  z-index: 10;
+}
+
