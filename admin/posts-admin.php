@@ -16,6 +16,9 @@ class Posts_Admin extends Base_Registrar {
   public static $section_id                  = 'kiosk_posts_display_admin_id';
   public static $section_post_tags           = 'kiosk_post_tags';
   public static $kiosk_post_tags             = '';
+  public static $section_post_status         = 'kiosk_post_status';
+  public static $kiosk_post_status           = 'any';
+  public static $section_post_details        = 'Post Details';
 
   protected $plugin_slug;
   protected $version;
@@ -77,7 +80,12 @@ class Posts_Admin extends Base_Registrar {
         Posts_Admin::$section_post_tags,
         array( $this, 'sanitize_post_tags_callback' )
     );
-
+    // register settings
+    register_setting(
+        Posts_Admin::$options_group,
+        Posts_Admin::$section_post_status,
+        array( $this, 'sanitize_post_tags_callback' )
+    );
     add_settings_section(
         Posts_Admin::$section_id,
         'Posts Details',
@@ -95,9 +103,30 @@ class Posts_Admin extends Base_Registrar {
           'section_post_tags_callback',
         ), // Callback
         Posts_Admin::$section_name,
+        Posts_Admin::$section_id,
+        array( 'context' => Posts_Admin::$section_post_tags ) // custom arguments
+    );
+    add_settings_field(
+        Posts_Admin::$section_post_status,
+        'Post Status',
+        array(
+          $this,
+          'section_post_tags_callback',
+        ), // Callback
+        Posts_Admin::$section_name,
+        Posts_Admin::$section_id,
+        array( 'context' => Posts_Admin::$section_post_status ) // custom arguments
+    );
+    add_settings_field(
+        Posts_Admin::$section_post_details,
+        '',
+        array(
+          $this,
+          'post_categories_callback',
+        ), // Callback
+        Posts_Admin::$section_name,
         Posts_Admin::$section_id
     );
-
   }
 
 
@@ -110,36 +139,51 @@ class Posts_Admin extends Base_Registrar {
   /**
    * Print the form section for the post tags
    */
-  public function section_post_tags_callback() {
-    $value = get_option( Posts_Admin::$section_post_tags );
+  public function section_post_tags_callback( $args ) {
+    if ( Posts_Admin::$section_post_tags === $args['context'] ) {
+         $tags = get_option( Posts_Admin::$section_post_tags );
+      printf(
+          '<input type="text" id="%s" name="%s" value="%s"></input>',
+          Posts_Admin::$section_post_tags,
+          Posts_Admin::$section_post_tags,
+          $tags
+      );
+      Posts_Admin::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
+    } elseif ( Posts_Admin::$section_post_status === $args['context'] ) {
+      $status = get_option( Posts_Admin::$section_post_status );
 
-    printf(
-        '<input type="text" id="%s" name="%s" value="%s"></input>',
-        Posts_Admin::$section_post_tags,
-        Posts_Admin::$section_post_tags,
-        $value
-    );
-    $kiosk_post_tags = $this->sanitize_post_tags_callback( $value );
-    echo $this->post_categories_callback( $kiosk_post_tags );
+      printf(
+          '<input type="text" id="%s" name="%s" value="%s"></input>',
+          Posts_Admin::$section_post_status,
+          Posts_Admin::$section_post_status,
+          $status
+      );
+      Posts_Admin::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
+    }
   }
 
 
   /**
    * Print the form section for the post categories
    */
-  public function post_categories_callback( $tags ) {
+  public function post_categories_callback( ) {
+    $tags   = Posts_Admin::$kiosk_post_tags;
+    $status = Posts_Admin::$kiosk_post_status;
     $limit                  = 20;
+    if ( empty( $status ) ) {
+      $status = 'any';
+    }
     $query_post_options     = array(
         'post_type'         => array( 'attachment', 'page', 'post' ),
         'posts_per_page'    => $limit,
         'orderby'           => 'post_date',
         'order'             => 'DESC',
         'tag'               => $tags,
-        'post_status'       => 'any',
+        'post_status'       => $status,
     );
     $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
     usort( $list_items, array( 'Kiosk_WP\Kiosk_Helper', 'sort_by_date' ) );
-    return $this->posts_table_display( $list_items );
+    echo $this->posts_table_display( $list_items );
   }
   public function posts_table_display( $list_items ){
     $table_template = <<<HTML
