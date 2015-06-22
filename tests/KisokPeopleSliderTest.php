@@ -18,26 +18,26 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
     $people_slider_helper_stub = $this->getMock(
         'Kiosk_WP\People_Slider_Helper',
         array(
-            'get_persons_images_category_keywords',
-            'get_person_image',
+            'get_keywords',
+            'get_people',
         )
     );
 
     $people_slider_helper_stub->expects( $this->any() )
-                              ->method( 'get_persons_images_category_keywords' )
+                              ->method( 'get_keywords' )
                               ->will(
                                   $this->returnValue(
                                       $this->return_unit_test_data(
-                                          'get_persons_images_category_keywords'
+                                          'get_keywords'
                                       )
                                   )
                               );
 
     $people_slider_helper_stub->expects( $this->any() )
-                              ->method( 'get_person_image' )
+                              ->method( 'get_people' )
                               ->will(
                                   $this->returnValue(
-                                      $this->return_unit_test_data( 'get_person_image' )
+                                      $this->return_unit_test_data( 'get_people' )
                                   )
                               );
 
@@ -51,22 +51,34 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
     $content = $stub->kiosk_people_slider( '' );
     $this->assertContains( 'kiosk-people-slider__layout', $content, 'Should return carousel slider' );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertEquals( 3, $numberOfEvents, 'There should 3 slider items' );
+    $this->assertEquals( 4, $numberOfEvents, 'There should 4 slider items' );
 
     $test_with_content = <<<HTML
-     keyword:Future and systems thinking
-      <br/> person-slug:jeffrey-englin
-      <br/> quote:Live for today&#8230; Hope for tomorrow
-      <br/> keyword:deforestation
-      <br/> keyword:deforestation
-      <br/> person-slug:jeffrey-englin
-      <br/> 
+    [
+  {
+    "keyword":"Biodiversity and preservation of natural environment",
+    "person-slug":"jeffrey-englin",
+    "quote":"Live for today Hope... for tomorrow&copy;"
+   },
+ {
+    "keyword":"Energy",
+    "person-slug":"jeffrey-englin"
+
+   },
+ {
+    "keyword":"food systems",
+
+    "quote":"Live for today Hope... for tomorrow&copy;"
+   }
+
+]
 HTML;
     $content = $stub->kiosk_people_slider( array(), $test_with_content );
     $this->assertContains( 'kiosk-people-slider__layout', $content, 'Should return carousel slider' );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertEquals( 3, $numberOfEvents, 'There should 3 slider items' );
-    $this->assertContains( 'aadhikari', $content, 'Should return content person-slug image' );
+    $this->assertEquals( 4, $numberOfEvents, 'There should 4 slider items' );
+    $this->assertContains( 'gdawson', $content, 'Should return content person-slug image' );
+     $this->assertContains( 'Live for today Hope... for tomorrow', $content, 'Should return content quote' );
 
   }
   /**
@@ -74,43 +86,27 @@ HTML;
     * @return mixed
     */
   function return_unit_test_data( $method_name ){
-    if ( 'get_persons_images_category_keywords' == $method_name ) {
-      $person_image_keyword = array(
-        array(
-          array(
-            'person_image' => '/img/people/dabbott.jpg',
-            'keyword' => 'Biodiversity and preservation of natural environment',
-            ),
-          array(
-            'person_image' => '/img/people/kabbott.jpg',
-            'keyword' => 'Biodiversity and preservation of natural environment',
-          ),
-        ),
-        array(
-          array(
-            'person_image' => '/img/people/hdavulcu.jpg',
-            'keyword' => 'Future and systems thinking',
-          ),
-          array(
-            'person_image' => '/img/people/pdeviche.jpg',
-            'keyword' => 'Future and systems thinking',
-          ),
-          array(
-            'person_image' => '/img/people/tday.jpg',
-            'keyword' => 'Future and systems thinking',
-          ),
-        ),
-        array(
-          array(
-            'person_image' => '/img/people/rdiaz.jpg',
-            'keyword' => 'Social and behavioral change, ethics',
-          ),
-        ),
-      );
-      return $person_image_keyword ;
-    } else if ( 'get_person_image' == $method_name ) {
-      return '/img/people/aadhikari.jpg';
+    $person                 = new Person();
+    $keyword                = new Keyword();
+    if ( 'get_keywords' == $method_name ) {
+      return array( $keyword, $keyword, $keyword, $keyword );
+    } else if ( 'get_people' == $method_name ) {
+      return array( $person, $person, $person, $person );
     }
     return null;
   }
+}
+/**
+ * Mocking up Person and Keyword class instead of depending on GIOS_API for unit test
+ */
+class Person {
+  public $slug           = 'gregory-dawson';
+  public $person_id      = '15998';
+  public $person_values  = array( 'photo_path' => '/people/gdawson.jpg' );
+  public function photo_url() {
+    return $this->person_values['photo_path'];
+  }
+}
+class Keyword {
+  public $keyword       = 'Biodiversity and preservation of natural environment';
 }

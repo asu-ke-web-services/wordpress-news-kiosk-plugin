@@ -60,7 +60,15 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     );
     $default_image          = $atts['default_image'];
     $tags                   = $atts['tags'];
-    $list_items             = Kiosk_Helper::get_posts_items_from_db( $limit, $tags );
+    $query_post_options   = array(
+        'post_type'         => array( 'attachment', 'page', 'post' ),
+        'posts_per_page'    => $limit,
+        'orderby'           => 'post_date',
+        'order'             => 'DESC',
+        'tag'               => $tags,
+        'post_status'       => 'publish',
+    );
+    $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
     $total_post_count       = count( $list_items );
     if ( 0 === $total_post_count ) {
       $list_items = Kiosk_Helper::get_default_images( $default_image );

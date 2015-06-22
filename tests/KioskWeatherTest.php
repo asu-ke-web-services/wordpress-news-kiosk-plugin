@@ -25,7 +25,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
 		     ->with( $this->equalTo( 'tempe, az' ) )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
 
-    $content = $stub->kiosk_weather( '' );
+    $content = $stub->kiosk_weather( 'tempe, az' );
     $this->assertContains( 'kiosk-weather__current ', $content, 'Should return current weather block' );
     $this->assertContains( 'kiosk-weather__forecast', $content, 'Should return forecast weather block' );
     $this->assertContains( 'kiosk-weather__forecast__location', $content, 'Should return location block' );

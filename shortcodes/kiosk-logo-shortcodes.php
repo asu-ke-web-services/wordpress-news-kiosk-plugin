@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Title Shortcode functionality.
+ * Logo Shortcode functionality.
  *
  * Provides shortcodes for users to use in Wordpress
  *
@@ -40,7 +40,7 @@ class Kiosk_Logo_Shortcodes extends Base_Registrar {
   /**
    * [kiosk_logo path='url']
    *
-   * Generates a <div> tag with asu_title from rss feed to display as asu_title
+   * Generates a <div> tag with asu_logo from rss feed to display as asu_logo
    * @param $atts array
    */
   public function kiosk_logo( $atts, $content = null ) {
@@ -51,12 +51,12 @@ class Kiosk_Logo_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    $asu_title  = <<<HTML
-    <div class="kiosk-title__logo">
-      <img src="{$atts['path']}" class="img-responsive">
+    $asu_logo  = <<<HTML
+    <div class="kiosk-logo__logo">
+      <img src="{$atts['path']}" class="img-responsive kiosk-logo__image">
       </div>
 HTML;
-    $kiosk_title_div = '<div class="kiosk-title">' . $asu_title . '</div>';
-    return $kiosk_title_div;
+    $kiosk_logo_div = '<div class="kiosk-logo">' . $asu_logo . '</div>';
+    return $kiosk_logo_div;
   }
 }

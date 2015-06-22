@@ -30,14 +30,20 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
   }
 
     /**
-   * [kiosk_weather]
+   * [kiosk_weather location='tempe, az']
    *
    * @param $atts array
    * Generates a <div> tag with current weather and weather forecast
    *
    */
   public function kiosk_weather( $atts, $content = null ) {
-    $kiosk_weather_helper = new \Kiosk_WP\Kiosk_Weather_Helper();
-    return $kiosk_weather_helper->kiosk_weather( $atts );
+    $atts                   = shortcode_atts(
+        array(
+          'location'        => 'tempe, az',
+        ),
+        $atts
+    );
+    $kiosk_weather_helper   = new \Kiosk_WP\Kiosk_Weather_Helper();
+    return $kiosk_weather_helper->kiosk_weather( $atts['location'] );
   }
 }

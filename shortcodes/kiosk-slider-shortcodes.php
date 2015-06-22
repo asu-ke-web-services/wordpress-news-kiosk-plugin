@@ -52,12 +52,16 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $atts               = shortcode_atts(
         array(
           'limit'       => '20',
+          'feed_urls'   => array(
+                            'https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200',
+                          )
         ),
         $atts
     );
-    $feed_urls_array    = array(
-      'https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200',
-    );
+    $feed_urls_array    = $atts['feed_urls'];
+    if ( ! is_array( $feed_urls_array ) ) {
+      $feed_urls_array  = explode( ',', $feed_urls_array );
+    }
     $limit              = $atts['limit'];
     $list_items         = array();
     $items              = $this->feed_helper->get_feed_data( $feed_urls_array );

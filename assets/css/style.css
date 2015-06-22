@@ -5,7 +5,7 @@
 
 .kiosk-ground-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 100%;
+  font-size: 1.7vmin;
   color: #333;
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
@@ -76,7 +76,7 @@
   padding: 10px;
 }
 
-.kiosk-ground-floor-layout-title {
+.kiosk-ground-floor-layout-logo {
   height: 151px;
   width: 100%;
   max-width: 480px;
@@ -123,19 +123,24 @@
   max-width: 480px;
 }
 
-.kiosk-title {
-  display: flex;
+.kiosk-logo {
   height: 100%;
-  width: 100%;
 }
 
-.kiosk-title__logo {
-  display: inline-flex;
+.kiosk-logo__logo {
   height: 100%;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  align-items: center;
+}
+
+.kiosk-logo__image {
+  max-height: 100%;
+  max-width: 100%;
+  height: 151px;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .kiosk-weather {
@@ -147,6 +152,7 @@
   width: 100%;
   height: 100%;
   vertical-align: middle;
+  align-items: center;
 }
 
 .kiosk-weather [class*='kiosk-weather__forecast']:not(:first-child) {
@@ -175,6 +181,7 @@
   font-size: 2em;
   color: #fff;
   padding-left: 15px;
+  font-weight: bold;
 }
 
 .kiosk-weather__current__item-image {
@@ -193,6 +200,16 @@
 
 .kiosk-weather__forecast__item {
   color: #fff;
+}
+
+.kiosk-weather__forecast__item__header {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.kiosk-weather__forecast__item__text {
+  font-size: 1em;
 }
 
 .kiosk-tweets {
@@ -285,8 +302,6 @@
 }
 
 .kiosk-tweets__tweet__avatar__image {
-  width: 73px;
-  height: 73px;
   margin-right: 15px;
 }
 
@@ -370,23 +385,23 @@
 .kiosk-date-time__calendar-icon * {
   display: inline-block;
   width: 100%;
-  font-size: 1em;
+  font-size: 1.7em;
   font-weight: bold;
   font-style: normal;
   text-align: center;
 }
 
 .kiosk-date-time__calendar-icon strong {
-  padding: 5px;
+  padding: 3px;
   color: #FFF;
-  font-size: 24px;
+  font-size: 1.3em;
   background-color: #A20B09;
   border-bottom: 1px none;
   box-shadow: 0px 2px 0px;
 }
 
 .kiosk-date-time__calendar-icon span {
-  font-size: 48px;
+  font-size: 2.5em;
   letter-spacing: -0.05em;
   color: #2F2F2F;
   padding: 0px 5px;
@@ -440,7 +455,7 @@
 }
 
 .kiosk-asu-news__slider__carousel-indicators {
-  visibility: hidden
+  visibility: hidden;
 }
 
 .kiosk-asu-news {
@@ -490,55 +505,80 @@
 
 .kiosk-people-slider__layout {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-around;
-  align-content: space-around;
+  align-content: center;
   align-items: center;
   overflow: hidden;
-  width: 1175px;
-  height: 915px;
+  width: 100%;
+  height: 100%;
 
+  /* maintain 7:5 aspect ratio*/
+  /*height: 825px;
+  width: calc( 825px * calc(7 / 5) ); */
 }
 
-.kiosk-people-slider__layout__row-top {
+.kiosk-people-slider__aspect-ratio {
+  position: relative;
+  /* maintain 7:5 aspect ratio*/
+  
+  padding-bottom: calc(100%*5/7);
+  height: 0;
+}
+
+.kiosk-people-slider__slider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 93%;
+  height: 93%;
+  /* Due to header images pops out. To fit into outer div used space*/
+  
+  margin: auto;
+}
+
+.kiosk-people-slider {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kiosk-people-slider__layout__row-top,
+.kiosk-people-slider__layout__row-bottom {
   display: flex;
-  height: 165px;
-  width: 1175px;
   justify-content: space-between;
-  align-content: space-between;
-  align-items: center;
+  align-content: space-around;
   overflow: hidden;
+  flex: auto;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 20%;
 }
 
 .kiosk-people-slider__layout__row-middle {
   display: flex;
-  height: 495px;
-  width: 1175px;
+  flex: auto;
+  width: 100%;
   justify-content: space-between;
   align-content: space-around;
   align-items: center;
   overflow: hidden;
+  flex: auto;
+  flex-direction: row;
+  height: 60%;
 }
 
-.kiosk-people-slider__layout__row-bottom {
-  display: flex;
-  height: 165px;
-  width: 1175px;
-  justify-content: space-between;
-  align-content: space-around;
-  align-items: center;
-  overflow: hidden;
-}
-
-.kiosk-people-slider__layout__row-middle--col1 {
+.kiosk-people-slider__layout__row-middle--col1,
+.kiosk-people-slider__layout__row-middle--col3 {
   display: flex;
   flex-direction: column;
   flex: auto;
-  width: 165px;
-  height: 495px;
+  width: calc(100% / 7);
+  height: 100%;
   justify-content: space-around;
-  align-content: space-around;
+  align-content: flex-start;
   align-items: flex-start;
   overflow: hidden;
 }
@@ -547,123 +587,197 @@
   display: flex;
   flex-direction: row;
   flex: auto;
-  width: 805px;
-  --max-width: 875px;
-  height: 495px;
+  width: calc(100% / 7 * 5);
+  height: 100%;
   justify-content: flex-start;
   align-content: flex-start;
   align-items: flex-start;
   overflow: hidden;
 }
 
-.kiosk-people-slider__layout__row-middle--col3 {
-  display: flex;
-  flex-direction: column;
-  flex: auto;
-  width: 165px;
-  height: 495px;
-  justify-content: space-around;
-  align-content: space-around;
-  align-items: flex-end;
-  overflow: hidden;
-}
-
 .kiosk-people-slider__layout__image {
   display: block;
-  max-width: 100%;
-  width: 165px;
-  height: 165px;
-  --border: 5px solid #FFF;
   padding: 5px;
   overflow: hidden;
+  align-self: center;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .kiosk-people-slider__layout__featured-image {
   display: block;
-  --max-width: 100%;
-  --min-width: 70%;
-  width: 495px;
-  height: 495px;
-  max-height: 525px;
-  --border-top: 5px solid #FFF;
-  --border-bottom: 5px solid #FFF;
-  --border-left: 5px solid #FFF;
-  padding: 5px;
-  oveflow: hidden;
+  padding: 5px 0px 5px 5px;
+  overflow: hidden;
+  width: 100%;
+  align-self: center;
+}
+
+.kiosk-people-slider__layout__featured--col1 {
+  display: block;
+  align-self: center;
+  overflow: hidden;
+  width: 60%;
+  height: 100%;
+  word-wrap: break-word;
+  padding: 2px 5px 5px 2px;
+  vertical-align: middle;
 }
 
 .kiosk-people-slider__layout__featured--col2 {
   display: block;
   align-self: center;
   overflow: hidden;
-  --border-left: 5px solid #FFF;
-  --border-right: 5px solid #FFF;
-  max-height: 90%;
-  max-width: 30%;
-  width: 350px;
+  width: 40%;
+  height: 90%;
   word-wrap: break-word;
-  padding: 2px 5px 5px 2px;
+  padding: 5px 5px 5px 10px;
   vertical-align: middle;
+  font-size: 1.2em;
+  font-style: italic;
 }
+
 .kiosk-people-slider__slider__carousel-indicators {
   visibility: hidden;
 }
-.kiosk-third-floor{
+
+.kiosk-people-slider__layout__header {
+  margin-bottom: 5px;
+  margin-top: 0px;
+  font-size: 2em;
+  text-align: center;
+  font-weight: bold;
+}
+
+.kiosk-third-floor {
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 100%;
+  font-size: 1.6vmin;
   color: #333;
-  --background-image: url("../images/bg-display.jpg");
-  --background-repeat: no-repeat;
-  --background-size: cover;
-  background-color: #76E9FF;
+  background: linear-gradient(to bottom, #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 54%, #9fd8ef 58%, #2ab0ed 100%);
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  --padding: 30px 30px;
-  width: 100vw;
-  height: 100vh;
+  padding: 20px;
+  width: 100%;
   flex: auto;
   justify-content: space-around;
   align-items: center;
   align-content: space-around;
 }
-.kiosk-third-floor-layout-col--1{
-  width:1225px;
+
+.kiosk-third-floor-layout-col--1 {
+  width: 70%;
+  display: flex;
   height: 100%;
+  flex-direction: column;
+  flex: auto;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+  padding-right: 5px;
 }
-.kiosk-third-floor-layout-col--2{
+
+.kiosk-third-floor-layout-col--2 {
+  width: 30%;
+  display: flex;
   height: 100%;
+  flex: auto;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+  padding-left: 5px;
 }
-.kiosk-third-floor-layout-title{
-  height: 100px;
+
+.kiosk-third-floor-layout-logo {
+  height: 15%;
   width: 100%;
-  max-width: 480px;
-  padding: 0px 0px 15px 0px;
+  padding: 0px 0px 0px 0px;
+  display: block;
+  align-items: center;
 }
-.kiosk-third-floor-layout-people-slider{
-  width:100%;
-  height: 100%;
-  overflow: visible;
-}
-.kiosk-third-floor-layout-time{
-  height: 140px;
+
+.kiosk-third-floor-layout-people-slider {
   width: 100%;
-  padding: 0px 0px 15px 0px;
-  max-width: 480px;
+  height: 85%;
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
 }
-.kiosk-third-floor-layout-weather{
+
+.kiosk-third-floor-layout-time {
+  height: 151px;
+  width: 100%;
+  max-width: 580px;
+  padding: 0px 0px 15px 0px;
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+}
+
+.kiosk-third-floor-layout-weather {
   height: 300px;
   width: 100%;
-  max-width: 480px;
+  max-width: 580px;
   padding: 15px 0px 15px 0px;
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
 }
-.kiosk-third-floor-layout-tweets{
+
+.kiosk-third-floor-layout-tweets {
   height: 575px;
   width: 100%;
-  max-width: 480px;
+  max-width: 580px;
   padding: 15px 0px 10px 0px;
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
 }
-.kiosk-people-slider__layout__header{
-  margin-bottom: 10px;
-  margin-top: 0px;
+
+.kiosk-third-floor .kiosk-weather {
+  border: 0px;
+  border-radius: 10px;
+  background: linear-gradient(to bottom, rgba(181, 189, 200, 1) 5%, rgba(40, 52, 59, 1) 94%);
+}
+
+.kiosk-third-floor .kiosk-tweets {
+  border: 0px;
+  border-radius: 10px;
+  background: linear-gradient(to top, rgba(181, 189, 200, 1) 5%, rgba(40, 52, 59, 1) 94%);
+}
+
+@media screen and (max-width: 1200px) {
+  .kiosk-third-floor {
+    flex-direction: column;
+    flex-wrap: none;
+  }
+  .kiosk-third-floor-layout-col--1 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-around;
+    padding-bottom: 20px;
+  }
+  .kiosk-third-floor-layout-col--2 {
+    width: 100%;
+    display: flex;
+    flex: auto;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-around;
+  }
 }

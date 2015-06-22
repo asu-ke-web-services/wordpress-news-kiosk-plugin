@@ -13,10 +13,10 @@ class General_Admin extends Base_Registrar {
   protected $version;
   protected $panels = array();
 
-  public function __construct() {
+  public function __construct( $version ) {
     $this->plugin_slug = 'kiosk-general-admin';
-    $this->version     = '0.1';
-
+    $this->version     = $version;
+    parent::__construct( $this->plugin_slug, $version );
     $this->load_dependencies();
     $this->define_hooks();
   }
@@ -45,8 +45,8 @@ class General_Admin extends Base_Registrar {
 
 
   public function admin_menu() {
-    $page_title = 'KIOSK Plugin Settings';
-    $menu_title = 'KIOSK Settings';
+    $page_title = 'KIOSK Plugin';
+    $menu_title = 'KIOSK Details';
     $capability = 'administrator';
     $path = plugin_dir_url( __FILE__ );
     add_menu_page(

@@ -24,15 +24,15 @@ class Kiosk_Weather_Helper {
   */
   function kiosk_parse_weather( $json_weather ) {
     $current_weather_div_template     = <<<HTML
-      <img class='kiosk-weather__current__item-image center-block' src='%s' >
-      <p><b>%s<sup>o</sup>%s</b></p>
+      <img class='kiosk-weather__current__item-image center-block img-responsive' src='%s' >
+      <div class="kiosk-weather__forecast__item__text"><b>%s<sup>o</sup>%s</b></div>
 HTML;
 
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item col-xs-4'>
-        <h5>%s</h5>
-        <img class='kiosk-weather_forecast__item_image center-block' src='%s' >
-        <p><b>%s<sup>o</sup> / %s<sup>o</sup></b></p>
+        <div class="kiosk-weather__forecast__item__header">%s</div>
+        <img class='kiosk-weather_forecast__item_image center-block img-responsive' src='%s' >
+        <div class="kiosk-weather__forecast__item__text"><b>%s<sup>o</sup> / %s<sup>o</sup></b></div>
       </div>
 HTML;
     $yahoo_weather_helper             = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
@@ -64,7 +64,7 @@ HTML;
           <div class="kiosk-weather__forecast col-xs-9">
             <div class ="row">
               <div class="kiosk-weather__forecast__location span12">
-                <b>%s</b>
+                %s
               </div>
             </div>
             <div class="row">
@@ -76,9 +76,9 @@ HTML;
     return sprintf( $weather_div, $current_weather_div, $location_title, $forecast_weather_block );
   }
 
-  public function kiosk_weather( $atts, $content = null ) {
+  public function kiosk_weather( $location ) {
 
-    $json = $this->get_weather_json( 'tempe, az' );
+    $json = $this->get_weather_json( $location );
     if ( empty( $json ) ) {
       if ( $this->request_not_from_wp ) {
         $kiosk_weather_div = '';

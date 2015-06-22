@@ -17,11 +17,33 @@ This plugin is set to replace our current RiseVision system. [Example](http://pr
 1. Create a custom Page with the "Kiosk" Page Template.
 2. Add responsive markup and add in the following Shortcodes:
     * `[kiosk-posts tags="t,a,g,s"]`
-    * `[kiosk-weather]`
+    * `[kiosk-weather location='tempe,az']`
     * `[kiosk-tweets]`
     * `[kiosk-time]`
     * `[kiosk-slider]`
     * `[kiosk-asu-news]`
+    * `[kiosk-logo path='http://www.example.com/image.png']`
+    * ```html
+    [kiosk_people_slider gios_url='https://sustainability.asu.edu']
+        [
+          {
+            "keyword":"Biodiversity and preservation of natural environment",
+            "person-slug":"jeffrey-englin",
+            "quote":"Live for today!!! Hopefor tomorrow"
+           },
+         {
+            "keyword":"Energy",
+            "person-slug":"mark-edwin"
+
+           },
+         {
+            "keyword-slug":"food-systems",
+            "quote":"Never take a decision in anger"
+           }
+
+        ]
+      [/kiosk_people_slider]
+      ```
 3. Set the T.V. to display the WordPress Page
 4. In order for Posts to display on the Page, make sure that you have Posts that:
     * Have a featured image set, or have a `<img>` tag in the content of the post.
@@ -54,7 +76,7 @@ The images come from the unique posts that belong to the tags given in the short
 
 1. Each post as at least one `<img>` tag in it or have a featured image.
 2. Each post has an `kiosk-end-date` custom field.
-4. The `kiosk-end-date` is parsible by `strtotime`.  See [the PHP documentation for details on how strtotime works](http://php.net/manual/en/function.strtotime.php).
+3. The `kiosk-end-date` is parsible by `strtotime`.  See [the PHP documentation for details on how strtotime works](http://php.net/manual/en/function.strtotime.php).
 4. The posts are published or scheduled to be published.
 
 In order to not hit any memory limits, the method grabs posts by 20 at a time from the list of tags, and checks to make sure
@@ -91,20 +113,112 @@ To get the image from the post, check for the following in the following order:
 
 # The KioskWeather Shortcode
 
-TODO
+`[kiosk-weather location='tempe,az']`
+
+Kiosk Weather shortcode pulls the weather forecast from the yahoo weather API. 
+
+Attributes Description:
+
+ * location attribute is optional and defaults to Tempe, AZ.
 
 # The Kiosk Tweets Shortcode
 
-TODO
+`[kiosk_tweets limit="20" query_string="#sustainabity" user_timeline="asugreen"]`
+
+Kiosk Tweets shorcode displays the tweets requested by the given search parameters.
+
+Attributes Description:
+
+ * limit attribute is optional and defaults to 20.
+
+ * Either one of the query_string or user_timeline attribute is required if both are specified user_timeline overrides the query_string for search and displays tweets from user timeline.
+
+Note:
+
+ * Make sure to update oauth_access_token, oauth_access_token_secret, consumer_key,consumer_secret with twitter account details in localsettings.php.
 
 # The Kiosk Time Shortcode
 
-TODO
+`[kiosk-time]`
+
+ Displays the current time and date calendar
 
 # The Kiosk Slider Shortcode
 
-TODO - a list of image urls that will be put into a slider
+`[kiosk_slider limit='20' feed_urls='http:://www.example.com/1,http:://www.example.com/2']`
+
+Displays the images from the Flickr feed data.
+
+Attributes Description:
+
+* limit attribute is optional and defaults to 20.
+
+* feed_urls is optional and defaults to GIOS flickr feed.
+
+* Default feed url: 
+
+`https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200`
 
 # The Kiosk ASU News Shortcode
 
-TODO
+`[kiosk_asu_news limit='20' feed='153,178,358,40' content_limit='50']`
+
+Kiosk ASU News Shortcode displays the news from the rss feed.
+
+Attributes Description:
+* limit attribute is optional and defaults to `20`.
+
+* feed attribute is optional and defaults to `153,178,358,40`. Each of these numeric values correponds to part of below url.
+
+```html
+https://asunews.asu.edu/taxonomy/term/153/all/feed
+https://asunews.asu.edu/taxonomy/term/178/all/feed
+https://asunews.asu.edu/taxonomy/term/358/all/feed
+https://asunews.asu.edu/taxonomy/term/40/all/feed
+```
+#Kiosk Logo Shortcode
+
+`[kiosk-logo path='http:://www.example.com/image.png']`
+
+Displays a logo fecth from the given path.
+
+Attributes Description:
+
+* path attribute is optional and defaults to GIOS logo.
+
+#Kiosk People Slider Shortcode
+
+```html
+[kiosk_people_slider gios_url='https://sustainability.asu.edu']
+[
+  {
+    "keyword":"Biodiversity and preservation of natural environment",
+    "person-slug":"jeffrey-englin",
+    "quote":"Live for today!!! Hopefor tomorrow"
+   },
+ {
+    "keyword":"Energy",
+    "person-slug":"mark-edwin"
+
+   },
+ {
+    "keyword-slug":"food-systems",
+    "quote":"Never take a decision in anger"
+   }
+
+]
+[/kiosk_people_slider]
+```
+
+Attributes Description:
+* Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available. 
+Json style synax should be given as part of content with keyword or keyword-slug, person-slug, quote.
+
+* For the given keyword shortcode displays the person's image identified using person-slug is displayed as featued image for that keyword and given quote is shown next to it.
+
+* Person-slug and quote attributes are optional and by default they are empty.
+* Keyword is the category name they belong to 
+  `For example Keyword can be: Energy or food systems but not deforestation`
+
+
+

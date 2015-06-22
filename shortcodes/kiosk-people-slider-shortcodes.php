@@ -47,72 +47,26 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * categories
    */
   public function kiosk_people_slider( $atts, $content = null ) {
-    $data_sections          = array();
-    $atts                   = shortcode_atts(
+    $atts             = shortcode_atts(
         array(
-          'gios_url'        => 'https://sustainability.asu.edu',
+          'gios_url'  => 'https://sustainability.asu.edu',
         ),
         $atts
     );
-    $this->gios_url = $atts['gios_url'];
-    $parsed_content = $this->parse_content( $content );
-
+    $this->gios_url   = $atts['gios_url'];
+    $parsed_content   = $this->parse_content( $content );
     // Get all the keywords
-    $keywords = $this->people_slider_helper->get_keywords();
-
-    foreach ( $keywords as $keyword ) {
-      $featured_image = false;
-      // Get all the images for the people in those keywords
-      $people = $this->people_slider_helper->get_people( $keyword );
-      $images = array();
-
-      foreach ( $people as $person ) {
-        $image = $person->photo_url();
-
-        if ( false !== $image ) {
-          $images[] = $image;
-        }
-      }
-
-      // Match the quote to the keyword
-      $quote          = false;
-      $person_slug    = false;
-      foreach ( $parsed_content as $part ) {
-        if ( ( array_key_exists( 'keyword', $part ) &&
-               $part['keyword'] === $keyword->keyword ) ||
-             ( array_key_exists( 'keyword-slug', $part ) &&
-               $part['keyword-slug'] === $keyword->slug ) ) {
-          $quote       = $part['quote'];
-          $person_slug = $part['person-slug'];
-
-          foreach ( $people as $person ) {
-            $image = $person->photo_url();
-
-            if ( false !== $image && $person->slug === $person_slug ) {
-              $featured_image = $image;
-            }
-          }
-
-          break;
-        }
-      }
-
-      $data_sections[] = array(
-        'keyword' => $keyword->keyword,
-        'people-images' => $images,
-        'quote' => $quote,
-        'person-slug' => $person_slug,
-        'featured-image' => $featured_image,
-      );
-    }
-
-    $carousel_slider          = $this->get_carousel_slider(
+    $keywords         = $this->people_slider_helper->get_keywords();
+    $data_sections    = $this
+        ->people_slider_helper
+        ->get_sliders_data( $keywords, $parsed_content );
+    $carousel_slider  = $this->get_carousel_slider(
         People_Slider_Helper::get_sliders(
             $data_sections,
             $this->gios_url
         )
     );
-    $kiosk_people_slider_div = '<div class="kiosk-people-slider">' . $carousel_slider . '</div>';
+    $kiosk_people_slider_div = '<div class="kiosk-people-slider"><div class="kiosk-people-slider__aspect-ratio">' . $carousel_slider . '</div></div>';
     return $kiosk_people_slider_div;
   }
 
@@ -122,12 +76,23 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * @return array
    */
   public function parse_content( $content ) {
-    $content = str_replace( '&#8220;', '"', $content );
-    $content = str_replace( '&#8221;', '"', $content );
-    $content = str_replace( '&#8217;', "'", $content );
-    $content = str_replace( '&#8216;', "'", $content );
 
-    return json_decode( trim( $content ), true );
+    if ( empty( $content ) ) {
+      return array();
+    }
+    $content = filter_var( $content, FILTER_SANITIZE_STRING );
+    $content = str_replace(
+        array( '&#8220;', '&#8221;', '&#8217;', '&#8216;', '&#34;', ),
+        array( '"', '"', '\'', '\'', '"', ),
+        $content
+    );
+    $decode = json_decode( trim( $content ), true );
+    if ( json_last_error( ) !== JSON_ERROR_NONE ) {
+      error_log( basename( __FILE__ ) .' People Slider Content JSON Decode Error' . json_last_error_msg() . "\n" );
+      echo ' People Slider Content JSON Decode error: ' . json_last_error_msg();
+      die();
+    }
+    return $decode;
   }
 
   /**
@@ -139,7 +104,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
   private function get_carousel_slider( $list_items ) {
     $carousel_slider = '';
     $prefix          = 'kiosk-people-slider';
-    $layout_template = '<div>%s</div>';
+    $layout_template = '%s';
     if ( count( $list_items ) > 0 ) {
       $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
     }

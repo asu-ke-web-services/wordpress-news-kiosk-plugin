@@ -13,22 +13,17 @@ class Kiosk_Helper {
    * @param string string
    * @return array
    */
-  public static function get_posts_items_from_db( $limit, $tags ){
+  public static function get_posts_items_from_db( $query_post_options ) {
      $exit_while             = false;
      $cureent_offset_posts   = 0;
      $list_items = array();
+     $limit      = array_key_exists( 'limit', $query_post_options )
+                      ? $query_post_options['limit'] : 20;
     while ( ! $exit_while ) {
-      $query_post_options   = array(
-        'post_type'         => array( 'attachment', 'page', 'post' ),
-        'posts_per_page'    => $limit,
-        'orderby'           => 'post_date',
-        'order'             => 'DESC',
-        'tag'               => $tags,
-        'offset'            => $cureent_offset_posts,
-        'post_status'       => 'publish',
-      );
+      $query_post_options['offset'] = $cureent_offset_posts;
       $cureent_offset_posts = $cureent_offset_posts + $limit;
       $posts                = get_posts( $query_post_options );
+
       if ( $posts ) {
         $next_list_items = Kiosk_Helper::check_for_image( $posts );
         if ( null != $next_list_items ) {
@@ -59,15 +54,35 @@ class Kiosk_Helper {
       $image_from_content                   = Kiosk_Helper::get_image_from_content( $post );
       $image_from_page_feature_attribute    = Kiosk_Helper::get_image_from_page_feature_attribute( $post );
       if ( null != $image_from_attachment ) {
-        $list_items[]  = $image_from_attachment;
+        //$list_items['image']  = $image_from_attachment;
+        $list_items[]  = self::prepare_kiosk_posts_data( $image_from_attachment, $post );
         //Check if posts had images in its body
       }else if ( null != $image_from_content ) {
-        $list_items[]  = $image_from_content;
+        //$list_items[]  = $image_from_content;
+        $list_items[]  = self::prepare_kiosk_posts_data( $image_from_content, $post );
         //Check if page_feature_image custom field has image and if it absolute else make absolute url from relative url //TO DO
       }else if ( null != $image_from_page_feature_attribute ) {
-        $list_items[]  = $image_from_page_feature_attribute;
+        //$list_items[]  = $image_from_page_feature_attribute;
+        $list_items[]  = self::prepare_kiosk_posts_data( $image_from_page_feature_attribute, $post );
       }
     }
+    return $list_items;
+  }
+  private static function prepare_kiosk_posts_data( $post_image, $post ) {
+    $list_items                     = array(
+      'image' => '',
+      'post-title' => '',
+      'kiosk-end-date' => '',
+      'post-status' => '',
+      'post-id' => '',
+      'post-date' => '',
+    );
+    $list_items['image']            = $post_image[0];
+    $list_items['post-title']       = $post->post_title;
+    $list_items['kiosk-end-date']   = get_post_meta( $post->ID, 'kiosk-end-date', true );
+    $list_items['post-status']      = $post->post_status;
+    $list_items['post-id']          = $post->ID;
+    $list_items['post-date']        = $post->post_date;
     return $list_items;
   }
 
@@ -148,17 +163,23 @@ class Kiosk_Helper {
    * @return array
    */
   public static function get_default_images( $default_image ){
-    $list_item  = null;
+    $list_items = null;
+    $list_item  = array(
+      'image' => '',
+      'post-title' => '',
+    );
     if ( ! empty( $default_image ) ) {
       $default_image_array = explode( ',', $default_image );
       for ( $k = 0 ; $k < count( $default_image_array ); $k++ ) {
         if ( parse_url( $default_image_array[ $k ], PHP_URL_SCHEME ) == '' ) {
           $default_image_array[ $k ] = home_url( $default_image_array[ $k ] );
         }
-        $list_item[] = array( trim( $default_image_array[ $k ] ), '', );
+        $list_item['image'] = trim( $default_image_array[ $k ] );
+        $list_item['post-title'] = '';
+        $list_items[] = $list_item;
       }
     }
-    return $list_item;
+    return $list_items;
   }
   /**
    * generate_unique_random_int_in_range( $start, $end, $quantity )
@@ -216,5 +237,13 @@ class Kiosk_Helper {
     } else {
       return $prefix . $url;
     }
+  }
+  /**
+   * sort_by_date( $first_date, $second_date )
+   * called using usort to sort an array of dates
+   * example: usort($data, "sort_by_date")
+   */
+  public static function sort_by_date( $first_date, $second_date ) {
+    return strtotime( $first_date['kiosk-end-date'] ) - strtotime( $second_date['kiosk-end-date'] );
   }
 }
