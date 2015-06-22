@@ -76,6 +76,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
    * @return array
    */
   public function parse_content( $content ) {
+
     if ( empty( $content ) ) {
       return array();
     }

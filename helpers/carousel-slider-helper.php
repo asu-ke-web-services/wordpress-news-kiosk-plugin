@@ -57,7 +57,7 @@ HTML;
           $list_items[ $i ]
       );
       $carousel_div_items   .= sprintf(
-          '<div class="item %s center-block %s__slider__div">'
+          '<div class="item %s %s__slider__slide">'
           . $prepare_div_items
           . '</div>',
           $div_item_active ,
