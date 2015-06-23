@@ -26,7 +26,7 @@ class Posts_Admin extends Base_Registrar {
     'pending'       => 'Pending',
     'private'       => 'Private',
     'trash'         => 'Trash',
-    'auto-draft'    =>'Auto-Draft',
+    'auto-draft'    => 'Auto-Draft',
     'inherit'       => 'Inherit',
   );
 
@@ -163,17 +163,16 @@ class Posts_Admin extends Base_Registrar {
       $status = get_option( Posts_Admin::$section_post_status );
       $post_status_drop_down = '<select id="%s" name="%s">';
       $selected = '';
-        foreach ( Posts_Admin::$post_statuses as $key => $value ) {
-          if ( $key == $status ) {
-            $selected = 'selected="selected"';
-          } else {
-            $selected = '';
-          }
-          $post_status_drop_down  .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+      foreach ( Posts_Admin::$post_statuses as $key => $value ) {
+        if ( $key == $status ) {
+          $selected = 'selected="selected"';
+        } else {
+          $selected = '';
         }
+        $post_status_drop_down  .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+      }
       $post_status_drop_down .= '</select>';
-      printf( $post_status_drop_down, Posts_Admin::$section_post_status, Posts_Admin::$section_post_status );       
-      var_dump($status);
+      printf( $post_status_drop_down, Posts_Admin::$section_post_status, Posts_Admin::$section_post_status );
       Posts_Admin::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
     }
   }
@@ -240,7 +239,7 @@ HTML;
           $item['image'],
           $item['image'],
           $item['post-id'],
-          $item['post-title'],          
+          $item['post-title'],
           $item['kiosk-end-date'],
           $item['post-status'],
           $item['post-date']
