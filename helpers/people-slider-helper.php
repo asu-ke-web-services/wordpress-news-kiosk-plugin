@@ -156,7 +156,7 @@ HTML;
       %s
     </div>
 HTML;
-    $image_tag_template = '<img class="img-responsive %s" src="%s">';
+    $image_tag_template = '<img class="%s" src="%s">';
     if ( false === $section['featured-image'] ) {
       $content_image = end( $section['people-images'] );
     } else {

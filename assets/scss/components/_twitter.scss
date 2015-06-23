@@ -95,3 +95,8 @@
   vertical-align: middle;
   width: 14px;
 }
+
+.kiosk-tweets__tweet__avatar__image {
+  @include img-responsive;
+  @include center-block;
+}

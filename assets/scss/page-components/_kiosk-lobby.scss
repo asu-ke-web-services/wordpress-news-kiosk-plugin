@@ -26,7 +26,7 @@
 .kiosk-lobby__column--3 {
   @extend .kiosk-lobby__column;
 
-  max-width: 570px;
+  max-width: 500px;
 }
 
 .kiosk-lobby__column--2 {
@@ -50,14 +50,12 @@
 }
 
 .kiosk-lobby__weather {
-  max-width: 480px;
   padding: 15px 0;
   width: 100%;
 }
 
 .kiosk-lobby__tweets {
   height: 575px;
-  max-width: 480px;
   padding: 15px 0;
   width: 100%;
 }
@@ -71,14 +69,12 @@
 
 .kiosk-lobby__gallery {
   height: 392px;
-  max-width: 480px;
   padding: 15px 0;  
   width: 100%;
 }
 
 .kiosk-lobby__asu-news {
   height: 418px;
-  max-width: 480px;
   padding: 15px 0 10px;
   width: 100%;
 }

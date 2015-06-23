@@ -85,7 +85,7 @@ HTML;
     $item_template     = <<<HTML
         <li class="kiosk-tweets__tweets__tweet">
           <div class="kiosk-tweets__tweet__avatar">
-              <img src="%s" class="kiosk-tweets__tweet__avatar__image img-responsive center-block" alt="">
+              <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
           </div>
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details__permalink">

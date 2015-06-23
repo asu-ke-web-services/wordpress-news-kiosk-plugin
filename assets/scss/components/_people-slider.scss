@@ -122,6 +122,9 @@
 }
 
 .kiosk-people-slider__layout__image {
+  @include img-responsive;
+  @include center-block;
+
   align-self: center;
   display: block;
   max-height: 100%;
@@ -131,6 +134,9 @@
 }
 
 .kiosk-people-slider__layout__featured-image {
+  @include img-responsive;
+  @include center-block;
+
   align-self: center;
   display: block;
   overflow: hidden;

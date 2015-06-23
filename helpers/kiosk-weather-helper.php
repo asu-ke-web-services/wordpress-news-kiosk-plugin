@@ -26,7 +26,7 @@ class Kiosk_Weather_Helper {
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item'>
         <div class="kiosk-weather__forecast__item__header">%s</div>
-        <img class='kiosk-weather_forecast__item_image center-block img-responsive' src='%s' >
+        <img class='kiosk-weather_forecast__item_image' src='%s' >
         <div class="kiosk-weather__forecast__item__text"><b>%s° / %s°</b></div>
       </div>
 HTML;
@@ -50,13 +50,13 @@ HTML;
         %s
       </div>
       <div class="kiosk-weather__weather__row">
-          <div class="kiosk-weather__current col-xs-3">
+          <div class="kiosk-weather__current">
             <img class='kiosk-weather__current__item__image' src='%s' >
             <div class="kiosk-weather__current__item__text">
               <b>%s°%s</b>
             </div>
           </div>
-          <div class="kiosk-weather__forecast col-xs-9">
+          <div class="kiosk-weather__forecast">
             <div class="row">
               %s
             </div>            
