@@ -107,10 +107,9 @@ HTML;
           <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
           <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> %s </a>
-        </div>
-        <input type="hidden" id="tweet-actual-time" value="%s" /> 
+        </div>        
 HTML;
-    $div_end      = '</ul></div>';
+    $div_end      = '</ul></div><input type="hidden" id="tweet-actual-time" value="%s" /> ';
     $tweet_items  = '';
     foreach ( $kiosk_tweet_items as $item ) {
       $retweet  = '';

@@ -1,71 +1,1362 @@
-/*
-Error: File to import not found or unreadable: bootstrap/assets/stylesheets/bootstrap/variables.
-        on line 6 of ../assets/scss/_bootstrap.scss
-        from line 9 of ../assets/scss/wordpress-news-kiosk-plugin.scss
+/*! ================================================
+    Scss Style for the GIOS WordPress powered Kiosks
+    MIT License Copyright ASU 2015
+    ================================================*/
+/* =========
+   Bootstrap
+   =========*/
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.container:before, .container:after {
+  content: " ";
+  display: table;
+}
+.container:after {
+  clear: both;
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
 
-1: /*! ================================================
-2:     Scss Style for the GIOS WordPress powered Kiosks
-3:     MIT License Copyright ASU 2015
-4:     ================================================*\/
-5: 
-6: // =========
-7: // Bootstrap
-8: // =========
-9: @import 'bootstrap';
-10: 
-11: // ====
+.container-fluid, .kiosk-weather__forecast {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.container-fluid:before, .kiosk-weather__forecast:before, .container-fluid:after, .kiosk-weather__forecast:after {
+  content: " ";
+  display: table;
+}
+.container-fluid:after, .kiosk-weather__forecast:after {
+  clear: both;
+}
 
-Backtrace:
-../assets/scss/_bootstrap.scss:6
-../assets/scss/wordpress-news-kiosk-plugin.scss:9
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/import_node.rb:67:in `rescue in import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/import_node.rb:45:in `import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/import_node.rb:28:in `imported_file'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/import_node.rb:37:in `css_import?'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:311:in `visit_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:79:in `block in with_base'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:115:in `with_frame'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:79:in `with_base'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:325:in `block (2 levels) in visit_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:325:in `map'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:325:in `block in visit_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:88:in `block in with_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:115:in `with_frame'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:88:in `with_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:322:in `visit_import'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `block in visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:79:in `block in with_base'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:115:in `with_frame'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/stack.rb:79:in `with_base'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:158:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `map'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:52:in `visit_children'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:167:in `block in visit_children'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:179:in `with_environment'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:166:in `visit_children'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `block in visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:186:in `visit_root'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/base.rb:36:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:157:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/visitors/perform.rb:8:in `visit'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/root_node.rb:36:in `css_tree'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/engine.rb:368:in `_render_with_sourcemap'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/engine.rb:285:in `render_with_sourcemap'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:407:in `run'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/exec/sass_scss.rb:63:in `process_result'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/exec/base.rb:52:in `parse'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/lib/sass/exec/base.rb:19:in `parse!'
-/var/lib/gems/1.9.1/gems/sass-3.4.14/bin/sass:13:in `<top (required)>'
-/usr/local/bin/sass:23:in `load'
-/usr/local/bin/sass:23:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Error: File to import not found or unreadable: bootstrap/assets/stylesheets/bootstrap/variables.\A         on line 6 of ../assets/scss/_bootstrap.scss\A         from line 9 of ../assets/scss/wordpress-news-kiosk-plugin.scss\A \A 1: /*! ================================================\A 2:     Scss Style for the GIOS WordPress powered Kiosks\A 3:     MIT License Copyright ASU 2015\A 4:     ================================================*/\A 5: \A 6: // =========\A 7: // Bootstrap\A 8: // =========\A 9: @import 'bootstrap';\A 10: \A 11: // ===="; }
+.row, .kiosk-weather__weather__row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.row:before, .kiosk-weather__weather__row:before, .row:after, .kiosk-weather__weather__row:after {
+  content: " ";
+  display: table;
+}
+.row:after, .kiosk-weather__weather__row:after {
+  clear: both;
+}
+
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .kiosk-weather__forecast__item, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .kiosk-weather__forecast__item, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
+  float: left;
+}
+
+.col-xs-1 {
+  width: 8.33333%;
+}
+
+.col-xs-2 {
+  width: 16.66667%;
+}
+
+.col-xs-3 {
+  width: 25%;
+}
+
+.col-xs-4, .kiosk-weather__forecast__item {
+  width: 33.33333%;
+}
+
+.col-xs-5 {
+  width: 41.66667%;
+}
+
+.col-xs-6 {
+  width: 50%;
+}
+
+.col-xs-7 {
+  width: 58.33333%;
+}
+
+.col-xs-8 {
+  width: 66.66667%;
+}
+
+.col-xs-9 {
+  width: 75%;
+}
+
+.col-xs-10 {
+  width: 83.33333%;
+}
+
+.col-xs-11 {
+  width: 91.66667%;
+}
+
+.col-xs-12 {
+  width: 100%;
+}
+
+.col-xs-pull-0 {
+  right: auto;
+}
+
+.col-xs-pull-1 {
+  right: 8.33333%;
+}
+
+.col-xs-pull-2 {
+  right: 16.66667%;
+}
+
+.col-xs-pull-3 {
+  right: 25%;
+}
+
+.col-xs-pull-4 {
+  right: 33.33333%;
+}
+
+.col-xs-pull-5 {
+  right: 41.66667%;
+}
+
+.col-xs-pull-6 {
+  right: 50%;
+}
+
+.col-xs-pull-7 {
+  right: 58.33333%;
+}
+
+.col-xs-pull-8 {
+  right: 66.66667%;
+}
+
+.col-xs-pull-9 {
+  right: 75%;
+}
+
+.col-xs-pull-10 {
+  right: 83.33333%;
+}
+
+.col-xs-pull-11 {
+  right: 91.66667%;
+}
+
+.col-xs-pull-12 {
+  right: 100%;
+}
+
+.col-xs-push-0 {
+  left: auto;
+}
+
+.col-xs-push-1 {
+  left: 8.33333%;
+}
+
+.col-xs-push-2 {
+  left: 16.66667%;
+}
+
+.col-xs-push-3 {
+  left: 25%;
+}
+
+.col-xs-push-4 {
+  left: 33.33333%;
+}
+
+.col-xs-push-5 {
+  left: 41.66667%;
+}
+
+.col-xs-push-6 {
+  left: 50%;
+}
+
+.col-xs-push-7 {
+  left: 58.33333%;
+}
+
+.col-xs-push-8 {
+  left: 66.66667%;
+}
+
+.col-xs-push-9 {
+  left: 75%;
+}
+
+.col-xs-push-10 {
+  left: 83.33333%;
+}
+
+.col-xs-push-11 {
+  left: 91.66667%;
+}
+
+.col-xs-push-12 {
+  left: 100%;
+}
+
+.col-xs-offset-0 {
+  margin-left: 0%;
+}
+
+.col-xs-offset-1 {
+  margin-left: 8.33333%;
+}
+
+.col-xs-offset-2 {
+  margin-left: 16.66667%;
+}
+
+.col-xs-offset-3 {
+  margin-left: 25%;
+}
+
+.col-xs-offset-4 {
+  margin-left: 33.33333%;
+}
+
+.col-xs-offset-5 {
+  margin-left: 41.66667%;
+}
+
+.col-xs-offset-6 {
+  margin-left: 50%;
+}
+
+.col-xs-offset-7 {
+  margin-left: 58.33333%;
+}
+
+.col-xs-offset-8 {
+  margin-left: 66.66667%;
+}
+
+.col-xs-offset-9 {
+  margin-left: 75%;
+}
+
+.col-xs-offset-10 {
+  margin-left: 83.33333%;
+}
+
+.col-xs-offset-11 {
+  margin-left: 91.66667%;
+}
+
+.col-xs-offset-12 {
+  margin-left: 100%;
+}
+
+@media (min-width: 768px) {
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    float: left;
+  }
+
+  .col-sm-1 {
+    width: 8.33333%;
+  }
+
+  .col-sm-2 {
+    width: 16.66667%;
+  }
+
+  .col-sm-3 {
+    width: 25%;
+  }
+
+  .col-sm-4 {
+    width: 33.33333%;
+  }
+
+  .col-sm-5 {
+    width: 41.66667%;
+  }
+
+  .col-sm-6 {
+    width: 50%;
+  }
+
+  .col-sm-7 {
+    width: 58.33333%;
+  }
+
+  .col-sm-8 {
+    width: 66.66667%;
+  }
+
+  .col-sm-9 {
+    width: 75%;
+  }
+
+  .col-sm-10 {
+    width: 83.33333%;
+  }
+
+  .col-sm-11 {
+    width: 91.66667%;
+  }
+
+  .col-sm-12 {
+    width: 100%;
+  }
+
+  .col-sm-pull-0 {
+    right: auto;
+  }
+
+  .col-sm-pull-1 {
+    right: 8.33333%;
+  }
+
+  .col-sm-pull-2 {
+    right: 16.66667%;
+  }
+
+  .col-sm-pull-3 {
+    right: 25%;
+  }
+
+  .col-sm-pull-4 {
+    right: 33.33333%;
+  }
+
+  .col-sm-pull-5 {
+    right: 41.66667%;
+  }
+
+  .col-sm-pull-6 {
+    right: 50%;
+  }
+
+  .col-sm-pull-7 {
+    right: 58.33333%;
+  }
+
+  .col-sm-pull-8 {
+    right: 66.66667%;
+  }
+
+  .col-sm-pull-9 {
+    right: 75%;
+  }
+
+  .col-sm-pull-10 {
+    right: 83.33333%;
+  }
+
+  .col-sm-pull-11 {
+    right: 91.66667%;
+  }
+
+  .col-sm-pull-12 {
+    right: 100%;
+  }
+
+  .col-sm-push-0 {
+    left: auto;
+  }
+
+  .col-sm-push-1 {
+    left: 8.33333%;
+  }
+
+  .col-sm-push-2 {
+    left: 16.66667%;
+  }
+
+  .col-sm-push-3 {
+    left: 25%;
+  }
+
+  .col-sm-push-4 {
+    left: 33.33333%;
+  }
+
+  .col-sm-push-5 {
+    left: 41.66667%;
+  }
+
+  .col-sm-push-6 {
+    left: 50%;
+  }
+
+  .col-sm-push-7 {
+    left: 58.33333%;
+  }
+
+  .col-sm-push-8 {
+    left: 66.66667%;
+  }
+
+  .col-sm-push-9 {
+    left: 75%;
+  }
+
+  .col-sm-push-10 {
+    left: 83.33333%;
+  }
+
+  .col-sm-push-11 {
+    left: 91.66667%;
+  }
+
+  .col-sm-push-12 {
+    left: 100%;
+  }
+
+  .col-sm-offset-0 {
+    margin-left: 0%;
+  }
+
+  .col-sm-offset-1 {
+    margin-left: 8.33333%;
+  }
+
+  .col-sm-offset-2 {
+    margin-left: 16.66667%;
+  }
+
+  .col-sm-offset-3 {
+    margin-left: 25%;
+  }
+
+  .col-sm-offset-4 {
+    margin-left: 33.33333%;
+  }
+
+  .col-sm-offset-5 {
+    margin-left: 41.66667%;
+  }
+
+  .col-sm-offset-6 {
+    margin-left: 50%;
+  }
+
+  .col-sm-offset-7 {
+    margin-left: 58.33333%;
+  }
+
+  .col-sm-offset-8 {
+    margin-left: 66.66667%;
+  }
+
+  .col-sm-offset-9 {
+    margin-left: 75%;
+  }
+
+  .col-sm-offset-10 {
+    margin-left: 83.33333%;
+  }
+
+  .col-sm-offset-11 {
+    margin-left: 91.66667%;
+  }
+
+  .col-sm-offset-12 {
+    margin-left: 100%;
+  }
+}
+@media (min-width: 992px) {
+  .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+    float: left;
+  }
+
+  .col-md-1 {
+    width: 8.33333%;
+  }
+
+  .col-md-2 {
+    width: 16.66667%;
+  }
+
+  .col-md-3 {
+    width: 25%;
+  }
+
+  .col-md-4 {
+    width: 33.33333%;
+  }
+
+  .col-md-5 {
+    width: 41.66667%;
+  }
+
+  .col-md-6 {
+    width: 50%;
+  }
+
+  .col-md-7 {
+    width: 58.33333%;
+  }
+
+  .col-md-8 {
+    width: 66.66667%;
+  }
+
+  .col-md-9 {
+    width: 75%;
+  }
+
+  .col-md-10 {
+    width: 83.33333%;
+  }
+
+  .col-md-11 {
+    width: 91.66667%;
+  }
+
+  .col-md-12 {
+    width: 100%;
+  }
+
+  .col-md-pull-0 {
+    right: auto;
+  }
+
+  .col-md-pull-1 {
+    right: 8.33333%;
+  }
+
+  .col-md-pull-2 {
+    right: 16.66667%;
+  }
+
+  .col-md-pull-3 {
+    right: 25%;
+  }
+
+  .col-md-pull-4 {
+    right: 33.33333%;
+  }
+
+  .col-md-pull-5 {
+    right: 41.66667%;
+  }
+
+  .col-md-pull-6 {
+    right: 50%;
+  }
+
+  .col-md-pull-7 {
+    right: 58.33333%;
+  }
+
+  .col-md-pull-8 {
+    right: 66.66667%;
+  }
+
+  .col-md-pull-9 {
+    right: 75%;
+  }
+
+  .col-md-pull-10 {
+    right: 83.33333%;
+  }
+
+  .col-md-pull-11 {
+    right: 91.66667%;
+  }
+
+  .col-md-pull-12 {
+    right: 100%;
+  }
+
+  .col-md-push-0 {
+    left: auto;
+  }
+
+  .col-md-push-1 {
+    left: 8.33333%;
+  }
+
+  .col-md-push-2 {
+    left: 16.66667%;
+  }
+
+  .col-md-push-3 {
+    left: 25%;
+  }
+
+  .col-md-push-4 {
+    left: 33.33333%;
+  }
+
+  .col-md-push-5 {
+    left: 41.66667%;
+  }
+
+  .col-md-push-6 {
+    left: 50%;
+  }
+
+  .col-md-push-7 {
+    left: 58.33333%;
+  }
+
+  .col-md-push-8 {
+    left: 66.66667%;
+  }
+
+  .col-md-push-9 {
+    left: 75%;
+  }
+
+  .col-md-push-10 {
+    left: 83.33333%;
+  }
+
+  .col-md-push-11 {
+    left: 91.66667%;
+  }
+
+  .col-md-push-12 {
+    left: 100%;
+  }
+
+  .col-md-offset-0 {
+    margin-left: 0%;
+  }
+
+  .col-md-offset-1 {
+    margin-left: 8.33333%;
+  }
+
+  .col-md-offset-2 {
+    margin-left: 16.66667%;
+  }
+
+  .col-md-offset-3 {
+    margin-left: 25%;
+  }
+
+  .col-md-offset-4 {
+    margin-left: 33.33333%;
+  }
+
+  .col-md-offset-5 {
+    margin-left: 41.66667%;
+  }
+
+  .col-md-offset-6 {
+    margin-left: 50%;
+  }
+
+  .col-md-offset-7 {
+    margin-left: 58.33333%;
+  }
+
+  .col-md-offset-8 {
+    margin-left: 66.66667%;
+  }
+
+  .col-md-offset-9 {
+    margin-left: 75%;
+  }
+
+  .col-md-offset-10 {
+    margin-left: 83.33333%;
+  }
+
+  .col-md-offset-11 {
+    margin-left: 91.66667%;
+  }
+
+  .col-md-offset-12 {
+    margin-left: 100%;
+  }
+}
+@media (min-width: 1200px) {
+  .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+    float: left;
+  }
+
+  .col-lg-1 {
+    width: 8.33333%;
+  }
+
+  .col-lg-2 {
+    width: 16.66667%;
+  }
+
+  .col-lg-3 {
+    width: 25%;
+  }
+
+  .col-lg-4 {
+    width: 33.33333%;
+  }
+
+  .col-lg-5 {
+    width: 41.66667%;
+  }
+
+  .col-lg-6 {
+    width: 50%;
+  }
+
+  .col-lg-7 {
+    width: 58.33333%;
+  }
+
+  .col-lg-8 {
+    width: 66.66667%;
+  }
+
+  .col-lg-9 {
+    width: 75%;
+  }
+
+  .col-lg-10 {
+    width: 83.33333%;
+  }
+
+  .col-lg-11 {
+    width: 91.66667%;
+  }
+
+  .col-lg-12 {
+    width: 100%;
+  }
+
+  .col-lg-pull-0 {
+    right: auto;
+  }
+
+  .col-lg-pull-1 {
+    right: 8.33333%;
+  }
+
+  .col-lg-pull-2 {
+    right: 16.66667%;
+  }
+
+  .col-lg-pull-3 {
+    right: 25%;
+  }
+
+  .col-lg-pull-4 {
+    right: 33.33333%;
+  }
+
+  .col-lg-pull-5 {
+    right: 41.66667%;
+  }
+
+  .col-lg-pull-6 {
+    right: 50%;
+  }
+
+  .col-lg-pull-7 {
+    right: 58.33333%;
+  }
+
+  .col-lg-pull-8 {
+    right: 66.66667%;
+  }
+
+  .col-lg-pull-9 {
+    right: 75%;
+  }
+
+  .col-lg-pull-10 {
+    right: 83.33333%;
+  }
+
+  .col-lg-pull-11 {
+    right: 91.66667%;
+  }
+
+  .col-lg-pull-12 {
+    right: 100%;
+  }
+
+  .col-lg-push-0 {
+    left: auto;
+  }
+
+  .col-lg-push-1 {
+    left: 8.33333%;
+  }
+
+  .col-lg-push-2 {
+    left: 16.66667%;
+  }
+
+  .col-lg-push-3 {
+    left: 25%;
+  }
+
+  .col-lg-push-4 {
+    left: 33.33333%;
+  }
+
+  .col-lg-push-5 {
+    left: 41.66667%;
+  }
+
+  .col-lg-push-6 {
+    left: 50%;
+  }
+
+  .col-lg-push-7 {
+    left: 58.33333%;
+  }
+
+  .col-lg-push-8 {
+    left: 66.66667%;
+  }
+
+  .col-lg-push-9 {
+    left: 75%;
+  }
+
+  .col-lg-push-10 {
+    left: 83.33333%;
+  }
+
+  .col-lg-push-11 {
+    left: 91.66667%;
+  }
+
+  .col-lg-push-12 {
+    left: 100%;
+  }
+
+  .col-lg-offset-0 {
+    margin-left: 0%;
+  }
+
+  .col-lg-offset-1 {
+    margin-left: 8.33333%;
+  }
+
+  .col-lg-offset-2 {
+    margin-left: 16.66667%;
+  }
+
+  .col-lg-offset-3 {
+    margin-left: 25%;
+  }
+
+  .col-lg-offset-4 {
+    margin-left: 33.33333%;
+  }
+
+  .col-lg-offset-5 {
+    margin-left: 41.66667%;
+  }
+
+  .col-lg-offset-6 {
+    margin-left: 50%;
+  }
+
+  .col-lg-offset-7 {
+    margin-left: 58.33333%;
+  }
+
+  .col-lg-offset-8 {
+    margin-left: 66.66667%;
+  }
+
+  .col-lg-offset-9 {
+    margin-left: 75%;
+  }
+
+  .col-lg-offset-10 {
+    margin-left: 83.33333%;
+  }
+
+  .col-lg-offset-11 {
+    margin-left: 91.66667%;
+  }
+
+  .col-lg-offset-12 {
+    margin-left: 100%;
+  }
+}
+/* ================
+   Variables
+   ================*/
+/* ===============
+   Color Variables
+   =============== */
+/* ====================
+   Typography Variables
+   ==================== */
+/* ======
+   Mixins
+   ======*/
+/* ======
+   Boxify
+   ======*/
+/* ===========
+   Scaffolding
+   =========== */
+/* ==========
+   Components
+   ========== */
+/* =========
+   Flex Grid
+   =========*/
+.flex-container, .kiosk-lobby {
+  align-content: center;
+  align-items: center;
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.flex-column, .kiosk-lobby__column, .kiosk-lobby__column--1,
+.kiosk-lobby__column--3, .kiosk-lobby__column--2 {
+  align-content: space-around;
+  align-items: center;
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: space-around;
+  vertical-align: middle;
+}
+
+/* =================
+   Weather Component
+   =================*/
+.kiosk-weather {
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
+  border: 3px solid #FFB310;
+  border-radius: 1px;
+  background: rgba(86, 142, 20, 0.7);
+  overflow: hidden;
+  padding: 15px;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-weather__weather__row {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.kiosk-weather__forecast__item {
+  color: #fff;
+  padding: 0;
+  text-align: center;
+}
+
+.kiosk-weather__forecast__item + .kiosk-weather__forecast__item {
+  padding: 0 10px;
+}
+
+.kiosk-weather__forecast__title {
+  color: #fff;
+  font-size: 2em;
+  font-weight: bold;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.kiosk-weather__current__item__image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.kiosk-weather__current__item__text {
+  color: #fff;
+  font-size: 1em;
+  text-align: center;
+}
+
+.kiosk-weather__forecast__item__header {
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 5px;
+}
+
+/* =================
+   Twitter Component
+   =================*/
+.kiosk-tweets {
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
+  border: 3px solid #FFB310;
+  border-radius: 1px;
+  background: rgba(86, 142, 20, 0.7);
+  color: #fff;
+  height: 100%;
+  overflow: hidden;
+  padding: 15px;
+  width: 100%;
+}
+
+.kiosk-tweets__container {
+  height: 86%;
+  padding-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.kiosk-tweets__timeline__title {
+  color: #fff;
+  height: 13%;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.kiosk-tweets__timeline__title__text {
+  color: #fff;
+  font-size: 2.5em;
+}
+
+.kiosk-tweets__timeline__title__logo {
+  background: transparent url("../images/twitter-bird.png") no-repeat center;
+  background-size: 100%;
+  color: #fff;
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  width: 3em;
+  top: 15px;
+  vertical-align: middle;
+}
+
+.kiosk-tweets__tweets {
+  height: 100%;
+  list-style: none;
+  padding-left: 15px;
+  position: relative;
+}
+
+.kiosk-tweets__tweets__tweet {
+  clear: both;
+  margin-bottom: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.kiosk-tweets__tweet__avatar {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  float: left;
+  margin-right: 15px;
+}
+
+.kiosk-tweets__tweet__details {
+  overflow: hidden;
+}
+
+.kiosk-tweets__tweet__details__header {
+  margin-bottom: 15px;
+}
+
+.kiosk-tweets__tweet__details__permalink {
+  border-bottom: 1px;
+  color: #ffffff;
+  float: right;
+  position: relative;
+}
+
+.kiosk-tweets__tweet__link {
+  border-bottom: 3px solid #039BE5;
+  box-shadow: inset 0 -3px 0 #039BE5;
+  color: #fff;
+  transition: background 0.15s cubic-bezier(0.33, 0.66, 0.66, 1);
+}
+
+.kiosk-tweets__tweet__retweet__icon {
+  background: transparent url("../images/retweet.png") no-repeat center;
+  display: inline-block;
+  height: 16px;
+  vertical-align: middle;
+  width: 14px;
+}
+
+/* ========
+   Calendar
+   ========*/
+.kiosk-date-time {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.kiosk-date-time__calendar {
+  height: 25%;
+  margin: 0 15px;
+  width: 25%;
+}
+
+.kiosk-date-time__calendar-icon {
+  background-color: #fff;
+  border: 0.3em solid #818486;
+  border-radius: .1em;
+  font-size: 1em;
+  overflow: hidden;
+}
+.kiosk-date-time__calendar-icon * {
+  display: inline-block;
+  font-size: 1.7em;
+  font-style: normal;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+}
+.kiosk-date-time__calendar-icon strong {
+  background-color: #A20B09;
+  color: #fff;
+  font-size: 1.3em;
+  padding: 3px;
+}
+.kiosk-date-time__calendar-icon span {
+  color: #2F2F2F;
+  font-size: 2.5em;
+  letter-spacing: -0.05em;
+  padding: 0 5px;
+}
+
+.kiosk-date-time__time {
+  color: #900;
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: -0.05em;
+  margin: 30px 10px 10px;
+}
+
+/* =======
+   Gallery
+   =======*/
+.kiosk-gallery {
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
+  border: 3px solid #FFB310;
+  border-radius: 1px;
+  background: rgba(86, 142, 20, 0.7);
+  height: 100%;
+  overflow: hidden;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-gallery__slider-caption h3 {
+  color: #fff;
+}
+
+.kiosk-gallery__slider {
+  overflow: hidden;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-gallery__slider__slide {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+}
+.kiosk-gallery__slider__slide img {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.kiosk-gallery__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+/* ====
+   News
+   ====*/
+.kiosk-asu-news {
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
+  border: 3px solid #FFB310;
+  border-radius: 1px;
+  background-color: #ffffff;
+  background-image: url("../images/asunews_now_header.jpg"), url("../images/asunews_grass.png");
+  background-position: 20px 20px, center bottom;
+  background-repeat: no-repeat;
+  background-size: auto, 100% 20%;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.kiosk-asu-news__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-asu-news h3 {
+  margin-top: 80px;
+}
+
+.kiosk-asu-news p {
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.kiosk-asu-news__slider {
+  overflow: hidden;
+}
+
+/* =====
+   Posts
+   =====*/
+.kiosk-posts {
+  display: block;
+  overflow: hidden;
+}
+
+.kiosk-posts__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-posts__slider__slide {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 100%;
+}
+.kiosk-posts__slider__slide img {
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+/* ===============
+   Page Components
+   =============== */
+/* ======================
+   Kiosk Lobby Compoments
+   ======================*/
+.kiosk-lobby {
+  background-image: url("../images/bg-display.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #333;
+  font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
+  font-size: 1.7vmin;
+  padding: 30px 0;
+  width: 100%;
+}
+
+.kiosk-lobby__column, .kiosk-lobby__column--1,
+.kiosk-lobby__column--3, .kiosk-lobby__column--2 {
+  min-width: 500px;
+  padding: 10px;
+}
+
+.kiosk-lobby__column--1,
+.kiosk-lobby__column--3 {
+  max-width: 570px;
+}
+
+.kiosk-lobby__column--2 {
+  max-width: 761px;
+}
+
+@media screen and (max-width: 1500px) {
+  .kiosk-lobby__column--1 {
+    order: 1;
+  }
+
+  .kiosk-lobby__column--2 {
+    order: 3;
+  }
+
+  .kiosk-lobby__column--3 {
+    order: 2;
+  }
+}
+.kiosk-lobby__weather {
+  max-width: 480px;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.kiosk-lobby__tweets {
+  height: 575px;
+  max-width: 480px;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.kiosk-lobby__time {
+  height: 140px;
+  width: 100%;
+  padding: 0px 0px 15px 0px;
+  max-width: 480px;
+}
+
+.kiosk-lobby__gallery {
+  height: 392px;
+  width: 100%;
+  padding: 15px 0px 15px 0px;
+  max-width: 480px;
+}
+
+.kiosk-lobby__asu-news {
+  height: 418px;
+  width: 100%;
+  padding: 15px 0px 10px 0px;
+  max-width: 480px;
+}
+
+.kiosk-lobby__posts {
+  height: 1019px;
+  width: 100%;
+}
+
+/*# sourceMappingURL=wordpress-news-kiosk-plugin.css.map */
