@@ -122,13 +122,13 @@ class People_Slider_Helper {
         %s
       </div>
       <div class="kiosk-people-slider__layout__row-middle">
-        <div class="kiosk-people-slider__layout__row-middle--col1">
+        <div class="kiosk-people-slider__layout__row-middle--column1">
           %s
         </div>
-        <div class="kiosk-people-slider__layout__row-middle--col2">
+        <div class="kiosk-people-slider__layout__row-middle--column2">
           %s
         </div>
-        <div class="kiosk-people-slider__layout__row-middle--col3">
+        <div class="kiosk-people-slider__layout__row-middle--column3">
           %s
         </div>
       </div>
@@ -138,21 +138,21 @@ class People_Slider_Helper {
     </div>
 HTML;
     $layout_center_with_quote = <<<HTML
-    <div class="kiosk-people-slider__layout__featured--col1">
+    <div class="kiosk-people-slider__layout__featured--column1">
       %s
     </div>
-    <div class="kiosk-people-slider__layout__featured--col2">
+    <div class="kiosk-people-slider__layout__featured--column2">
       %s
     </div>
 HTML;
     $layout_center_no_quote = <<<HTML
-    <div class ="kiosk-people-slider__layout__featured--col1">
+    <div class ="kiosk-people-slider__layout__featured--column1">
       %s
     </div>
-    <div class ="kiosk-people-slider__layout__featured--col2">
+    <div class ="kiosk-people-slider__layout__featured--column2">
       %s
     </div>
-    <div class ="kiosk-people-slider__layout__featured--col3">
+    <div class ="kiosk-people-slider__layout__featured--column3">
       %s
     </div>
 HTML;

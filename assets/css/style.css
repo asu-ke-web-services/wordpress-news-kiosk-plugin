@@ -84,6 +84,7 @@
   right: 0;
   width: 93%;
   height: 93%;
+  display: block;
   /* Due to header images pops out. To fit into outer div used space*/
   
   margin: auto;
@@ -262,12 +263,6 @@
   width: 100%;
   max-width: 580px;
   padding: 0px 0px 15px 0px;
-  display: flex;
-  flex: auto;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  align-content: space-around;
 }
 
 .kiosk-third-floor-layout-weather {
@@ -275,12 +270,6 @@
   width: 100%;
   max-width: 580px;
   padding: 15px 0px 15px 0px;
-  display: flex;
-  flex: auto;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  align-content: space-around;
 }
 
 .kiosk-third-floor-layout-tweets {
@@ -288,12 +277,6 @@
   width: 100%;
   max-width: 580px;
   padding: 15px 0px 10px 0px;
-  display: flex;
-  flex: auto;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  align-content: space-around;
 }
 
 .kiosk-third-floor .kiosk-weather {

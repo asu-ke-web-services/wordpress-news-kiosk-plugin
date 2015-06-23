@@ -1,0 +1,138 @@
+/* =============
+   People Slider
+   =============*/
+
+.kiosk-people-slider {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 30px;
+}
+
+.kiosk-people-slider__aspect-ratio {
+  height: 0;
+  /* maintain 7:5 aspect ratio*/  
+  padding-bottom: calc(100%*5/7);
+  position: relative;   
+}
+
+.kiosk-people-slider__slider {
+  bottom: 0;
+  /* Using only 93% to fit to outer div as images pops out of div due to heading space*/
+  height: 93%;
+  left: 0;
+  margin: auto;
+  position: absolute;  
+  right: 0;
+  top:0;
+  width: 93%;  
+}
+
+.kiosk-people-slider__layout {
+  @extend .flex-column;
+
+  flex-wrap:nowrap;
+  height: 100%;
+  overflow: hidden;
+  width: 100%;  
+}
+
+.kiosk-people-slider__layout__row {
+  @extend .flex-container;
+
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
+}
+.kiosk-people-slider__layout__row-top,
+.kiosk-people-slider__layout__row-bottom {
+  @extend .kiosk-people-slider__layout__row;
+
+  height: 20%;
+}
+
+.kiosk-people-slider__layout__row-middle {
+  @extend .kiosk-people-slider__layout__row;
+  
+  height: 60%;
+}
+
+.kiosk-people-slider__layout__row-middle--column1,
+.kiosk-people-slider__layout__row-middle--column3 {
+  @extend .flex-column;
+
+  align-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  height: 100%;
+  overflow: hidden;
+  width: calc(100% / 7);
+}
+
+.kiosk-people-slider__layout__row-middle--column2 {
+  @extend .flex-container;
+
+  align-content: flex-start;
+  align-items: flex-start;
+  height: 100%;
+  justify-content: flex-start;  
+  overflow: hidden;
+  width: calc(100% / 7 * 5);
+}
+
+.kiosk-people-slider__layout__featured--column {
+  align-self: center;
+  display: block; 
+  height: 100%; 
+  overflow: hidden;
+  vertical-align: middle;
+}
+.kiosk-people-slider__layout__featured--column1 {
+  @extend .kiosk-people-slider__layout__featured--column;
+
+  padding: 2px 5px 5px 2px;  
+  width: 60%;
+}
+
+.kiosk-people-slider__layout__featured--column2 {
+  @extend .kiosk-people-slider__layout__featured--column;
+  
+  font-size: 1.2em;
+  font-style: italic;
+  padding: 5px 5px 5px 10px;
+  width: 40%;
+  word-wrap: break-word;
+}
+
+
+.kiosk-people-slider__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-people-slider__layout__header {
+  margin-bottom: 5px;
+  margin-top: 0px;
+  font-size: 2em;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.kiosk-people-slider__layout__image {
+  align-self: center;
+  display: block;
+  max-height: 100%;
+  max-width: 100%;  
+  overflow: hidden;
+  padding: 5px;  
+}
+
+.kiosk-people-slider__layout__featured-image {
+  align-self: center;
+  display: block;
+  overflow: hidden;
+  padding: 5px 0px 5px 5px;  
+  width: 100%;  
+}
