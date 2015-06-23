@@ -32,17 +32,17 @@ class KioskSliderTest extends WP_UnitTestCase {
 
     // Test no tags by default limit 20 image items if found
     $content = $stub->kiosk_slider( '' );
-    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 20 ) );
-    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 image items' );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 5 ) );
-    $this->assertContains( 'kiosk-gallery__slider__div', $content, 'Should return images with div tag' );
+    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 image items' );
   }

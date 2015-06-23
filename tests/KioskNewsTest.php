@@ -26,29 +26,29 @@ class KioskNewsTest extends WP_UnitTestCase {
     // Test no tags by default limit 20 news items if found
     $content = $stub->kiosk_asu_news( '' );
 
-    $this->assertContains( 'kiosk-asu-news__slider__div', $content, 'Returns asu news items' );
+    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
 
     // Test limit tag
     //$content = do_shortcode( '[kiosk-asu-news limit="20"]' );
     $content = $stub->kiosk_asu_news( array( 'limit' => 20 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__div', $content, 'Returns asu news items' );
+    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 news items' );
 
     // Test with content_limit tag
     //$content = do_shortcode( '[kiosk-asu-news content_limit="10"]' );
     $content = $stub->kiosk_asu_news( array( 'limit' => 10 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__div', $content, 'Returns asu news items' );
+    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
 
     // Test with feed tag
     //$content = do_shortcode( '[kiosk-asu-news feed="153,40,358"]' );
     $content = $stub->kiosk_asu_news( array( 'feed' => '153,40,358' ) );
-    $this->assertContains( 'kiosk-asu-news__slider__div', $content, 'Returns asu news items' );
+    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
 
     // Test with multipe tags
     //$content = do_shortcode( '[kiosk-asu-news feed="153,40,358" limit="5" ]' );
     $content = $stub->kiosk_asu_news( array( 'feed' => '153,40,358', 'limit' => 5 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__div', $content, 'Returns asu news items' );
+    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
     $numberOfEvents = substr_count( $content, '<li' );
     $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 news items' );
   }

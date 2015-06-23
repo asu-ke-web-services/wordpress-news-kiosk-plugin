@@ -39,9 +39,11 @@
   .kiosk-lobby__column--1 {
     order: 1;
   }
+
   .kiosk-lobby__column--2 {
     order: 3;
   }
+
   .kiosk-lobby__column--3 {
     order: 2;
   }
@@ -62,23 +64,23 @@
 
 .kiosk-lobby__time {
   height: 140px;
-  width: 100%;
-  padding: 0px 0px 15px 0px;
   max-width: 480px;
+  padding: 0 0 15px;
+  width: 100%;
 }
 
 .kiosk-lobby__gallery {
   height: 392px;
-  width: 100%;
-  padding: 15px 0px 15px 0px;
   max-width: 480px;
+  padding: 15px 0;  
+  width: 100%;
 }
 
 .kiosk-lobby__asu-news {
   height: 418px;
-  width: 100%;
-  padding: 15px 0px 10px 0px;
   max-width: 480px;
+  padding: 15px 0 10px;
+  width: 100%;
 }
 
 .kiosk-lobby__posts {

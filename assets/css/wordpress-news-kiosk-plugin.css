@@ -958,7 +958,7 @@
    =================*/
 .kiosk-weather {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
-  border: 3px solid #FFB310;
+  border: 3px solid #ffb310;
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
   overflow: hidden;
@@ -1019,7 +1019,7 @@
    =================*/
 .kiosk-tweets {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
-  border: 3px solid #FFB310;
+  border: 3px solid #ffb310;
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
   color: #fff;
@@ -1031,8 +1031,8 @@
 
 .kiosk-tweets__container {
   height: 86%;
-  padding-bottom: 10px;
   overflow: hidden;
+  padding-bottom: 10px;
   position: relative;
 }
 
@@ -1055,9 +1055,9 @@
   display: inline-block;
   position: absolute;
   right: 15px;
-  width: 3em;
   top: 15px;
   vertical-align: middle;
+  width: 3em;
 }
 
 .kiosk-tweets__tweets {
@@ -1095,14 +1095,14 @@
 
 .kiosk-tweets__tweet__details__permalink {
   border-bottom: 1px;
-  color: #ffffff;
+  color: #fff;
   float: right;
   position: relative;
 }
 
 .kiosk-tweets__tweet__link {
-  border-bottom: 3px solid #039BE5;
-  box-shadow: inset 0 -3px 0 #039BE5;
+  border-bottom: 3px solid #039be5;
+  box-shadow: inset 0 -3px 0 #039be5;
   color: #fff;
   transition: background 0.15s cubic-bezier(0.33, 0.66, 0.66, 1);
 }
@@ -1134,7 +1134,7 @@
 
 .kiosk-date-time__calendar-icon {
   background-color: #fff;
-  border: 0.3em solid #818486;
+  border: .3em solid #818486;
   border-radius: .1em;
   font-size: 1em;
   overflow: hidden;
@@ -1148,15 +1148,15 @@
   width: 100%;
 }
 .kiosk-date-time__calendar-icon strong {
-  background-color: #A20B09;
+  background-color: #a20b09;
   color: #fff;
   font-size: 1.3em;
   padding: 3px;
 }
 .kiosk-date-time__calendar-icon span {
-  color: #2F2F2F;
+  color: #2f2f2f;
   font-size: 2.5em;
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   padding: 0 5px;
 }
 
@@ -1164,7 +1164,7 @@
   color: #900;
   font-size: 2em;
   font-weight: bold;
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   margin: 30px 10px 10px;
 }
 
@@ -1173,7 +1173,7 @@
    =======*/
 .kiosk-gallery {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
-  border: 3px solid #FFB310;
+  border: 3px solid #ffb310;
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
   height: 100%;
@@ -1224,9 +1224,9 @@
    ====*/
 .kiosk-asu-news {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
-  border: 3px solid #FFB310;
+  border: 3px solid #ffb310;
   border-radius: 1px;
-  background-color: #ffffff;
+  background-color: #fff;
   background-image: url("../images/asunews_now_header.jpg"), url("../images/asunews_grass.png");
   background-position: 20px 20px, center bottom;
   background-repeat: no-repeat;
@@ -1235,19 +1235,17 @@
   overflow: hidden;
   width: 100%;
 }
-
-.kiosk-asu-news__slider__carousel-indicators {
-  visibility: hidden;
-}
-
 .kiosk-asu-news h3 {
   margin-top: 80px;
 }
-
 .kiosk-asu-news p {
   margin-bottom: 20px;
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.kiosk-asu-news__slider__carousel-indicators {
+  visibility: hidden;
 }
 
 .kiosk-asu-news__slider {
@@ -1294,11 +1292,11 @@
    People Slider
    =============*/
 .kiosk-people-slider {
-  position: relative;
   display: block;
-  width: 100%;
   height: 100%;
   padding-bottom: 30px;
+  position: relative;
+  width: 100%;
 }
 
 .kiosk-people-slider__aspect-ratio {
@@ -1389,11 +1387,11 @@
 }
 
 .kiosk-people-slider__layout__header {
-  margin-bottom: 5px;
-  margin-top: 0px;
   font-size: 2em;
-  text-align: center;
   font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 0;
+  text-align: center;
 }
 
 .kiosk-people-slider__layout__image {
@@ -1409,7 +1407,7 @@
   align-self: center;
   display: block;
   overflow: hidden;
-  padding: 5px 0px 5px 5px;
+  padding: 5px 0 5px 5px;
   width: 100%;
 }
 
@@ -1473,23 +1471,23 @@
 
 .kiosk-lobby__time {
   height: 140px;
-  width: 100%;
-  padding: 0px 0px 15px 0px;
   max-width: 480px;
+  padding: 0 0 15px;
+  width: 100%;
 }
 
 .kiosk-lobby__gallery {
   height: 392px;
-  width: 100%;
-  padding: 15px 0px 15px 0px;
   max-width: 480px;
+  padding: 15px 0;
+  width: 100%;
 }
 
 .kiosk-lobby__asu-news {
   height: 418px;
-  width: 100%;
-  padding: 15px 0px 10px 0px;
   max-width: 480px;
+  padding: 15px 0 10px;
+  width: 100%;
 }
 
 .kiosk-lobby__posts {
@@ -1523,8 +1521,8 @@
 
 @media screen and (max-width: 1200px) {
   .kiosk-third-floor__column--1 {
-    width: 100%;
     padding-bottom: 20px;
+    width: 100%;
   }
 
   .kiosk-third-floor__column--2 {
@@ -1534,7 +1532,7 @@
 .kiosk-third-floor__logo {
   display: block;
   height: 15%;
-  padding: 0px 0px 0px 0px;
+  padding: 0;
   width: 100%;
 }
 
@@ -1563,7 +1561,7 @@
   height: 15%;
   max-height: 200px;
   max-width: 580px;
-  padding: 0px 0px 15px 0px;
+  padding: 0 0 15px;
   width: 100%;
 }
 

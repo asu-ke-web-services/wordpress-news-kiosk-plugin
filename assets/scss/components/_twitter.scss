@@ -15,8 +15,8 @@
 
 .kiosk-tweets__container {
   height: 86%;
-  padding-bottom: 10px;
   overflow: hidden;
+  padding-bottom: 10px;
   position: relative;
 }
 
@@ -39,9 +39,9 @@
   display: inline-block;
   position: absolute;
   right: 15px;
-  width: 3em;
   top: 15px;
   vertical-align: middle;
+  width: 3em;
 }
 
 .kiosk-tweets__tweets {
@@ -76,16 +76,16 @@
 
 .kiosk-tweets__tweet__details__permalink {
   border-bottom: 1px;
-  color: #ffffff;
+  color: #fff;
   float: right;
   position: relative;
 }
 
 .kiosk-tweets__tweet__link {
-  border-bottom: 3px solid #039BE5;
-  box-shadow: inset 0 -3px 0 #039BE5;
+  border-bottom: 3px solid #039be5;
+  box-shadow: inset 0 -3px 0 #039be5;
   color: #fff;
-  transition: background .15s cubic-bezier(.33,.66,.66,1);
+  transition: background .15s cubic-bezier(.33, .66, .66, 1);
 }
 
 .kiosk-tweets__tweet__retweet__icon {

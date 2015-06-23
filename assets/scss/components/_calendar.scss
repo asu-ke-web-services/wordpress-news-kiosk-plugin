@@ -18,7 +18,7 @@
 
 .kiosk-date-time__calendar-icon {
   background-color: #fff;
-  border: 0.3em solid #818486;
+  border: .3em solid #818486;
   border-radius: .1em;
   font-size: 1em;
   overflow: hidden;
@@ -33,16 +33,16 @@
   }
 
   strong {
-    background-color: #A20B09;
+    background-color: #a20b09;
     color: #fff;
     font-size: 1.3em;
     padding: 3px;
   }
 
   span {
-    color: #2F2F2F;
+    color: #2f2f2f;
     font-size: 2.5em;
-    letter-spacing: -0.05em;
+    letter-spacing: -.05em;
     padding: 0 5px;
   }
 }
@@ -51,6 +51,6 @@
   color: #900;
   font-size: 2em;
   font-weight: bold;
-  letter-spacing: -0.05em;
+  letter-spacing: -.05em;
   margin: 30px 10px 10px;
 }

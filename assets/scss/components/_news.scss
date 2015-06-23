@@ -4,28 +4,29 @@
 
 .kiosk-asu-news {
   @include boxify;
-  background-color: #ffffff;
-  background-image: url("../images/asunews_now_header.jpg"), url("../images/asunews_grass.png");
+  background-color: #fff;
+  background-image: url('../images/asunews_now_header.jpg'), url('../images/asunews_grass.png');
   background-position: 20px 20px, center bottom;
   background-repeat: no-repeat;
   background-size: auto, 100% 20%;
   height: 100%;
   overflow: hidden;
   width: 100%;
+
+  h3 {
+    margin-top: 80px;
+  }
+
+  p {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
 }
 
 .kiosk-asu-news__slider__carousel-indicators {
   visibility: hidden;
-}
-
-.kiosk-asu-news h3 {
-  margin-top: 80px;
-}
-
-.kiosk-asu-news p {
-  margin-bottom: 20px;
-  margin-left: 20px;
-  margin-right: 20px;
 }
 
 .kiosk-asu-news__slider {
