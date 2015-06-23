@@ -12,11 +12,11 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
   var month        = date_string.substring(4, 7);
   var current_date = date_string.substring(8, 10);
   var ampm         = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  hours = hours < 10 ? '0' + hours : hours;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
+  hours            = hours % 12;
+  hours            = hours ? hours : 12; // the hour '0' should be '12'
+  hours            = hours < 10 ? '0' + hours : hours;
+  minutes          = minutes < 10 ? '0' + minutes : minutes;
+  var strTime      = hours + ':' + minutes + ' ' + ampm;
   $(time_selector).html(strTime);
   $(cal_selector_mon).html(month);
   $(cal_selector_date).html(current_date);
@@ -30,18 +30,17 @@ function updateKioskTime(time_selector, cal_selector_mon, cal_selector_date) {
  * For each tweet read the actual time got from server and update the tweet time
  * relative to the current time every 10 seconds interval
  */
-function setRelativeTweetTime(old_time_selector, actual_time_selector) {
+function setRelativeTweetTime(old_time_selector) {
   var $formated_time = $(old_time_selector);
-  $(actual_time_selector).each(function(index, time_tag) {
-    var old_time = $formated_time.eq(index).html();
+  $formated_time.each(function(index, tweet_time) {
+    var old_time   = $(tweet_time).html();    
     if (old_time.length <= 3) {
-      var actual_time = $(time_tag).html();
-      var relative_time = calculateRelativeTime(actual_time);
-      $formated_time.eq(index).html(relative_time);
+      var actual_time   = $(tweet_time).data('actualTime');
+      $(tweet_time).html(calculateRelativeTime(actual_time));
     }
   });
   setTimeout(function() {
-    setRelativeTweetTime(old_time_selector, actual_time_selector);
+    setRelativeTweetTime(old_time_selector);
   }, 10000 /* 10 seconds */ );
 }
 
@@ -57,9 +56,9 @@ function setRelativeTweetTime(old_time_selector, actual_time_selector) {
  */
 
 function calculateRelativeTime(tweet_time) {
-  var time = Math.round(+new Date() / 1000);
+  var time         = Math.round(+new Date() / 1000);
   var elapsed_time = time - tweet_time;
-  var temp = '0h';
+  var temp         = '0h';
   if (elapsed_time < 1) {
     return 'now';
   }
@@ -83,12 +82,12 @@ function calculateRelativeTime(tweet_time) {
 
   for (var i = 0; i < time_conversion.length; i++) {
     var ratio_elapsed_to_unit = elapsed_time / time_conversion[i].secs;
-    var rounded_time = Math.round(ratio_elapsed_to_unit);
-    temp = rounded_time + time_conversion[i].unit;
+    var rounded_time          = Math.round(ratio_elapsed_to_unit);
+    temp                      = rounded_time + time_conversion[i].unit;
     var not_a_fractional_unit = ratio_elapsed_to_unit >= 1;
-    var less_than_one_day = time_conversion[i].unit == 'h' && ratio_elapsed_to_unit < 24;
-    var less_than_one_hour = time_conversion[i].unit == 'm' && ratio_elapsed_to_unit < 60;
-    var less_than_one_minute = time_conversion[i].unit == 's' && ratio_elapsed_to_unit < 60;
+    var less_than_one_day     = time_conversion[i].unit == 'h' && ratio_elapsed_to_unit < 24;
+    var less_than_one_hour    = time_conversion[i].unit == 'm' && ratio_elapsed_to_unit < 60;
+    var less_than_one_minute  = time_conversion[i].unit == 's' && ratio_elapsed_to_unit < 60;
     if (not_a_fractional_unit && (less_than_one_day || less_than_one_hour || less_than_one_minute)) {
       return temp;
     }
@@ -96,7 +95,7 @@ function calculateRelativeTime(tweet_time) {
   return temp;
 }
 
-setRelativeTweetTime('.kiosk-tweets__tweet__details__tweet-time', '.kiosk-tweets__tweet__details__actual-tweet-time');
+setRelativeTweetTime('.kiosk-tweets__tweet__details__tweet-time');
 updateKioskTime('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong', '.kiosk-date-time__calendar-icon span');
 
 /**
@@ -111,11 +110,11 @@ $('.carousel').carousel({
  * replaces tweets block and weather block
  *
  */
-var site_url = $(location).attr("href");
-var tweets_limit = 20;
+var site_url          = $(location).attr("href");
+var tweets_limit      = 20;
 var $weather_location = $('.kiosk-weather__forecast__location').text();
-var tweets_url = site_url + 'kiosk/twitter/limit/' + tweets_limit;
-var weather_url = site_url + 'kiosk/weather/location='+ $weather_location;
+var tweets_url        = site_url + 'kiosk/twitter/limit/' + tweets_limit;
+var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
 setInterval(function() {
   $.ajax({
     url: tweets_url,
@@ -143,7 +142,7 @@ setInterval(function() {
  * the first tweet up. After animation, reset list,
  * and move first tweet to the end of the list
  */
-var $tweet_list = $('#kiosk-tweets__tweets');
+var $tweet_list    = $('#kiosk-tweets__tweets');
 setInterval(function tweetAnimate() {
   var $first_tweet = $tweet_list.find('li:first');
   $tweet_list.find('li').animate({

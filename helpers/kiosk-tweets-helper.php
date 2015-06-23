@@ -89,7 +89,7 @@ HTML;
           </div>
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details__permalink">
-              <div class="kiosk-tweets__tweet__details__tweet-time">%s</div>
+              <div class="kiosk-tweets__tweet__details__tweet-time" data-actual-time="%s">%s</div>
             </div>
             <div class="kiosk-tweets__tweet__details__header">
                <div class="kiosk-tweets__tweet__details__header__full-name">%s</div>
@@ -109,7 +109,7 @@ HTML;
           <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> %s </a>
         </div>        
 HTML;
-    $div_end      = '</ul></div><input type="hidden" id="tweet-actual-time" value="%s" /> ';
+    $div_end = '</ul></div>';
     $tweet_items  = '';
     foreach ( $kiosk_tweet_items as $item ) {
       $retweet  = '';
@@ -123,14 +123,15 @@ HTML;
       $tweet_items .= sprintf(
           $item_template,
           $item['profile_pic'],
+          $item['actual_date_time'],
           $item['relative_date_time'],
           $item['full_name'],
           $item['screen_name'],
           $item['text'],
           $retweet
       );
-      $tweet_actual_time = $item['actual_date_time'];
     }
+
     return $div_start . $tweet_items . $div_end;
   }
   /**
