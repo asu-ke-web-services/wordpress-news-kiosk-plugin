@@ -16,7 +16,7 @@ class Kiosk_Tweets_Helper {
   protected $localsettings    = array();
   protected $limit;
   protected $query_string;
-  protected $user_timeline;
+  protected $handle;
   public $request_not_from_wp = false;
   public function __construct() {
     $this->load_dependencies();
@@ -90,7 +90,6 @@ HTML;
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details__permalink">
               <div class="kiosk-tweets__tweet__details__tweet-time">%s</div>
-              <div class="kiosk-tweets__tweet__details__actual-tweet-time">%s</div>
             </div>
             <div class="kiosk-tweets__tweet__details__header">
                <div class="kiosk-tweets__tweet__details__header__full-name">%s</div>
@@ -109,6 +108,7 @@ HTML;
           Retweeted by
           <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> %s </a>
         </div>
+        <input type="hidden" id="tweet-actual-time" value="%s" /> 
 HTML;
     $div_end      = '</ul></div>';
     $tweet_items  = '';
@@ -125,18 +125,18 @@ HTML;
           $item_template,
           $item['profile_pic'],
           $item['relative_date_time'],
-          $item['actual_date_time'],
           $item['full_name'],
           $item['screen_name'],
           $item['text'],
           $retweet
       );
+      $tweet_actual_time = $item['actual_date_time'];
     }
     return $div_start . $tweet_items . $div_end;
   }
   /**
    * kiosk_tweets( $atts, $content = null )
-   * sets tweets limit, search string, user_timeline  and request to tweets helper
+   * sets tweets limit, search string, handle  and request to tweets helper
    * to get the data and creates html to return
    * @param array
    * @return string
@@ -147,8 +147,8 @@ HTML;
                                 ? $atts['limit'] : '20';
     $this->query_string   = array_key_exists( 'query_string', $atts )
                                 ? $atts['query_string'] : '@asugreen';
-    $this->user_timeline  = array_key_exists( 'user_timeline', $atts )
-                                ? $atts['user_timeline'] : '';
+    $this->handle  = array_key_exists( 'handle', $atts )
+                                ? $atts['handle'] : '';
     $json = $this->get_tweets_json();
     if ( empty( $json ) ){
       if ( $this->request_not_from_wp ){
@@ -188,7 +188,7 @@ HTML;
         $this->localsettings['consumer_secret'],
         $this->query_string,
         $this->limit,
-        $this->user_timeline
+        $this->handle
     );
 
     return $json;

@@ -73,18 +73,18 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
     if ( 0 === $total_post_count ) {
       $list_items = Kiosk_Helper::get_default_images( $default_image );
     }
-    $carousel_slider        = $this->get_events_carousel_slider( $list_items );
-    $kiosk_events_div       = '<div class="kiosk-events">' . $carousel_slider . '</div>';
-    return $kiosk_events_div;
+    $carousel_slider        = $this->get_posts_carousel_slider( $list_items );
+    $kiosk_posts_div       = '<div class="kiosk-posts">' . $carousel_slider . '</div>';
+    return $kiosk_posts_div;
   }
   /**
-   * get_events_carousel_slider( $list_items ) creates template required on carousel
+   * get_posts_carousel_slider( $list_items ) creates template required on carousel
    * and invokes helper function to create carousel slider
    * @param array
    * @return string
    */
-  private function get_events_carousel_slider( $list_items ){
-    $prefix          = 'kiosk-events';
+  private function get_posts_carousel_slider( $list_items ){
+    $prefix          = 'kiosk-posts';
     $carousel_slider = '';
     $layout_template = '<img src="%s" class="img-responsive center-block" alt="%s">';
     if ( count( $list_items ) > 0 ){

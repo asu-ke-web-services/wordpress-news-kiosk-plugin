@@ -25,7 +25,7 @@
   padding: 15px 0px 10px 0px;
 }
 
-.kiosk-ground-floor-layout-events {
+.kiosk-ground-floor-layout-posts {
   height: 1019px;
   width: 100%;
 }
@@ -51,51 +51,6 @@
   right: 0;
   margin: auto;
 }
-
-
-
-
-.kiosk-events__slider__carousel-indicators {
-  visibility: hidden;
-}
-
-.kiosk-events {
-  overflow: hidden;
-  display: block;
-}
-
-.kiosk-events__slider__div {
-  overflow: hidden;
-  display: block;
-  height: 100%;
-}
-
-.kiosk-events__slider__div img {
-  max-height: 100%;
-  max-width: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

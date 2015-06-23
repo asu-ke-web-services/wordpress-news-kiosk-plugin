@@ -123,7 +123,7 @@ Attributes Description:
 
 # The Kiosk Tweets Shortcode
 
-`[kiosk_tweets limit="20" query_string="#sustainabity" user_timeline="asugreen"]`
+`[kiosk_tweets limit="20" query_string="#sustainabity" handle="asugreen"]`
 
 Kiosk Tweets shorcode displays the tweets requested by the given search parameters.
 
@@ -131,7 +131,7 @@ Attributes Description:
 
  * limit attribute is optional and defaults to 20.
 
- * Either one of the query_string or user_timeline attribute is required if both are specified user_timeline overrides the query_string for search and displays tweets from user timeline.
+ * Either one of the query_string or handle attribute is required if both are specified handle overrides the query_string for search and displays tweets from user timeline.
 
 Note:
 

@@ -1,0 +1,30 @@
+/* =====
+   Posts
+   =====*/
+
+.kiosk-posts {
+  display: block;
+  overflow: hidden;  
+}
+
+.kiosk-posts__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-posts__slider__slide{
+  @include center-block;
+  
+  display: block;
+  height: 100%;
+
+  img {
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}

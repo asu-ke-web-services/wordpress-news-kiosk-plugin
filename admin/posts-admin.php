@@ -19,6 +19,16 @@ class Posts_Admin extends Base_Registrar {
   public static $section_post_status         = 'kiosk_post_status';
   public static $kiosk_post_status           = 'any';
   public static $section_post_details        = 'Post Details';
+  public static $post_statuses               = array(
+    'publish'       => 'Published',
+    'future'        => 'Future',
+    'draft'         => 'Draft',
+    'pending'       => 'Pending',
+    'private'       => 'Private',
+    'trash'         => 'Trash',
+    'auto-draft'    =>'Auto-Draft',
+    'inherit'       => 'Inherit',
+  );
 
   protected $plugin_slug;
   protected $version;
@@ -151,13 +161,19 @@ class Posts_Admin extends Base_Registrar {
       Posts_Admin::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
     } elseif ( Posts_Admin::$section_post_status === $args['context'] ) {
       $status = get_option( Posts_Admin::$section_post_status );
-
-      printf(
-          '<input type="text" id="%s" name="%s" value="%s"></input>',
-          Posts_Admin::$section_post_status,
-          Posts_Admin::$section_post_status,
-          $status
-      );
+      $post_status_drop_down = '<select id="%s" name="%s">';
+      $selected = '';
+        foreach ( Posts_Admin::$post_statuses as $key => $value ) {
+          if ( $key == $status ) {
+            $selected = 'selected="selected"';
+          } else {
+            $selected = '';
+          }
+          $post_status_drop_down  .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+        }
+      $post_status_drop_down .= '</select>';
+      printf( $post_status_drop_down, Posts_Admin::$section_post_status, Posts_Admin::$section_post_status );       
+      var_dump($status);
       Posts_Admin::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
     }
   }
@@ -191,9 +207,9 @@ class Posts_Admin extends Base_Registrar {
         <table class="table table-striped table-condensed">
           <thead>
             <tr>
-              <th>Post ID</th>
-              <th>Post Title</th>
               <th>Image</th>
+              <th>Post ID</th>
+              <th>Post Title</th>              
               <th>Kiosk End Date</th>
               <th>Post Status</th>
               <th>Post Date</th>
@@ -208,9 +224,9 @@ class Posts_Admin extends Base_Registrar {
 HTML;
     $row_template = <<<HTML
     <tr>
+    <td><a href="%s" target="_blank"><img src="%s" class='img-thumbnail posts-table__image'></a></td>
     <td>%s</td>
-    <td>%s</td>
-    <td><a href="%s">%s</td>
+    <td>%s</td>    
     <td>%s</td>
     <td>%s</td>
     <td>%s</td>
@@ -221,10 +237,10 @@ HTML;
     foreach ( $list_items as $item ) {
       $row_items .= sprintf(
           $row_template,
+          $item['image'],
+          $item['image'],
           $item['post-id'],
-          $item['post-title'],
-          $item['image'],
-          $item['image'],
+          $item['post-title'],          
           $item['kiosk-end-date'],
           $item['post-status'],
           $item['post-date']
