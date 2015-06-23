@@ -1,6 +1,3 @@
 [submodule ".standards/coding_standards"]
 	path = .standards/coding_standards
 	url = https://github.com/gios-asu/wordpress-coding-standards.git
-[submodule "assets/scss/bootstrap"]
-	path = assets/scss/bootstrap
-	url = git@github.com:twbs/bootstrap-sass.git
