@@ -86,7 +86,7 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
   private function get_posts_carousel_slider( $list_items ){
     $prefix          = 'kiosk-posts';
     $carousel_slider = '';
-    $layout_template = '<img src="%s" class="img-responsive center-block" alt="%s">';
+    $layout_template = '<img src="%s" alt="%s">';
     if ( count( $list_items ) > 0 ){
       $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
     }

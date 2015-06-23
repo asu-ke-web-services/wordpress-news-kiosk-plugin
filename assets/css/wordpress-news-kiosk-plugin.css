@@ -1196,6 +1196,12 @@
   height: 100%;
 }
 .kiosk-gallery__slider__slide img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 100%;
+  height: auto;
   bottom: 0;
   left: 0;
   margin: auto;
@@ -1265,6 +1271,12 @@
   height: 100%;
 }
 .kiosk-posts__slider__slide img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 100%;
+  height: auto;
   bottom: 0;
   left: 0;
   margin: auto;
