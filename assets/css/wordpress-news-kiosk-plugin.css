@@ -1200,7 +1200,7 @@
   border: 3px solid #ffb310;
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
-  height: 100%;
+  height: 360px;
   overflow: hidden;
   vertical-align: middle;
   width: 100%;
@@ -1211,9 +1211,14 @@
 }
 
 .kiosk-gallery__slider {
+  height: 100%;
   overflow: hidden;
   vertical-align: middle;
   width: 100%;
+}
+
+.kiosk-gallery__carousel-inner {
+  height: 100%;
 }
 
 .kiosk-gallery__slider__slide {
@@ -1282,17 +1287,18 @@
 .kiosk-posts {
   display: block;
   overflow: hidden;
+  height: 1019px;
 }
 
 .kiosk-posts__slider__carousel-indicators {
   visibility: hidden;
 }
 
+.kiosk-posts__slider, .kiosk-posts__carousel-inner {
+  height: 100%;
+}
+
 .kiosk-posts__slider__slide {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
   height: 100%;
 }
 .kiosk-posts__slider__slide img {
@@ -1535,12 +1541,12 @@
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 1.6vmin;
-  padding: 20px;
+  padding: 15px;
   width: 100%;
 }
 
 .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
-  padding: 10px;
+  padding: 15px;
 }
 
 .kiosk-third-floor__column--1 {
@@ -1553,7 +1559,6 @@
 
 @media screen and (max-width: 1200px) {
   .kiosk-third-floor__column--1 {
-    padding-bottom: 20px;
     width: 100%;
   }
 

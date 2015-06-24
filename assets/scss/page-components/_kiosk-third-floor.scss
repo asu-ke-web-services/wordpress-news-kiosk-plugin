@@ -1,7 +1,7 @@
 /* ======================
    Kiosk Third Floor Compoments
    ======================*/
-
+ $kiosk-padding: 15px;
 .kiosk-third-floor {
   @extend .flex-container;
 
@@ -9,14 +9,14 @@
   color: #333;
   font-family: $font-family-sans-serif;
   font-size: 1.6vmin;
-  padding: 20px;
+  padding: $kiosk-padding;
   width: 100%;
 }
 
 .kiosk-third-floor__column {
   @extend .flex-column;
 
-  padding: 10px;
+  padding: $kiosk-padding;  
 }
 
 .kiosk-third-floor__column--1 {
@@ -33,7 +33,6 @@
 
 @media screen and (max-width: 1200px) {
   .kiosk-third-floor__column--1 {
-    padding-bottom: 20px;
     width: 100%;
   }
 

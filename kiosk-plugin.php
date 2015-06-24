@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: KIOSK Wordpress Plugin
+Plugin Name: Kiosk Wordpress Plugin
 Plugin URI: http://kiosk.asu.edu
-Description: The KIOSK Wordpress Plugin that handles posts, weather report, time, gallery, tweets, asu news
+Description: The Kiosk Wordpress Plugin that handles posts, weather report, time, gallery, tweets, asu news
 Version: 1.1
 Author: The Global Institute of Sustainability
 License: Copyright 2015
@@ -21,11 +21,13 @@ define( 'KIOSK_WP_VERSION', '1.1' );
 define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
 
 /**
- * load all the dependent files to use kisok plugin
+ * Load all the dependent files to use kiosk plugin
  */
-function load_dependencies(){
+function load_dependencies() {
   // Require all the files for the Kiosk plugin
-  // for unit test this file will not be available so checking if exists in include path
+  /*
+   * For unit test this file will not be available during the travis build time
+   */
   if ( file_exists( stream_resolve_include_path( 'gios-api-v2.0.php' ) )  ) {
     require_once 'gios-api-v2.0.php';
   }
@@ -39,6 +41,7 @@ function load_dependencies(){
   require_once_directory( plugin_dir_path( __FILE__ ) . 'globals' );
   require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
 }
+
 function require_once_directory( $directory ) {
   $files = glob( $directory . '/*.php' );
   foreach ( $files as $file ) {
@@ -48,7 +51,7 @@ function require_once_directory( $directory ) {
 /**
  * Initialize the required classes for kiosk plugin
  */
-function run_loaded_classes(){
+function run_loaded_classes() {
   $version = KIOSK_WP_VERSION;
   // ==========
   // Helpers

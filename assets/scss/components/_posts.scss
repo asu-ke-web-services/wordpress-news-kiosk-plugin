@@ -4,17 +4,19 @@
 
 .kiosk-posts {
   display: block;
-  overflow: hidden;  
+  overflow: hidden;
+  height: 1019px;
 }
 
 .kiosk-posts__slider__carousel-indicators {
   visibility: hidden;
 }
 
+.kiosk-posts__slider,.kiosk-posts__carousel-inner {
+  height: 100%;
+}
+
 .kiosk-posts__slider__slide {
-  @include center-block;
-  
-  display: block;
   height: 100%;
 
   img {

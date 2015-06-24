@@ -53,18 +53,18 @@ class Twitter_Api_Helper {
    * $oauth_access_token_secret,
    * $consumer_key,
    * $consumer_secret,
-   * $query_string,
+   * $query,
    * $limit,
-   * $user_timeline ) Connects to twitter streaming API using given credentails
+   * $handle ) Connects to twitter streaming API using given credentails
    * and creates a json formatted string with all the given limit of tweets
    * This function returns mock up data incase of unit testing.
    * @param string $oauth_access_token
    * @param string $oauth_access_token_secret
    * @param string $consumer_key
    * @param string $consumer_secret
-   * @param string $query_string
+   * @param string $query
    * @param int $limit
-   * @param string $user_timeline
+   * @param string $handle
    * @return string
    *
    */
@@ -73,16 +73,16 @@ class Twitter_Api_Helper {
     $oauth_access_token_secret,
     $consumer_key,
     $consumer_secret,
-    $query_string,
+    $query,
     $limit,
-    $user_timeline ) {
+    $handle ) {
 
-    if ( empty( $user_timeline ) ) {
+    if ( empty( $handle ) ) {
       $twitter_api_url        = 'https://api.twitter.com/1.1/search/tweets.json';
     } else {
       $twitter_api_url        = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-      //Override query_string with user_timeline to get user timeline
-      $query_string           = $user_timeline;
+      //Override query with handle to get user timeline
+      $query           = $handle;
     }
     $oauth                    = array(
      'oauth_consumer_key'     => $consumer_key,
@@ -91,7 +91,7 @@ class Twitter_Api_Helper {
      'oauth_token'            => $oauth_access_token,
      'oauth_timestamp'        => time(),
      'oauth_version'          => '1.0',
-     'q'                      => $query_string,
+     'q'                      => $query,
      'count'                  => $limit,
      'include_rts'            => 1,
     );
@@ -110,7 +110,7 @@ class Twitter_Api_Helper {
     $curl_options             = array(
       CURLOPT_HTTPHEADER      => $header,
       CURLOPT_HEADER          => false,
-      CURLOPT_URL             => $twitter_api_url . '?q=' . rawurlencode( $query_string ) . '&count=' . $limit . '&include_rts=1',
+      CURLOPT_URL             => $twitter_api_url . '?q=' . rawurlencode( $query ) . '&count=' . $limit . '&include_rts=1',
       CURLOPT_RETURNTRANSFER  => true,
       CURLOPT_SSL_VERIFYPEER  => false,
     );

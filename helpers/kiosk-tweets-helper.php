@@ -15,7 +15,7 @@ namespace Kiosk_WP;
 class Kiosk_Tweets_Helper {
   protected $localsettings    = array();
   protected $limit;
-  protected $query_string;
+  protected $query;
   protected $handle;
   public $request_not_from_wp = false;
   public function __construct() {
@@ -145,8 +145,8 @@ HTML;
 
     $this->limit          = array_key_exists( 'limit', $atts )
                                 ? $atts['limit'] : '20';
-    $this->query_string   = array_key_exists( 'query_string', $atts )
-                                ? $atts['query_string'] : '@asugreen';
+    $this->query   = array_key_exists( 'query', $atts )
+                                ? $atts['query'] : '@asugreen';
     $this->handle  = array_key_exists( 'handle', $atts )
                                 ? $atts['handle'] : '';
     $json = $this->get_tweets_json();
@@ -186,7 +186,7 @@ HTML;
         $this->localsettings['oauth_access_token_secret'],
         $this->localsettings['consumer_key'],
         $this->localsettings['consumer_secret'],
-        $this->query_string,
+        $this->query,
         $this->limit,
         $this->handle
     );

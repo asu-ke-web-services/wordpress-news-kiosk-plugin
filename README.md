@@ -121,9 +121,12 @@ Attributes Description:
 
  * location attribute is optional and defaults to Tempe, AZ.
 
+Note: If the location you are trying doesn't work try without comma
+`Example: Use location="paris texas" instead of location ="paris, texas"`
+
 # The Kiosk Tweets Shortcode
 
-`[kiosk_tweets limit="20" query_string="#sustainabity" handle="asugreen"]`
+`[kiosk_tweets limit="20" query="#sustainabity" handle="asugreen"]`
 
 Kiosk Tweets shorcode displays the tweets requested by the given search parameters.
 
@@ -131,11 +134,12 @@ Attributes Description:
 
  * limit attribute is optional and defaults to 20.
 
- * Either one of the query_string or handle attribute is required if both are specified handle overrides the query_string for search and displays tweets from user timeline.
+ * Either one of the query or handle attribute is required if both are specified handle overrides the query for search and displays tweets from user timeline.
 
 Note:
 
  * Make sure to update oauth_access_token, oauth_access_token_secret, consumer_key,consumer_secret with twitter account details in localsettings.php.
+ * handle attribute works only for the current user whose account details are used in localsettings.php file
 
 # The Kiosk Time Shortcode
 
@@ -184,7 +188,8 @@ Displays a logo fecth from the given path.
 
 Attributes Description:
 
-* path attribute is optional and defaults to GIOS logo.
+* path attribute is optional and defaults to GIOS logo which is located in github 
+`assets/images/logo-gios.jpg`.
 
 #Kiosk People Slider Shortcode
 

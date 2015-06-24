@@ -45,8 +45,8 @@ class General_Admin extends Base_Registrar {
 
 
   public function admin_menu() {
-    $page_title = 'KIOSK Plugin';
-    $menu_title = 'KIOSK Details';
+    $page_title = 'Kiosk Plugin';
+    $menu_title = 'Kiosk Details';
     $capability = 'administrator';
     $path = plugin_dir_url( __FILE__ );
     add_menu_page(
