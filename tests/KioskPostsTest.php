@@ -12,10 +12,10 @@ class KioskPostsTest extends WP_UnitTestCase {
   // @codingStandardsIgnoreEnd
 
   /**
-   * To Test Kiosk posts using tags will work only if have tags with names
+   * To Test Kiosk posts using tags... will work only if we have tags with names
    * Kiosk SOS kiosk-sos Kiosk SSS kiosk-sss-lounge
    */
-  function test_kiosk_posts_short_should_have_the_correct_number_of_entries() {
+  function test_kiosk_posts_shortcode_default() {
     $this->assertTrue( shortcode_exists( 'kiosk-posts' ) );
 
     // Test no tags
@@ -25,7 +25,9 @@ class KioskPostsTest extends WP_UnitTestCase {
         $content,
         'Return all posts when no tags provided'
     );
+  }
 
+  function test_kiosk_posts_shortcode_empty_tags() {
     // Test empty tag
     $content = do_shortcode( '[kiosk-posts tags=""]' );
     $this->assertContains(
@@ -33,7 +35,8 @@ class KioskPostsTest extends WP_UnitTestCase {
         $content,
         'Return all posts when empty string passed on tags'
     );
-
+  }
+  function test_kiosk_posts_shortcode_with_single_tag() {
     // Test with tags
     $content = do_shortcode( '[kiosk-posts tags="Kiosk"]' );
     $this->assertContains(
@@ -41,7 +44,9 @@ class KioskPostsTest extends WP_UnitTestCase {
         $content,
         'Return all posts with kisok tags'
     );
+  }
 
+  function test_kiosk_posts_shortcode_with_multiple_tag() {
     // Test with multipe tags
     $content = do_shortcode(
         '[kiosk-posts tags="Kiosk,SOS,SSS,kisok,abc,linux,windows"]'
@@ -51,7 +56,9 @@ class KioskPostsTest extends WP_UnitTestCase {
         $content,
         'Return all posts with kisok Kiosk,SOS,SSS,kisok,abc,linux,windows'
     );
+  }
 
+  function test_kiosk_posts_shortcode_with_wrong_tag() {
     // Test with wrong tags
     $content = do_shortcode( '[kiosk-posts tags="no tags with this name"]' );
     $this->assertNotContains(
@@ -59,7 +66,9 @@ class KioskPostsTest extends WP_UnitTestCase {
         $content,
         'Do not return any posts'
     );
+  }
 
+  function test_kiosk_posts_shortcode_with_wrong_tag_default_images() {
     // Test with wrong tags and default image
     $content = do_shortcode(
         '[kiosk-posts tags="no tags with this name" 

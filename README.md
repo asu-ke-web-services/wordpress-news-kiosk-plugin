@@ -165,7 +165,7 @@ Attributes Description:
 
 # The Kiosk ASU News Shortcode
 
-`[kiosk_asu_news limit='20' feed='153,178,358,40' content_limit='50']`
+`[kiosk_asu_news limit='20' feed_ids='153,178,358,40' content_limit='50']`
 
 Kiosk ASU News Shortcode displays the news from the rss feed.
 
@@ -184,7 +184,7 @@ https://asunews.asu.edu/taxonomy/term/40/all/feed
 
 `[kiosk-logo path='http:://www.example.com/image.png']`
 
-Displays a logo fecth from the given path.
+Displays a logo by fetching from the given path.
 
 Attributes Description:
 

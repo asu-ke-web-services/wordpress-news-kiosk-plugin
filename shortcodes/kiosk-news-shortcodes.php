@@ -40,7 +40,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     $this->add_shortcode( 'kiosk-asu-news', $this, 'kiosk_asu_news' );
   }
   /**
-   * [kiosk_asu_news limit='20' feed='153,178,358,40' content_limit='50']
+   * [kiosk_asu_news limit='20' feed_ids='153,178,358,40' content_limit='50']
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
@@ -51,13 +51,13 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
   public function kiosk_asu_news( $atts, $content = null ) {
     $atts                  = shortcode_atts(
         array(
-          'feed'           => '153,178,358,40',
+          'feed_ids'           => '153,178,358,40',
           'limit'          => '20',
           'content_limit'  => '50',
         ),
         $atts
     );
-    $feed                  = explode( ',', $atts['feed'] );
+    $feed                  = explode( ',', $atts['feed_ids'] );
     for ( $i = 0 ; $i < count( $feed ); $i++ ) {
       $feed_urls_array[]   = "https://asunews.asu.edu/taxonomy/term/$feed[$i]/all/feed";
     }

@@ -1,10 +1,23 @@
 <?php
 
 class KioskWeatherTest extends WP_UnitTestCase {
+  private $stub = null;
   // @codingStandardsIgnoreStart
   static function setUpBeforeClass() {
     WP_UnitTestCase::setUpBeforeClass();
 
+  }
+  function setUp() {
+    // Mockup data
+    $this->stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Weather_Helper',
+        array( 'get_weather_json' )
+    );
+
+    $this->stub->expects( $this->any() )
+         ->method( 'get_weather_json' )
+         ->with( $this->equalTo( 'tempe, az' ) )
+         ->will( $this->returnValue( $this->return_unit_test_data() ) );
   }
   // @codingStandardsIgnoreEnd
 
@@ -15,18 +28,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
   function test_kiosk_weather_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-weather' ) );
 
-    // Test with mockup data
-    $stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Weather_Helper',
-        array( 'get_weather_json' )
-    );
-
-    $stub->expects( $this->any() )
-         ->method( 'get_weather_json' )
-		     ->with( $this->equalTo( 'tempe, az' ) )
-         ->will( $this->returnValue( $this->return_unit_test_data() ) );
-
-    $content = $stub->kiosk_weather( 'tempe, az' );
+    $content = $this->stub->kiosk_weather( 'tempe, az' );
     $this->assertContains(
         'kiosk-weather__current',
         $content,
