@@ -63,16 +63,23 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     }
     $limit                 = $atts['limit'];
     $content_limit         = $atts['content_limit'];
-    $items                 = $this->feed_helper->get_feed_data( $feed_urls_array );
+    $items                 = $this->feed_helper->get_feed_data(
+        $feed_urls_array
+    );
     // sorts the news ordered by date using helper function in Feed_Helper class
     usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
     // remove the duplicate items based on title
-    $items  = Feed_Helper::remove_duplicate_rss_items( $items );
+    $items              = Feed_Helper::remove_duplicate_rss_items( $items );
     // extract the required content from the feed
-    $list_items            = Feed_Helper::extract_news_from_rss_feed( $limit, $content_limit, $items );
-    // get the carousel slider
-    $carousel_slider    = $this->get_carousel_slider( $list_items );
-    $kiosk_asu_news_div = '<div class="kiosk-asu-news">' . $carousel_slider . '</div>';
+    if ( count( $items ) > 0 ) {
+      $list_items         = Feed_Helper::extract_news_from_rss_feed(
+          $limit, $content_limit, $items
+      );
+      // get the carousel slider
+      $carousel_slider    = $this->get_carousel_slider( $list_items );
+    }
+    $kiosk_asu_news_div = '<div class="kiosk-asu-news">'
+        . $carousel_slider . '</div>';
     return $kiosk_asu_news_div;
   }
   /**
@@ -81,7 +88,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    * @param array $list_items
    * @return string
    */
-  private function get_carousel_slider( $list_items ){
+  private function get_carousel_slider( $list_items ) {
     $carousel_slider = '';
     $prefix = 'kiosk-asu-news';
     $layout_template = <<<HTML
@@ -95,8 +102,10 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
         <p>%s</p>
       </div>
 HTML;
-    if ( count( $list_items ) > 0 ){
-      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
+    if ( count( $list_items ) > 0 ) {
+      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+          $prefix, $layout_template, $list_items
+      );
     }
     return $carousel_slider;
   }

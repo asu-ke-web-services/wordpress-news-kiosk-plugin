@@ -14,7 +14,10 @@ class KioskNewsTest extends WP_UnitTestCase {
   function test_kiosk_news_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     // Test with mockup data
-    $feed_stub = $this->getMock( 'Kiosk_WP\Feed_Helper', array( 'simple_pie_feed_fetch' ) );
+    $feed_stub = $this->getMock(
+        'Kiosk_WP\Feed_Helper',
+        array( 'simple_pie_feed_fetch' )
+    );
     $feed_stub->expects( $this->any() )
          ->method( 'simple_pie_feed_fetch' )
          ->with( $this->stringContains( 'asunews' ) )
@@ -26,37 +29,65 @@ class KioskNewsTest extends WP_UnitTestCase {
     // Test no tags by default limit 20 news items if found
     $content = $stub->kiosk_asu_news( '' );
 
-    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
+    $this->assertContains(
+        'kiosk-asu-news__slider__slide',
+        $content,
+        'Returns asu news items'
+    );
 
     // Test limit tag
     //$content = do_shortcode( '[kiosk-asu-news limit="20"]' );
     $content = $stub->kiosk_asu_news( array( 'limit' => 20 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
+    $this->assertContains(
+        'kiosk-asu-news__slider__slide',
+        $content,
+        'Returns asu news items'
+    );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 news items' );
+    $this->assertLessThanOrEqual(
+        20,
+        $numberOfEvents,
+        'There should be <= 20 news items'
+    );
 
     // Test with content_limit tag
-    //$content = do_shortcode( '[kiosk-asu-news content_limit="10"]' );
     $content = $stub->kiosk_asu_news( array( 'limit' => 10 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
+    $this->assertContains(
+        'kiosk-asu-news__slider__slide',
+        $content,
+        'Returns asu news items'
+    );
 
     // Test with feed tag
-    //$content = do_shortcode( '[kiosk-asu-news feed="153,40,358"]' );
     $content = $stub->kiosk_asu_news( array( 'feed' => '153,40,358' ) );
-    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
+    $this->assertContains(
+        'kiosk-asu-news__slider__slide',
+        $content,
+        'Returns asu news items'
+    );
 
     // Test with multipe tags
-    //$content = do_shortcode( '[kiosk-asu-news feed="153,40,358" limit="5" ]' );
-    $content = $stub->kiosk_asu_news( array( 'feed' => '153,40,358', 'limit' => 5 ) );
-    $this->assertContains( 'kiosk-asu-news__slider__slide', $content, 'Returns asu news items' );
+    $content = $stub->kiosk_asu_news(
+        array( 'feed' => '153,40,358', 'limit' => 5 )
+    );
+    $this->assertContains(
+        'kiosk-asu-news__slider__slide',
+        $content,
+        'Returns asu news items'
+    );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 news items' );
+    $this->assertLessThanOrEqual(
+        5,
+        $numberOfEvents,
+        'There should be <= 5 news items'
+    );
   }
+
   /**
-  * return_unit_test_data() creates a mock up data to be used as feed data
+  * Creates a mock up data to be used as feed data
   * @return SimplePie
   */
-  function return_unit_test_data(){
+  function return_unit_test_data() {
     $sample_json = <<<XML
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xml:base="https://asunews.asu.edu"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">

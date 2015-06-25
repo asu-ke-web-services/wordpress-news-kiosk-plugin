@@ -47,7 +47,9 @@ class Kiosk_Tweets_Page extends Base_Registrar {
     //add_rewrite_tag( '%page_type%' , '([^&]+)' );
     add_rewrite_tag( '%' . Kiosk_Tweets_Page::$page_name . '%' , '([^&]+)' );
     add_rewrite_tag( '%' . Kiosk_Tweets_Page::$param_slug . '%' , '([^&]+)' );
-    add_rewrite_tag( '%' . Kiosk_Tweets_Page::$extra_params[0] . '%' , '([^&]+)' );
+    add_rewrite_tag( '%' . Kiosk_Tweets_Page::$extra_params[0]
+        . '%' , '([^&]+)'
+    );
 
     /*
      * Add the rewrite rules
@@ -55,9 +57,12 @@ class Kiosk_Tweets_Page extends Base_Registrar {
     // ======================================================
     // Rule: /kiosk/twitter/limit/{20} => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
     // ======================================================
-    $from_url = Kiosk_Tweets_Page::$page_name . '/' . Kiosk_Tweets_Page::$param_slug . '/'. Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]+)?$';
+    $from_url = Kiosk_Tweets_Page::$page_name . '/'
+        . Kiosk_Tweets_Page::$param_slug . '/'
+        . Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]+)?$';
     $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
-    $to_url  .= '/views/kiosk-tweets-presenter.php' . '?' . Kiosk_Tweets_Page::$extra_params[0] . '=$1';
+    $to_url  .= '/views/kiosk-tweets-presenter.php'
+        . '?' . Kiosk_Tweets_Page::$extra_params[0] . '=$1';
 
     add_rewrite_rule( $from_url, $to_url, 'top' );
 

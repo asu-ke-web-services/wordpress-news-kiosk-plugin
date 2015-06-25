@@ -44,8 +44,8 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with slider from rss feed to display as slider
-   * To add feed from other urls update $feed_urls_array we can improve by accepting associative array
-   *
+   * To add feed from other urls update $feed_urls_array we can improve by
+   * accepting associative array
    */
   public function kiosk_slider( $atts, $content = null ) {
     $total_feed_count   = 0;
@@ -53,7 +53,9 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
         array(
           'limit'       => '20',
           'feed_urls'   => array(
-                            'https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200',
+                            'https://api.flickr.com/services/feeds
+                            /photos_public.gne?id=55424394@N03
+                            &lang=en-us&format=rss_200',
                           )
         ),
         $atts
@@ -66,13 +68,17 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $list_items         = array();
     $items              = $this->feed_helper->get_feed_data( $feed_urls_array );
     usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
-    $list_items         = Feed_Helper::extract_images_from_flicker_feed( $items, $limit );
+    $list_items         = Feed_Helper::extract_images_from_flickr_feed( $items, $limit );
     $carousel_slider    = $this->get_gallery_carousel_slider( $list_items );
     $kiosk_slider_div   = '<div class="kiosk-gallery">' . $carousel_slider . '</div>';
     return $kiosk_slider_div;
   }
-
-  private function get_gallery_carousel_slider( $list_items ){
+  /**
+   * Creates required template and invokes helper function to create carousel
+   * @param array
+   * @return string
+   */
+  private function get_gallery_carousel_slider( $list_items ) {
     $prefix          = 'kiosk-gallery';
     $carousel_slider = '';
     $layout_template = <<<HTML
@@ -81,8 +87,12 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
        <h3><strong>%s</strong></h3>
       </div>
 HTML;
-    if ( count( $list_items ) > 0 ){
-      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
+    if ( count( $list_items ) > 0 ) {
+      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+          $prefix,
+          $layout_template,
+          $list_items
+      );
     }
     return $carousel_slider;
   }

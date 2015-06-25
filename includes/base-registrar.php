@@ -71,15 +71,24 @@ class Base_Registrar {
 
   public function run() {
     foreach ( $this->filters as $hook ) {
-      add_filter( $hook['hook'], array( $hook['component'], $hook['callback'] ) );
+      add_filter(
+          $hook['hook'],
+          array( $hook['component'], $hook['callback'] )
+      );
     }
 
     foreach ( $this->actions as $hook ) {
-      add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'] );
+      add_action(
+          $hook['hook'],
+          array( $hook['component'], $hook['callback'] ), $hook['priority']
+      );
     }
 
     foreach ( $this->shortcodes as $hook ) {
-      add_shortcode( $hook['hook'], array( $hook['component'], $hook['callback'] ) );
+      add_shortcode(
+          $hook['hook'],
+          array( $hook['component'], $hook['callback'] )
+      );
     }
   }
 }

@@ -17,11 +17,11 @@ class Kiosk_Weather_Helper {
       $this->request_not_from_wp = true ;
     }
   }
-   /**
-  * kiosk_parse_weather( $json_weather ) takes a json formatted string and retrieves the current and forecast data
-  * and creates a div block for the current and next 3 days forecast
-  * @return string
-  */
+  /**
+   * Retrieves the current and forecast weather data
+   * and creates a div block for the current and next 3 days forecast
+   * @return string HTML markup
+   */
   function kiosk_parse_weather( $json_weather ) {
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item'>
@@ -30,14 +30,16 @@ class Kiosk_Weather_Helper {
         <div class="kiosk-weather__forecast__item__text"><b>%s° / %s°</b></div>
       </div>
 HTML;
-    $yahoo_weather_helper             = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
-    $weather_details                  = $yahoo_weather_helper->extract_weather_data( $json_weather );
-    $location_title                   = $weather_details['location_title'];
+    $yahoo_weather_helper    = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
+    $weather_details         = $yahoo_weather_helper->extract_weather_data(
+        $json_weather
+    );
+    $location_title          = $weather_details['location_title'];
 
-    $forecast_weather_block           = '';
-    $forecast                         = $weather_details['forecast'];
-    for ( $i = 0; $i < 3; $i++ ){
-      $forecast_weather_block        .= sprintf(
+    $forecast_weather_block  = '';
+    $forecast                = $weather_details['forecast'];
+    for ( $i = 0; $i < 3; $i++ ) {
+      $forecast_weather_block .= sprintf(
           $forecast_weather_block_template,
           $forecast[ $i ]['date'],
           $forecast[ $i ]['image'],
@@ -72,7 +74,13 @@ HTML;
         $forecast_weather_block
     );
   }
-
+  /**
+   * Create a weather widget
+   * If any error occurs while pulling data will return empty string when
+   * invoked using wordpress rewrite urls else returns the HTML markup.
+   * @param string $location
+   * @param string HTML markup
+   */
   public function kiosk_weather( $location ) {
 
     $json = $this->get_weather_json( $location );
@@ -80,30 +88,38 @@ HTML;
       if ( $this->request_not_from_wp ) {
         $kiosk_weather_div = '';
       } else {
-        $kiosk_weather_div = '<div class="kiosk-weather">Weather API Errored</div>';
+        $kiosk_weather_div = '<div class="kiosk-weather">'
+            . 'Weather API Errored</div>';
       }
     } else {
       // Convert JSON to PHP array
       $json         = Json_Decode_Helper::remove_unwanted_chars( $json );
       $json_weather = json_decode( $json, true );
       if ( $json_weather != null && json_last_error() === JSON_ERROR_NONE ) {
-        $kiosk_weather_div = '<div class="kiosk-weather">' . $this->kiosk_parse_weather( $json_weather ) . '</div>';
+        $kiosk_weather_div = '<div class="kiosk-weather">'
+          . $this->kiosk_parse_weather( $json_weather )
+          . '</div>';
       } else {
         $kiosk_weather_div = '';
-        error_log( basename( __FILE__ ) .' Weather API error: JSON ' . json_last_error_msg() . "\n" );
+        error_log( basename( __FILE__ )
+            .' Weather API error: JSON '
+            . json_last_error_msg()
+            . "\n"
+        );
       }
     }
     return $kiosk_weather_div;
   }
   /**
-   * get_weather_json( $location ) is being used as part of unit test case to mock up test data
-   * so it is written separate
+   * Invoked the yahoo weather helper class method to get weather info
    * @param string
    * @return json
    */
   public function get_weather_json( $location ) {
     $yahoo_weather_helper = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
-    $json                 = $yahoo_weather_helper->get_weather_json( $location );
+    $json                 = $yahoo_weather_helper->get_weather_json(
+        $location
+    );
     return $json;
   }
 }

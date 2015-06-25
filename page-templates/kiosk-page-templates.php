@@ -21,7 +21,7 @@ class Kiosk_Page_Templates extends Base_Registrar {
   public function __construct() {
     $this->plugin_slug = 'kiosk-page-template';
     $this->version = '0.1';
-    $this->templates = array( 'kiosk-default-template.php' => 'KIOSK' );
+    $this->templates = array( 'kiosk-default-template.php' => 'Kiosk' );
 
     $this->load_dependencies();
     $this->define_hooks();
@@ -32,7 +32,11 @@ class Kiosk_Page_Templates extends Base_Registrar {
   }
 
   public function define_hooks() {
-    $this->add_filter( 'page_attributes_dropdown_pages_args', $this, 'page_attributes_dropdown_pages_args' );
+    $this->add_filter(
+        'page_attributes_dropdown_pages_args',
+        $this,
+        'page_attributes_dropdown_pages_args'
+    );
     $this->add_filter( 'wp_insert_post_data', $this, 'wp_insert_post_data' );
     $this->add_filter( 'template_include', $this, 'template_include' );
   }
@@ -51,7 +55,11 @@ class Kiosk_Page_Templates extends Base_Registrar {
       return $template;
     }
 
-    if ( ! isset( $this->templates[ get_post_meta( $post->ID, '_wp_page_template', true ) ] ) ) {
+    if ( ! isset( $this->templates[ get_post_meta(
+        $post->ID,
+        '_wp_page_template',
+        true
+    ) ] ) ) {
       return $template;
     }
 
@@ -59,7 +67,8 @@ class Kiosk_Page_Templates extends Base_Registrar {
       return $template;
     }
 
-    $file = plugin_dir_path( __FILE__ ) . 'views/' . get_post_meta( $post->ID, '_wp_page_template', true );
+    $file = plugin_dir_path( __FILE__ ) . 'views/'
+        . get_post_meta( $post->ID, '_wp_page_template', true );
 
     if ( file_exists( $file ) ) {
       return $file;
@@ -75,7 +84,9 @@ class Kiosk_Page_Templates extends Base_Registrar {
    */
   protected function register_project_templates () {
     // Create the key used for the themes cache
-    $cache_key = 'page_templates-' . md5( get_theme_root() . '/' . get_stylesheet() );
+    $cache_key = 'page_templates-' . md5(
+        get_theme_root() . '/' . get_stylesheet()
+    );
 
     // Retrieve the cache list
     // If it doesn't exist, or it's emty prepare an array

@@ -36,17 +36,20 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_posts tags="t,a,g,s" default_image="http://www.example1.jpg,http://www.example2.jpg,http://www.example3.jpg"]
-   *
+   * [kiosk_posts tags="t,a,g,s" default_image="http://www.example1.jpg,
+   * http://www.example2.jpg,http://www.example3.jpg"]
    * @param $atts array
    * Generates a <div> tag with images from post to display as slider
-   * Query the featured images which are attachments by thumbnail ID by passing post ID.
-   * Store current post item  and parse it the check if post has any images in the body.
+   * Query the featured images which are attachments by thumbnail ID by
+   * passing post ID.
+   * Store current post item  and parse it the check if post has any
+   * images in the body.
    * Regex string to search for images
    * Run preg_match_all to grab all the images and save the results in $pics
    * Query any custom fields for page_feature_image
    * Query any custom fields for kiosk-end-date
-   * Show posts which are having either image as attachment or images in body of post
+   * Show posts which are having either image as attachment or images in
+   * body of post
    * or image with custom field and not expired
    */
   public function kiosk_posts( $atts, $content = null ) {
@@ -68,27 +71,33 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
         'tag'               => $tags,
         'post_status'       => 'publish',
     );
-    $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
+    $list_items             = Kiosk_Helper::get_posts_items_from_db(
+        $query_post_options
+    );
     $total_post_count       = count( $list_items );
     if ( 0 === $total_post_count ) {
       $list_items = Kiosk_Helper::get_default_images( $default_image );
     }
     $carousel_slider        = $this->get_posts_carousel_slider( $list_items );
-    $kiosk_posts_div       = '<div class="kiosk-posts">' . $carousel_slider . '</div>';
+    $kiosk_posts_div       = '<div class="kiosk-posts">'
+        . $carousel_slider . '</div>';
     return $kiosk_posts_div;
   }
   /**
-   * get_posts_carousel_slider( $list_items ) creates template required on carousel
-   * and invokes helper function to create carousel slider
+   * Creates required template and invokes helper function to create carousel
    * @param array
    * @return string
    */
-  private function get_posts_carousel_slider( $list_items ){
+  private function get_posts_carousel_slider( $list_items ) {
     $prefix          = 'kiosk-posts';
     $carousel_slider = '';
     $layout_template = '<img src="%s" alt="%s">';
-    if ( count( $list_items ) > 0 ){
-      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
+    if ( count( $list_items ) > 0 ) {
+      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+          $prefix,
+          $layout_template,
+          $list_items
+      );
     }
     return $carousel_slider;
   }

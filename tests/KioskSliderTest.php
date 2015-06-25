@@ -15,14 +15,12 @@ class KioskSliderTest extends WP_UnitTestCase {
   function test_kiosk_slider_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-slider' ) );
     // Test with mockup data
-    // $stub = $this->getMock( 'Kiosk_WP\Kiosk_Slider_Shortcodes', array( 'kiosk_slider_fetch_feed' ) );
-    // $stub->expects( $this->any() )
-    //      ->method( 'kiosk_slider_fetch_feed' )
-    //      ->will( $this->returnValue( $this->return_unit_test_data() ) );
-
-    $feed_stub = $this->getMock( 'Kiosk_WP\Feed_Helper', array( 'simple_pie_feed_fetch' ) );
+    $feed_stub = $this->getMock(
+        'Kiosk_WP\Feed_Helper',
+        array( 'fetch_feed' )
+    );
     $feed_stub->expects( $this->any() )
-         ->method( 'simple_pie_feed_fetch' )
+         ->method( 'fetch_feed' )
          ->with( $this->stringContains( 'flickr' ) )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
     $stub = $this->getMockBuilder( 'Kiosk_WP\Kiosk_Slider_Shortcodes' )
@@ -32,25 +30,46 @@ class KioskSliderTest extends WP_UnitTestCase {
 
     // Test no tags by default limit 20 image items if found
     $content = $stub->kiosk_slider( '' );
-    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
+    $this->assertContains(
+        'kiosk-gallery__slider__slide',
+        $content,
+        'Should return images with div tag'
+    );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 20 ) );
-    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
+    $this->assertContains(
+        'kiosk-gallery__slider__slide',
+        $content,
+        'Should return images with div tag'
+    );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 20, $numberOfEvents, 'There should be <= 20 image items' );
+    $this->assertLessThanOrEqual(
+        20,
+        $numberOfEvents,
+        'There should be <= 20 image items'
+    );
 
     // Test limit attribute
     $content = $stub->kiosk_slider( array( 'limit' => 5 ) );
-    $this->assertContains( 'kiosk-gallery__slider__slide', $content, 'Should return images with div tag' );
+    $this->assertContains(
+        'kiosk-gallery__slider__slide',
+        $content,
+        'Should return images with div tag'
+    );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertLessThanOrEqual( 5, $numberOfEvents, 'There should be <= 5 image items' );
+    $this->assertLessThanOrEqual(
+        5,
+        $numberOfEvents,
+        'There should be <= 5 image items'
+    );
   }
+
   /**
-    * return_unit_test_data() creates a mock up data to be used as feed data
+    * Creates a mock up data to be used as feed data
     * @return SimplePie
     */
-  function return_unit_test_data(){
+  function return_unit_test_data() {
     $sample_json = <<<XML
 <?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:creativeCommons="http://cyber.law.harvard.edu/rss/creativeCommonsRssModule.html" xmlns:flickr="urn:flickr:user" ><channel><title>Uploads from Global Institute of Sustainability</title><link>https://www.flickr.com/photos/asu-gios/</link><description></description><pubDate>Thu, 09 Oct 2014 11:51:16 -0700</pubDate><lastBuildDate>Thu, 09 Oct 2014 11:51:16 -0700</lastBuildDate><generator>https://www.flickr.com/</generator><image><url>https://farm2.staticflickr.com/1426/buddyicons/55424394@N03.jpg?1289424405#55424394@N03</url><title>Uploads from Global Institute of Sustainability</title><link>https://www.flickr.com/photos/asu-gios/</link></image><item><title>Fall Welcome 2014</title><link>https://www.flickr.com/photos/asu-gios/15489018322/</link><description>     &lt;p&gt;&lt;a href=&quot;https://www.flickr.com/people/asu-gios/&quot;&gt;Global Institute of Sustainability&lt;/a&gt; posted a photo:&lt;/p&gt;
   

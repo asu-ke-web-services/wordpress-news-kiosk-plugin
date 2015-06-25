@@ -9,8 +9,8 @@ namespace Kiosk_WP;
 
 class Twitter_Api_Helper {
   /**
+   * Creates encoded url with given parameters
    * We need to use ksort as this uses Hashing for the oauth_signature_method
-   * create_base_url( $baseURI, $method, $params ) helper to create encoded url with given parameters
    * @param string $baseURI Twitter API url
    * @param string $method 'GET' or 'POST'
    * @param array $params authentication oauth parameters for twitter account
@@ -25,20 +25,24 @@ class Twitter_Api_Helper {
    *                      - include_rts
    * @return string
    */
-  private function create_base_url( $baseURI, $method, $params ) {
+  public static function create_base_url( $baseURI, $method, $params ) {
     $encode_params      = array();
     ksort( $params );
-    foreach ( $params as $key => $value ){
+    foreach ( $params as $key => $value ) {
       $encode_params[]  = "$key=" . rawurlencode( $value );
     }
-    return $method . '&' . rawurlencode( $baseURI ) . '&' . rawurlencode( implode( '&', $encode_params ) );
+    return $method
+        . '&'
+        . rawurlencode( $baseURI )
+        . '&'
+        . rawurlencode( implode( '&', $encode_params ) );
   }
 
   /**
-   * create_request_header( $oauth ) creates a Header for authentication to invoke twitter streaming API
+   * Creates a Header for authentication to invoke twitter streaming API
    * @return string
    */
-  private function create_request_header( $oauth ) {
+  public static function create_request_header( $oauth ) {
     $encode_header  = 'Authorization: OAuth ';
     $values         = array();
     foreach ( $oauth as $key => $value ) {
@@ -47,15 +51,9 @@ class Twitter_Api_Helper {
     $encode_header .= implode( ', ', $values );
     return $encode_header;
   }
+
   /**
-   * tweets_json(
-   * $oauth_access_token,
-   * $oauth_access_token_secret,
-   * $consumer_key,
-   * $consumer_secret,
-   * $query,
-   * $limit,
-   * $handle ) Connects to twitter streaming API using given credentails
+   * Connects to twitter streaming API using given credentails
    * and creates a json formatted string with all the given limit of tweets
    * This function returns mock up data incase of unit testing.
    * @param string $oauth_access_token
@@ -68,7 +66,7 @@ class Twitter_Api_Helper {
    * @return string
    *
    */
-  public function tweets_json(
+  public static function tweets_json(
     $oauth_access_token,
     $oauth_access_token_secret,
     $consumer_key,
@@ -78,9 +76,10 @@ class Twitter_Api_Helper {
     $handle ) {
 
     if ( empty( $handle ) ) {
-      $twitter_api_url        = 'https://api.twitter.com/1.1/search/tweets.json';
+      $twitter_api_url = 'https://api.twitter.com/1.1/search/tweets.json';
     } else {
-      $twitter_api_url        = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
+      $twitter_api_url = 'https://api.twitter.com/1.1/'
+          . 'statuses/user_timeline.json';
       //Override query with handle to get user timeline
       $query           = $handle;
     }
@@ -96,14 +95,22 @@ class Twitter_Api_Helper {
      'include_rts'            => 1,
     );
 
-    $base_url                 = $this->create_base_url( $twitter_api_url, 'GET', $oauth );
-    $composite_key            = rawurlencode( $consumer_secret ) . '&' . rawurlencode( $oauth_access_token_secret );
-    $oauth_signature          = base64_encode( hash_hmac( 'sha1', $base_url, $composite_key, true ) );
+    $base_url                 = self::create_base_url(
+        $twitter_api_url,
+        'GET',
+        $oauth
+    );
+    $composite_key            = rawurlencode( $consumer_secret )
+        . '&'
+        . rawurlencode( $oauth_access_token_secret );
+    $oauth_signature          = base64_encode(
+        hash_hmac( 'sha1', $base_url, $composite_key, true )
+    );
     $oauth['oauth_signature'] = $oauth_signature;
 
     // Make Requests
     $header                   = array(
-      $this->create_request_header( $oauth ),
+      self::create_request_header( $oauth ),
       'Content-Type: application/json',
       'Expect:',
     );
@@ -119,14 +126,19 @@ class Twitter_Api_Helper {
     $json                     = curl_exec( $feed );
     if ( curl_error( $feed ) ) {
       $json   = '';
-      error_log( basename( __FILE__ ) .' Twitter API error: CURL ' . curl_strerror( curl_errno( $feed ) ) . "\n" );
+      error_log(
+          basename( __FILE__ )
+          . ' Twitter API error: CURL '
+          . curl_strerror( curl_errno( $feed ) )
+          . "\n"
+      );
     }
     curl_close( $feed );
     return $json;
   }
+
   /**
-   * time_short_form($tweet_time) Helper function to
-   * update tweet time relative to current time in case of
+   * Updates tweet time relative to current time in case of
    * less than 24 hours as hours ago
    * or less than 1 hour as minutes ago
    * or less than 1 minute as seconds ago
@@ -134,7 +146,7 @@ class Twitter_Api_Helper {
    * @see kiosk-helper.js calculateRelativeTime()
    * @return string
    */
-  public function time_short_form( $tweet_time ) {
+  public static function time_short_form( $tweet_time ) {
     $elapsed_time = time() - strtotime( $tweet_time );
     if ( $elapsed_time < 1 ) {
         return 'now';
@@ -152,63 +164,102 @@ class Twitter_Api_Helper {
       $less_than_one_day      = 'h' == $unit && $elapsed_time_to_unit < 24;
       $less_than_one_hour     = 'm' == $unit && $elapsed_time_to_unit < 60;
       $less_than_one_minute   = 's' == $unit && $elapsed_time_to_unit < 60;
-      if ( $not_fractional_unit && ( $less_than_one_day || $less_than_one_hour || $less_than_one_minute ) ) {
+      if ( $not_fractional_unit
+          && ( $less_than_one_day
+                || $less_than_one_hour
+                || $less_than_one_minute
+            )
+      ) {
           $rounded_time       = round( $elapsed_time_to_unit );
           return $rounded_time . $unit;
       }
     }
     return date_format( date_create( $tweet_time ),'d M' );
   }
+
   /**
-   * convert_url_text_to_hyperlink( $tweet_text )
+   * Converts any URL in text to hyperlink
    * @param string
    * @return string
    */
-  public function convert_url_text_to_hyperlink( $tweet_text, $classes ) {
-    //http://www.dynamicdrive.com/forums/archive/index.php/t-64387.html for regex url
-    $regex_url    = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/';
+  public static function convert_url_text_to_hyperlink(
+      $tweet_text,
+      $classes
+  ) {
+    // http://www.dynamicdrive.com/forums/archive/index.php/t-64387.html for
+    // regex url
+    $regex_url    = '/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]'
+        . '+\.[a-zA-Z]{2,3}(\/\S*)?/';
         // make links link to URL
     if ( preg_match( $regex_url, $tweet_text, $url ) ) {
       // make the urls hyper links
-      $tweet_text = preg_replace( $regex_url, "<a class=\"tweet-text-hyperlink $classes\" href='{$url[0]}'>{$url[0]}</a> ", $tweet_text );
+      $tweet_text = preg_replace(
+          $regex_url,
+          "<a class=\"tweet-text-hyperlink $classes\""
+          . " href='{$url[0]}'>{$url[0]}</a> ",
+          $tweet_text
+      );
     }
     return $tweet_text;
   }
+
   /**
-   * convert_hash_text_to_hyperlink( $tweet_text )
+   * Converts any hash tag text in text to hyperlink
    * @param string
    * @return string
    */
-  public function convert_hash_text_to_hyperlink( $tweet_text, $classes ) {
+  public static function convert_hash_text_to_hyperlink(
+      $tweet_text,
+      $classes
+  ) {
     $regex_hash     = '/#([a-z_0-9]+)/i';
     if ( preg_match( $regex_hash, $tweet_text, $hash ) ) {
       // make the hash tags hyper links
-      $tweet_text   = preg_replace( $regex_hash, "<a class=\"tweet-text-hyperlink  $classes \" href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}</a> ", $tweet_text );
+      $tweet_text   = preg_replace(
+          $regex_hash,
+          "<a class=\"tweet-text-hyperlink  $classes \""
+          . " href='https://twitter.com/search?q={$hash[0]}' >{$hash[0]}"
+          . '</a>',
+          $tweet_text
+      );
       // swap out the # in the URL to make %23
-      $tweet_text   = str_replace( '/search?q=#', '/search?q=%23', $tweet_text );
+      $tweet_text   = str_replace(
+          '/search?q=#',
+          '/search?q=%23',
+          $tweet_text
+      );
     }
     return $tweet_text;
   }
+
   /**
-   * convert_twitter_handle_text_to_hyperlink( $tweet_text )
+   * Converts any twitter handle text in text to hyperlink
    * @param string
    * @return string
    */
-  public function convert_twitter_handle_text_to_hyperlink( $tweet_text, $classes ) {
+  public static function convert_twitter_handle_text_to_hyperlink(
+      $tweet_text,
+      $classes
+  ) {
     $regex_user   = '/@([a-z_0-9]+)/i';
     if ( preg_match( $regex_user, $tweet_text, $user ) ) {
-      $tweet_text = preg_replace( $regex_user , "<a class=\"tweet-text-hyperlink $classes \" href='http://twitter.com/$1'>$0</a >", $tweet_text );
+      $tweet_text = preg_replace(
+          $regex_user,
+          "<a class=\"tweet-text-hyperlink $classes \""
+          . " href='http://twitter.com/$1'>$0</a >",
+          $tweet_text
+      );
     }
     return $tweet_text;
   }
   /**
-   * extract_tweet_details( $tweet, $tweets_search_request ) creates a default tweet details tempalate
+   * Extracts the tweet details and return thems
    * @param JSON object
-   * @return arraywith profile_pic relative_date_time actual_date_time full_name screen_name
-   * text retweet_link retweet_by
+   * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
+   * screen_name,text retweet_link retweet_by
    */
-  public function extract_tweet_details( $tweet, $link_classes ) {
-    $tweet_details                              = array(
+  public static function extract_tweet_details( $tweet, $link_classes ) {
+    $tweet_info                           = array(
       'text'                              => '',
       'screen_name'                       => '',
       'full_name'                         => '',
@@ -220,42 +271,73 @@ class Twitter_Api_Helper {
       'retweet_by'                        => '',
       );
     $parse_tweet = $tweet;
-    if ( array_key_exists( 'retweet_count', $tweet ) &&  0 != $tweet['retweet_count'] && array_key_exists( 'retweeted_status', $tweet ) ) {
+    if ( array_key_exists( 'retweet_count', $tweet )
+        &&  0 != $tweet['retweet_count']
+        && array_key_exists( 'retweeted_status', $tweet )
+    ) {
       $parse_tweet = $tweet['retweeted_status'];
-      $tweet_details['retweet_link']      = $this->get_tweet_profile_image( $tweet );
-      $tweet_details['retweet_by']        = $this->get_tweet_screen_name( $tweet );
+      $tweet_info['retweet_link']     = self::get_tweet_profile_image( $tweet );
+      $tweet_info['retweet_by']       = self::get_tweet_screen_name( $tweet );
     }
-    $tweet_details['text']                = $this->get_tweet_text( $parse_tweet );
-    $tweet_details['screen_name']         = $this->get_tweet_screen_name( $parse_tweet );
-    $tweet_details['full_name']           = $this->get_tweet_full_name( $parse_tweet );
-    $tweet_details['profile_pic']         = $this->get_tweet_profile_image( $parse_tweet );
-    $tweet_details['relative_date_time']           = $this->get_tweet_created_date_short_form( $parse_tweet );
-    $tweet_details['actual_date_time']    = $this->get_tweet_created_date_actual( $parse_tweet );
-    $tweet_details['status_link ']        = $this->get_tweet_status_link( $parse_tweet );
-    $tweet_details['text']                = $this->convert_url_text_to_hyperlink( $tweet_details['text'], $link_classes );
-    $tweet_details['text']                = $this->convert_hash_text_to_hyperlink( $tweet_details['text'], $link_classes );
-    $tweet_details['text']                = $this->convert_twitter_handle_text_to_hyperlink( $tweet_details['text'], $link_classes );
-    return $tweet_details ;
+    $tweet_info['text']               = self::get_tweet_text( $parse_tweet );
+    $tweet_info['screen_name']        = self::get_tweet_screen_name(
+        $parse_tweet
+    );
+    $tweet_info['full_name']          = self::get_tweet_full_name(
+        $parse_tweet
+    );
+    $tweet_info['profile_pic']        = self::get_tweet_profile_image(
+        $parse_tweet
+    );
+    $tweet_info['relative_date_time'] = self::get_tweet_created_date_short_form(
+        $parse_tweet
+    );
+    $tweet_info['actual_date_time']   = self::get_tweet_created_date_actual(
+        $parse_tweet
+    );
+    $tweet_info['status_link ']       = self::get_tweet_status_link(
+        $parse_tweet
+    );
+    $tweet_info['text']               = self::convert_url_text_to_hyperlink(
+        $tweet_info['text'],
+        $link_classes
+    );
+    $tweet_info['text']               = self::convert_hash_text_to_hyperlink(
+        $tweet_info['text'],
+        $link_classes
+    );
+    $tweet_info['text']               = self::
+        convert_twitter_handle_text_to_hyperlink(
+            $tweet_info['text'],
+            $link_classes
+        );
+    return $tweet_info ;
   }
-  private function get_tweet_text( $tweet ) {
-    return array_key_exists( 'text', $tweet )? $tweet['text'] : ''; //get the tweet
+  public static function get_tweet_text( $tweet ) {
+    return array_key_exists( 'text', $tweet )
+        ? $tweet['text'] : '';
   }
-  private function get_tweet_screen_name( $tweet ) {
-    return array_key_exists( 'user', $tweet )? $tweet['user']['screen_name'] : '';
+  public static function get_tweet_screen_name( $tweet ) {
+    return array_key_exists( 'user', $tweet )
+        ? $tweet['user']['screen_name'] : '';
   }
-  private function get_tweet_full_name( $tweet ) {
-    return array_key_exists( 'user', $tweet )? $tweet['user']['name'] : '';
+  public static function get_tweet_full_name( $tweet ) {
+    return array_key_exists( 'user', $tweet )
+        ? $tweet['user']['name'] : '';
   }
-  private function get_tweet_profile_image( $tweet ) {
-    return array_key_exists( 'user', $tweet )? $tweet['user']['profile_image_url'] : '';
+  public static function get_tweet_profile_image( $tweet ) {
+    return array_key_exists( 'user', $tweet )
+        ? $tweet['user']['profile_image_url'] : '';
   }
-  private function get_tweet_created_date_short_form( $tweet ) {
-    return array_key_exists( 'created_at', $tweet )? $this->time_short_form( $tweet['created_at'] ): '';
+  public static function get_tweet_created_date_short_form( $tweet ) {
+    return array_key_exists( 'created_at', $tweet )
+        ? self::time_short_form( $tweet['created_at'] ): '';
   }
-  private function get_tweet_created_date_actual( $tweet ) {
+  public static function get_tweet_created_date_actual( $tweet ) {
     return strtotime( $tweet['created_at'] );
   }
-  private function get_tweet_status_link( $tweet ) {
-    return array_key_exists( 'id_str', $tweet )? $tweet['id_str'] : '';
+  public static function get_tweet_status_link( $tweet ) {
+    return array_key_exists( 'id_str', $tweet )
+        ? $tweet['id_str'] : '';
   }
 }

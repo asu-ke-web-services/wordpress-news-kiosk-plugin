@@ -5,16 +5,18 @@
    */
 namespace Kiosk_WP;
 class People_Slider_Helper {
+
   /**
-   * get_keywords() gets the list of keywords from GIOS_API
+   * Gets the list of keywords from GIOS_API
    * @return array
    */
   public function get_keywords() {
     $keyword_presenter                = new \Keywords_Presenter();
     return $keyword_presenter->get_expertise_category_keywords();
   }
+
   /**
-   * get_people( $keyword ) gets the list of people for a keyword from GIOS_API
+   * Gets the list of people for a keyword from GIOS_API
    * @param string $keyword
    * @return array
    */
@@ -25,13 +27,13 @@ class People_Slider_Helper {
                          slugify( $keyword->keyword )
                      );
   }
+
   /**
-   * get_sliders_data( $keywords, $parsed_content ) relates the content data of
-   * of people slider shortcode with data from GIOS_API for keywords and persons
-   * and returns array with keyword people-images quote person-slug  and featured-image
+   * Relates the content data of people slider shortcode with data from GIOS_API
+   * for keywords and persons.
    * @param array $keywords
    * @param array $parsed_content
-   * @return array with keyword people-images quote person-slug  and featured-image
+   * @return array<keyword, people-images, quote, person-slug, featured-image>
    */
   public function get_sliders_data( $keywords, $parsed_content ) {
     $data_sections          = array();
@@ -59,8 +61,12 @@ class People_Slider_Helper {
                0 == strcasecmp( $part['keyword'], $keyword->keyword ) )
              || ( array_key_exists( 'keyword-slug', $part ) &&
                   0 == strcasecmp( $part['keyword-slug'], $keyword->slug ) ) ) {
-          $quote       = array_key_exists( 'quote', $part ) ? $part['quote'] : false;
-          $person_slug = array_key_exists( 'person-slug', $part ) ? $part['person-slug'] : false;
+          $quote       = array_key_exists( 'quote', $part )
+              ? $part['quote']
+              : false;
+          $person_slug = array_key_exists( 'person-slug', $part )
+              ? $part['person-slug']
+              : false;
 
           foreach ( $people as $person ) {
             $image = $person->photo_url();
@@ -86,11 +92,10 @@ class People_Slider_Helper {
   }
 
   /**
-   * get_sliders( $persons_images_category_keywords )
    * For each category creates a slider with images of people who belong to it
    * and checks for the content image and quote for the associated keyword
-   * @param array $persons_images_category_keywords an indexed array of associative arrays, where entries are "person_image" and "keyword"
-   * @param array $keyword_slug_quote_image an indexed array of associative arrays, where entries are "keyword", "person-slug", "quote", "image"
+   * @param array $data_sections<keyword, people-images, quote, person-slug,
+   * featured-image>
    * @param String $gios_url
    * @return array
    */
@@ -108,10 +113,10 @@ class People_Slider_Helper {
   }
 
   /**
-   * create_slider_layout( $images, $content_image, $quote = '' )
-   * creates a slider template and fills it with atmost 15 images along with  featured
-   * image from the content and quote.
-   * @param array $section named array with keyword, people-images, quote, person-slug and featured-image
+   * Creates a slider template and fills it with atmost 21 images along
+   * with featured image from the content and quote.
+   * @param array $section<keyword, people-images, quote, person-slug,
+   * featured-image>
    * @return string
    */
   public static function create_slider_layout( $section, $gios_url ) {
@@ -177,7 +182,10 @@ HTML;
       $surrond_image = sprintf(
           $image_tag_template,
           'kiosk-people-slider__layout__image',
-          Kiosk_Helper::relative_to_absolute_url( $section['people-images'][ $i ], $gios_url )
+          Kiosk_Helper::relative_to_absolute_url(
+              $section['people-images'][ $i ],
+              $gios_url
+          )
       );
       if ( $i < 7 ) {
         $top_row .= $surrond_image;
@@ -187,31 +195,18 @@ HTML;
         $bottom_row .= $surrond_image;
       } else if ( $i < 21 ) {
         $left_column .= $surrond_image;
-      } /*else if ( $i < 23 ) {
-        $center_left_column .= $surrond_image;
-      } else if ( $i < 27 ) {
-        $center_right_column .= $surrond_image;
-      }*/
+      }
     }
     $center_image = sprintf(
         $image_tag_template,
         'kiosk-people-slider__layout__featured-image',
         Kiosk_Helper::relative_to_absolute_url( $content_image, $gios_url )
     );
-    /*if ( ! empty( $quote ) ) {*/
     $layout_center = sprintf(
         $layout_center_with_quote,
         $center_image,
         $quote
     );
-    /*} else {
-      $layout_center = sprintf(
-          $layout_center_no_quote,
-          $center_left_column,
-          $center_image,
-          $center_right_column
-      );
-    }*/
     $slider_layout = sprintf(
         $layout_template,
         $title,

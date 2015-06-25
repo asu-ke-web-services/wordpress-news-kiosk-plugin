@@ -18,23 +18,34 @@ class Kiosk_Tweets_Helper {
   protected $query;
   protected $handle;
   public $request_not_from_wp = false;
+
   public function __construct() {
     $this->load_dependencies();
   }
+
   /**
    * @override
    */
   public function load_dependencies() {
     // file must be present to include account settings;
     if ( function_exists( 'plugin_dir_path' ) ) {
-      if ( file_exists( plugin_dir_path( __FILE__ ) . '../localsettings.php' ) ) {
+      if ( file_exists( plugin_dir_path( __FILE__ )
+      . '../localsettings.php' )
+      ) {
         require( plugin_dir_path( __FILE__ ) . '../localsettings.php' );
         $this->localsettings = $localsettings;
       }
     } else {
-      //$plugin_path = $_SERVER['DOCUMENT_ROOT'] . dirname( $_SERVER['PHP_SELF'] ).'/../';
-      $document_root  = filter_input( INPUT_SERVER, 'DOCUMENT_ROOT', FILTER_SANITIZE_STRING );
-      $php_self       = filter_input( INPUT_SERVER, 'PHP_SELF', FILTER_SANITIZE_STRING );
+      $document_root  = filter_input(
+          INPUT_SERVER,
+          'DOCUMENT_ROOT',
+          FILTER_SANITIZE_STRING
+      );
+      $php_self       = filter_input(
+          INPUT_SERVER,
+          'PHP_SELF',
+          FILTER_SANITIZE_STRING
+      );
       $plugin_path    = $document_root . dirname( $php_self ) . '/../';
       if ( file_exists( $plugin_path . '../localsettings.php' ) ) {
         require( $plugin_path . '../localsettings.php' );
@@ -45,39 +56,48 @@ class Kiosk_Tweets_Helper {
   }
 
   /**
-   * kiosk_parse_tweets( $decode, $limit )
-   * Accepts the json formatted string and the limit on number of tweets
-   * Creates a div block with all the tweets and by converting the hash tags and @ and urls to hyperlinks
-   * returns html formated string. If retweeted by some one it displays the original tweet by the user and who retweeted.
-   * @return array with profile_pic relative_date_time actual_date_time full_name screen_name
-   * text retweet_link retweet_by
+   * Creates a div block with all the tweets and by converting the hash tags
+   * and @ and urls to hyperlinks returns html formated string.
+   * If retweeted by some one it displays the original tweet by the
+   * user and who retweeted.
+   * @param string json array
+   * @param int $limit number of tweets
+   * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
+   * screen_name text, retweet_link, retweet_by>
    */
   private function kiosk_parse_tweets( $decode, $limit ) {
     $kiosk_tweet_items = array();
-    /* array will have 'statuses' as column name in case of search api to read actual
-      tweets take data from statutses column
-      For user timeline we do not have statuses column so read data as it comes form api */
+    /*
+     $decode array will have 'statuses' as column name in case of twitter
+     search api is used to read actual tweets take data from statutses column.
+     For user timeline we do not have statuses column so read data as it comes
+     form tiwtter user timelineapi */
     if ( array_key_exists( 'statuses', $decode ) ) {
       $decode = $decode['statuses'];
     }
     for ( $i = 0; $i < count( $decode ) && $i < $limit ; $i++ ) {
       $twitter_api_helper   = new \Kiosk_WP\Twitter_Api_Helper();
-      $kiosk_tweet_items[]  = $twitter_api_helper->extract_tweet_details( $decode[ $i ], 'kiosk-tweets__tweet__link' );
+      $kiosk_tweet_items[]  = $twitter_api_helper->extract_tweet_details(
+          $decode[ $i ],
+          'kiosk-tweets__tweet__link'
+      );
     }
     return $kiosk_tweet_items;
   }
+
   /**
    * kiosk_tweets_block( $kiosk_tweet_items )
    * creates a div block with the tweets passed to it
-   * @param array with profile_pic relative_date_time actual_date_time full_name screen_name
-   * text retweet_link retweet_by
+   * @param array<profile_pic, relative_date_time, actual_date_time, full_name,
+   * screen_name, text, retweet_link, retweet_by>
    * @return string
    */
   private function kiosk_tweets_block( $kiosk_tweet_items ) {
     $div_start   = <<<HTML
     <div class="kiosk-tweets__timeline__title">
        <b class="kiosk-tweets__timeline__title__text">Tweets</b>
-       <p class="kiosk-tweets__timeline__title__logo"  title="Twitter" target="_blank">Twitter</p>
+       <p class="kiosk-tweets__timeline__title__logo"  title="Twitter" 
+       target="_blank">Twitter</p>
     </div>
     <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets__container">
       <ul class="kiosk-tweets__tweets" id="kiosk-tweets__tweets">
@@ -89,11 +109,16 @@ HTML;
           </div>
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details__permalink">
-              <div class="kiosk-tweets__tweet__details__tweet-time" data-actual-time="%s">%s</div>
+              <div class="kiosk-tweets__tweet__details__tweet-time" 
+              data-actual-time="%s">%s</div>
             </div>
             <div class="kiosk-tweets__tweet__details__header">
-               <div class="kiosk-tweets__tweet__details__header__full-name">%s</div>
-               <div class="kiosk-tweets__tweet__details__header__user-name">@%s</div>
+               <div class="kiosk-tweets__tweet__details__header__full-name">
+                %s
+               </div>
+               <div class="kiosk-tweets__tweet__details__header__user-name">
+                @%s
+               </div>
             </div>
             <div>
               <div class="kiosk-tweets__tweet__details__text"> %s </div> 
@@ -106,7 +131,9 @@ HTML;
         <div class="kiosk-tweets__tweet__retweet">
           <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
-          <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> %s </a>
+          <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> 
+            %s 
+          </a>
         </div>        
 HTML;
     $div_end = '</ul></div>';
@@ -134,10 +161,13 @@ HTML;
 
     return $div_start . $tweet_items . $div_end;
   }
+
   /**
    * kiosk_tweets( $atts, $content = null )
    * sets tweets limit, search string, handle  and request to tweets helper
    * to get the data and creates html to return
+   * Returns empty string when there are any errors and invoked using wordpress
+   * rewrite urls otherwise returns HTML markup
    * @param array
    * @return string
    */
@@ -150,33 +180,46 @@ HTML;
     $this->handle  = array_key_exists( 'handle', $atts )
                                 ? $atts['handle'] : '';
     $json = $this->get_tweets_json();
-    if ( empty( $json ) ){
-      if ( $this->request_not_from_wp ){
+    if ( empty( $json ) ) {
+      if ( $this->request_not_from_wp ) {
         $kiosk_tweets_div = '';
       } else {
-        $kiosk_tweets_div = '<div class="kiosk-tweets">Twitter API Errored</div>';
+        $kiosk_tweets_div = '<div class="kiosk-tweets">Twitter API Errored
+        </div>';
       }
     } else {
       $json = Json_Decode_Helper::remove_unwanted_chars( $json );
       $decode = json_decode( $json, true ); //getting the file content as array
 
       if ( $decode != null && json_last_error( ) === JSON_ERROR_NONE ) {
-        if ( array_key_exists( 'errors' , $decode ) && array_key_exists( 0 , $decode['errors'] ) && array_key_exists( 'message' , $decode['errors'][0] ) ) {
-          $kiosk_tweets_div   = '<div class="kiosk-tweets">' . $decode['errors'][0]['message']. '</div>';
+        if ( array_key_exists( 'errors' , $decode )
+              && array_key_exists( 0 , $decode['errors'] )
+              && array_key_exists( 'message' , $decode['errors'][0] ) ) {
+          $kiosk_tweets_div   = '<div class="kiosk-tweets">'
+              . $decode['errors'][0]['message']
+              . '</div>';
         } else {
-          $kiosk_tweet_items  = $this->kiosk_parse_tweets( $decode, $this->limit );
-          $kiosk_tweets_div   = '<div class="kiosk-tweets">' .  $this->kiosk_tweets_block( $kiosk_tweet_items ). '</div>';
+          $kiosk_tweet_items  = $this->kiosk_parse_tweets(
+              $decode,
+              $this->limit
+          );
+          $kiosk_tweets_div   = '<div class="kiosk-tweets">'
+          . $this->kiosk_tweets_block( $kiosk_tweet_items )
+          . '</div>';
         }
       } else {
         $kiosk_tweets_div   = '';
-        error_log( basename( __FILE__ ) .' Twitter API error: JSON ' . json_last_error_msg() . "\n" );
+        error_log(
+            basename( __FILE__ )
+            . ' Twitter API error: JSON '
+            . json_last_error_msg() . "\n"
+        );
       }
     }
     return $kiosk_tweets_div;
   }
   /**
-   * get_tweets_json() is being used as part of unit test cases to mock
-   * up data it written separately.
+   * Reads localsettings.php file and invokes twitter helper class methods
    * @return JSON object
    */
   public function get_tweets_json() {

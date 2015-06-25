@@ -37,7 +37,9 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
                               ->method( 'get_people' )
                               ->will(
                                   $this->returnValue(
-                                      $this->return_unit_test_data( 'get_people' )
+                                      $this->return_unit_test_data(
+                                          'get_people'
+                                      )
                                   )
                               );
 
@@ -47,11 +49,24 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
           ->getMock();
 
     $content = $stub->kiosk_people_slider( '' );
-    $this->assertContains( 'kiosk-people-slider__layout', $content, 'Should return carousel slider' );
+    $this->assertContains(
+        'kiosk-people-slider__layout',
+        $content,
+        'Should return carousel slider'
+    );
     $content = $stub->kiosk_people_slider( '' );
-    $this->assertContains( 'kiosk-people-slider__layout', $content, 'Should return carousel slider' );
+    $this->assertContains(
+        'kiosk-people-slider__layout',
+        $content,
+        'Should return carousel slider'
+    );
+
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertEquals( 4, $numberOfEvents, 'There should 4 slider items' );
+    $this->assertEquals(
+        4,
+        $numberOfEvents,
+        'There should 4 slider items'
+    );
 
     $test_with_content = <<<HTML
     [
@@ -74,18 +89,34 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
 ]
 HTML;
     $content = $stub->kiosk_people_slider( array(), $test_with_content );
-    $this->assertContains( 'kiosk-people-slider__layout', $content, 'Should return carousel slider' );
+    $this->assertContains(
+        'kiosk-people-slider__layout',
+        $content,
+        'Should return carousel slider'
+    );
     $numberOfEvents = substr_count( $content, '<li' );
-    $this->assertEquals( 4, $numberOfEvents, 'There should 4 slider items' );
-    $this->assertContains( 'gdawson', $content, 'Should return content person-slug image' );
-     $this->assertContains( 'Live for today Hope... for tomorrow', $content, 'Should return content quote' );
+    $this->assertEquals(
+        4,
+        $numberOfEvents,
+        'There should 4 slider items'
+    );
+    $this->assertContains(
+        'gdawson',
+        $content,
+        'Should return content person-slug image'
+    );
+    $this->assertContains(
+        'Live for today Hope... for tomorrow',
+        $content,
+        'Should return content quote'
+    );
 
   }
   /**
-    * return_unit_test_data() creates a mock up data
+    * Creates a mock up data
     * @return mixed
     */
-  function return_unit_test_data( $method_name ){
+  function return_unit_test_data( $method_name ) {
     $person                 = new Person();
     $keyword                = new Keyword();
     if ( 'get_keywords' == $method_name ) {
@@ -97,7 +128,8 @@ HTML;
   }
 }
 /**
- * Mocking up Person and Keyword class instead of depending on GIOS_API for unit test
+ * Mocking up Person and Keyword class instead of depending on GIOS_API
+ * for unit test
  */
 class Person {
   public $slug           = 'gregory-dawson';
@@ -108,5 +140,5 @@ class Person {
   }
 }
 class Keyword {
-  public $keyword       = 'Biodiversity and preservation of natural environment';
+  public $keyword = 'Biodiversity and preservation of natural environment';
 }

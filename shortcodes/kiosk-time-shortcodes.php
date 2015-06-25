@@ -66,7 +66,8 @@ HTML;
         $dayOfMonth,
         $current_time
     );
-    $kiosk_time_div = '<div class="kiosk-date-time" id="kiosk_time">' . $calender_time . '</div>';
+    $kiosk_time_div = '<div class="kiosk-date-time" id="kiosk_time">'
+        . $calender_time . '</div>';
     return $kiosk_time_div;
   }
 }

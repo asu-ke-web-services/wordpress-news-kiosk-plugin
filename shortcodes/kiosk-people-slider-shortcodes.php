@@ -66,12 +66,14 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
             $this->gios_url
         )
     );
-    $kiosk_people_slider_div = '<div class="kiosk-people-slider"><div class="kiosk-people-slider__aspect-ratio">' . $carousel_slider . '</div></div>';
+    $kiosk_people_slider_div = '<div class="kiosk-people-slider">
+    <div class="kiosk-people-slider__aspect-ratio">' . $carousel_slider
+    . '</div></div>';
     return $kiosk_people_slider_div;
   }
 
   /**
-   * parse_content( $content )
+   * Parses the content and converts from json to array
    * @param string
    * @return array
    */
@@ -88,7 +90,12 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
     );
     $decode = json_decode( trim( $content ), true );
     if ( json_last_error( ) !== JSON_ERROR_NONE ) {
-      error_log( basename( __FILE__ ) .' People Slider Content JSON Decode Error' . json_last_error_msg() . "\n" );
+      error_log(
+          basename( __FILE__ )
+          . ' People Slider Content JSON Decode Error'
+          . json_last_error_msg()
+          . "\n"
+      );
       echo ' People Slider Content JSON Decode error: ' . json_last_error_msg();
       die();
     }
@@ -106,7 +113,11 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
     $prefix          = 'kiosk-people-slider';
     $layout_template = '%s';
     if ( count( $list_items ) > 0 ) {
-      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider( $prefix, $layout_template, $list_items );
+      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+          $prefix,
+          $layout_template,
+          $list_items
+      );
     }
     return $carousel_slider;
   }

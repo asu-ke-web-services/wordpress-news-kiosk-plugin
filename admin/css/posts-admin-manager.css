@@ -16,11 +16,11 @@
   width:100%;
   text-align: center;
 }
-.timeline_header_section:nth-child(even){
+.timeline_header_section:nth-child(even) {
   background-color: tomato; 
 
 }
-.timeline_header_section:nth-child(odd){
+.timeline_header_section:nth-child(odd) {
   background-color: orange; 
 }
 .timeline-row-item{

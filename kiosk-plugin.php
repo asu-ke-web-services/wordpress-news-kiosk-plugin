@@ -2,7 +2,8 @@
 /*
 Plugin Name: Kiosk Wordpress Plugin
 Plugin URI: http://kiosk.asu.edu
-Description: The Kiosk Wordpress Plugin that handles posts, weather report, time, gallery, tweets, asu news
+Description: The Kiosk Wordpress Plugin that handles posts, weather report,
+time, gallery, tweets, asu news
 Version: 1.1
 Author: The Global Institute of Sustainability
 License: Copyright 2015
@@ -90,7 +91,9 @@ function run_loaded_classes() {
   $posts_shortcodes = new \Kiosk_WP\Kiosk_Weather_Shortcodes();
   $posts_shortcodes->run();
 
-  $posts_shortcodes = new \Kiosk_WP\Kiosk_People_Slider_Shortcodes( $people_slider_helper );
+  $posts_shortcodes = new \Kiosk_WP\Kiosk_People_Slider_Shortcodes(
+      $people_slider_helper
+  );
   $posts_shortcodes->run();
 
   // =====

@@ -47,13 +47,14 @@ class Kiosk_Logo_Shortcodes extends Base_Registrar {
     $site_url   = get_site_url();
     $atts                   = shortcode_atts(
         array(
-          'path'            => "{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png",
+          'path' => "{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png",
         ),
         $atts
     );
     $asu_logo  = <<<HTML
     <div class="kiosk-logo__logo">
-      <img src="{$atts['path']}" class="img-responsive center-block kiosk-logo__image">
+      <img src="{$atts['path']}"
+       class="img-responsive center-block kiosk-logo__image">
       </div>
 HTML;
     $kiosk_logo_div = '<div class="kiosk-logo">' . $asu_logo . '</div>';

@@ -19,16 +19,7 @@ class Posts_Admin extends Base_Registrar {
   public static $section_post_status         = 'kiosk_post_status';
   public static $kiosk_post_status           = 'any';
   public static $section_post_details        = 'Post Details';
-  public static $post_statuses               = array(
-    'publish'       => 'Published',
-    'future'        => 'Future',
-    'draft'         => 'Draft',
-    'pending'       => 'Pending',
-    'private'       => 'Private',
-    'trash'         => 'Trash',
-    'auto-draft'    => 'Auto-Draft',
-    'inherit'       => 'Inherit',
-  );
+  public static $kiosk_post_statuses         = array();
 
   protected $plugin_slug;
   protected $version;
@@ -37,6 +28,7 @@ class Posts_Admin extends Base_Registrar {
     $this->plugin_slug = 'kiosk-post-admin';
     $this->version     = '0.1';
     $this->css         = plugin_dir_url( __FILE__ ) . 'css/posts-admin-manager.css';
+    self::$kiosk_post_statuses = get_post_statuses();
     $this->load_dependencies();
     $this->define_hooks();
     $general_admin->enqueue_panel(
@@ -69,101 +61,97 @@ class Posts_Admin extends Base_Registrar {
   public function admin_enqueue_scripts() {
     $plugin_dir_url = plugin_dir_url( dirname( __FILE__ ) );
     wp_enqueue_style( $this->plugin_slug, $this->css, array(), $this->version, false );
-    wp_register_script( 'jquery', $plugin_dir_url . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
-    wp_register_script( 'bootstrap-js', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
     wp_register_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
-    wp_enqueue_script( 'jquery', $plugin_dir_url . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
-    wp_enqueue_script( 'bootstrap-js', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
     wp_enqueue_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
   }
 
   public function admin_init() {
-    // register settings
+    // register settings for form
     register_setting(
-        Posts_Admin::$options_group,
-        Posts_Admin::$options_name,
+        self::$options_group,
+        self::$options_name,
         array( $this, 'form_submit' )
     );
-    // register settings
+    // register settings for post tags field
     register_setting(
-        Posts_Admin::$options_group,
-        Posts_Admin::$section_post_tags,
+        self::$options_group,
+        self::$section_post_tags,
         array( $this, 'sanitize_post_tags_callback' )
     );
-    // register settings
+    // register settings for post status field
     register_setting(
-        Posts_Admin::$options_group,
-        Posts_Admin::$section_post_status,
+        self::$options_group,
+        self::$section_post_status,
         array( $this, 'sanitize_post_tags_callback' )
     );
     add_settings_section(
-        Posts_Admin::$section_id,
+        self::$section_id,
         'Posts Details',
         array(
           $this,
           'print_section_info',
         ),
-        Posts_Admin::$section_name
+        self::$section_name
     );
     add_settings_field(
-        Posts_Admin::$section_post_tags,
+        self::$section_post_tags,
         'Post Tags',
         array(
           $this,
           'section_post_tags_callback',
         ), // Callback
-        Posts_Admin::$section_name,
-        Posts_Admin::$section_id,
-        array( 'context' => Posts_Admin::$section_post_tags ) // custom arguments
+        self::$section_name,
+        self::$section_id,
+        array( 'context' => self::$section_post_tags ) // custom arguments
     );
     add_settings_field(
-        Posts_Admin::$section_post_status,
+        self::$section_post_status,
         'Post Status',
         array(
           $this,
           'section_post_tags_callback',
         ), // Callback
-        Posts_Admin::$section_name,
-        Posts_Admin::$section_id,
-        array( 'context' => Posts_Admin::$section_post_status ) // custom arguments
+        self::$section_name,
+        self::$section_id,
+        array( 'context' => self::$section_post_status ) // custom arguments
     );
     add_settings_field(
-        Posts_Admin::$section_post_details,
+        self::$section_post_details,
         '',
         array(
           $this,
           'post_categories_callback',
         ), // Callback
-        Posts_Admin::$section_name,
-        Posts_Admin::$section_id
+        self::$section_name,
+        self::$section_id
     );
   }
 
 
-   /**
+  /**
    * Print the Section text
    */
   public function print_section_info() {
     // print 'Enter your settings below:';
   }
   /**
-   * Print the form section for the post tags
+   * Print the form section for the post tags and post status
    */
   public function section_post_tags_callback( $args ) {
-    if ( Posts_Admin::$section_post_tags === $args['context'] ) {
-         $tags = get_option( Posts_Admin::$section_post_tags );
+    if ( self::$section_post_tags === $args['context'] ) {
+         $tags = get_option( self::$section_post_tags );
       printf(
           '<input type="text" id="%s" name="%s" value="%s"></input>',
-          Posts_Admin::$section_post_tags,
-          Posts_Admin::$section_post_tags,
+          self::$section_post_tags,
+          self::$section_post_tags,
           $tags
       );
-      Posts_Admin::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
-    } elseif ( Posts_Admin::$section_post_status === $args['context'] ) {
-      $status = get_option( Posts_Admin::$section_post_status );
+      self::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
+    } elseif ( self::$section_post_status === $args['context'] ) {
+      $status = get_option( self::$section_post_status );
       $post_status_drop_down = '<select id="%s" name="%s">';
       $selected = '';
-      foreach ( Posts_Admin::$post_statuses as $key => $value ) {
+      foreach ( self::$kiosk_post_statuses as $key => $value ) {
         if ( $key == $status ) {
           $selected = 'selected="selected"';
         } else {
@@ -172,8 +160,12 @@ class Posts_Admin extends Base_Registrar {
         $post_status_drop_down  .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
       }
       $post_status_drop_down .= '</select>';
-      printf( $post_status_drop_down, Posts_Admin::$section_post_status, Posts_Admin::$section_post_status );
-      Posts_Admin::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
+      printf(
+          $post_status_drop_down,
+          self::$section_post_status,
+          self::$section_post_status
+      );
+      self::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
     }
   }
 
@@ -182,8 +174,8 @@ class Posts_Admin extends Base_Registrar {
    * Print the form section for the post categories
    */
   public function post_categories_callback( ) {
-    $tags   = Posts_Admin::$kiosk_post_tags;
-    $status = Posts_Admin::$kiosk_post_status;
+    $tags   = self::$kiosk_post_tags;
+    $status = self::$kiosk_post_status;
     $limit                  = 20;
     if ( empty( $status ) ) {
       $status = 'any';
@@ -198,9 +190,12 @@ class Posts_Admin extends Base_Registrar {
     );
     $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
     usort( $list_items, array( 'Kiosk_WP\Kiosk_Helper', 'sort_by_date' ) );
-    echo $this->posts_table_display( $list_items );
+    echo $this->posts_items_display( $list_items );
   }
-  public function posts_table_display( $list_items ){
+  /**
+   *
+   */
+  public function posts_items_display( $list_items ){
     $table_template = <<<HTML
       <div class="table-responsive">          
         <table class="table table-striped table-condensed">
