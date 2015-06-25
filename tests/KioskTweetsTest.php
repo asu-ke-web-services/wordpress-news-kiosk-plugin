@@ -1,10 +1,21 @@
 <?php
 
 class KioskTweetsTest extends WP_UnitTestCase {
+  private $stub = null;
   // @codingStandardsIgnoreStart
   static function setUpBeforeClass() {
     WP_UnitTestCase::setUpBeforeClass();
 
+  }
+  function setUp() {
+    // Mockup data
+    $this->stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Helper',
+        array( 'get_tweets_json' )
+    );
+    $this->stub->expects( $this->any() )
+         ->method( 'get_tweets_json' )
+         ->will( $this->returnValue( $this->return_unit_test_data() ) );
   }
   // @codingStandardsIgnoreEnd
 
@@ -15,16 +26,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-tweets' ) );
 
-    // Test with mockup data
-    $stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
-        array( 'get_tweets_json' )
-    );
-    $stub->expects( $this->any() )
-         ->method( 'get_tweets_json' )
-         ->will( $this->returnValue( $this->return_unit_test_data() ) );
-
-    $content = $stub->kiosk_tweets( array() );
+    $content = $this->stub->kiosk_tweets( array() );
     $this->assertContains(
         'kiosk-tweets__tweet',
         $content,
@@ -37,8 +39,10 @@ class KioskTweetsTest extends WP_UnitTestCase {
         $number_of_items,
         'There should be <= 8 news items'
     );
+  }
+  function test_kiosk_tweets_shortcode_limit_4() {
 
-    $content = $stub->kiosk_tweets( array( 'limit' => 4 ) );
+    $content = $this->stub->kiosk_tweets( array( 'limit' => 4 ) );
     $this->assertContains(
         'kiosk-tweets__tweet',
         $content,
@@ -50,7 +54,6 @@ class KioskTweetsTest extends WP_UnitTestCase {
         $number_of_items,
         'There should be <= 4 news items'
     );
-
   }
   /**
   * Creates a mock up data to be used as twitter streaming api response

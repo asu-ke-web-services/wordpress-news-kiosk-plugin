@@ -1,9 +1,47 @@
 <?php
 
 class KioskPeopleSliderTest extends WP_UnitTestCase {
+  private $people_slider_helper_stub = null;
+  private $stub                      = null;
   // @codingStandardsIgnoreStart
   static function setUpBeforeClass() {
     WP_UnitTestCase::setUpBeforeClass();
+
+  }
+  function setUp() {
+    $this->people_slider_helper_stub = $this->getMock(
+        'Kiosk_WP\People_Slider_Helper',
+        array(
+            'get_keywords',
+            'get_people',
+        )
+    );
+
+    $this->people_slider_helper_stub->expects( $this->any() )
+                              ->method( 'get_keywords' )
+                              ->will(
+                                  $this->returnValue(
+                                      $this->return_unit_test_data(
+                                          'get_keywords'
+                                      )
+                                  )
+                              );
+
+    $this->people_slider_helper_stub->expects( $this->any() )
+                              ->method( 'get_people' )
+                              ->will(
+                                  $this->returnValue(
+                                      $this->return_unit_test_data(
+                                          'get_people'
+                                      )
+                                  )
+                              );
+
+    $this->stub = $this
+          ->getMockBuilder('Kiosk_WP\Kiosk_People_Slider_Shortcodes' )
+          ->setConstructorArgs( array( $this->people_slider_helper_stub ) )
+          ->setMethods( null )
+          ->getMock();
 
   }
   // @codingStandardsIgnoreEnd
@@ -14,47 +52,7 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
    */
   function test_kiosk_people_slider_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-people-slider' ) );
-
-    $people_slider_helper_stub = $this->getMock(
-        'Kiosk_WP\People_Slider_Helper',
-        array(
-            'get_keywords',
-            'get_people',
-        )
-    );
-
-    $people_slider_helper_stub->expects( $this->any() )
-                              ->method( 'get_keywords' )
-                              ->will(
-                                  $this->returnValue(
-                                      $this->return_unit_test_data(
-                                          'get_keywords'
-                                      )
-                                  )
-                              );
-
-    $people_slider_helper_stub->expects( $this->any() )
-                              ->method( 'get_people' )
-                              ->will(
-                                  $this->returnValue(
-                                      $this->return_unit_test_data(
-                                          'get_people'
-                                      )
-                                  )
-                              );
-
-    $stub = $this->getMockBuilder( 'Kiosk_WP\Kiosk_People_Slider_Shortcodes' )
-          ->setConstructorArgs( array( $people_slider_helper_stub ) )
-          ->setMethods( null )
-          ->getMock();
-
-    $content = $stub->kiosk_people_slider( '' );
-    $this->assertContains(
-        'kiosk-people-slider__layout',
-        $content,
-        'Should return carousel slider'
-    );
-    $content = $stub->kiosk_people_slider( '' );
+    $content = $this->stub->kiosk_people_slider( '' );
     $this->assertContains(
         'kiosk-people-slider__layout',
         $content,
@@ -67,7 +65,28 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
         $numberOfEvents,
         'There should 4 slider items'
     );
+  }
 
+  function test_kiosk_people_slider_shortcode_with_gios_url() {
+    $this->assertTrue( shortcode_exists( 'kiosk-people-slider' ) );
+    $content = $this->stub->kiosk_people_slider(
+        array( 'gios_url' => 'http:/example.asu.edu' )
+    );
+    $this->assertContains(
+        'example.asu.edu',
+        $content,
+        'Should contain prefix given from gios_url'
+    );
+
+    $numberOfEvents = substr_count( $content, '<li' );
+    $this->assertEquals(
+        4,
+        $numberOfEvents,
+        'There should 4 slider items'
+    );
+  }
+  function test_kiosk_people_slider_shortcode_with_content() {
+    $this->assertTrue( shortcode_exists( 'kiosk-people-slider' ) );
     $test_with_content = <<<HTML
     [
   {
@@ -88,7 +107,7 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
 
 ]
 HTML;
-    $content = $stub->kiosk_people_slider( array(), $test_with_content );
+    $content = $this->stub->kiosk_people_slider( array(), $test_with_content );
     $this->assertContains(
         'kiosk-people-slider__layout',
         $content,
@@ -112,6 +131,7 @@ HTML;
     );
 
   }
+
   /**
     * Creates a mock up data
     * @return mixed
