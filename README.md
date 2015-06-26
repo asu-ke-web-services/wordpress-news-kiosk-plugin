@@ -138,7 +138,7 @@ Attributes Description:
 
 Note:
 
- * Make sure to update oauth_access_token, oauth_access_token_secret, consumer_key,consumer_secret with twitter account details in localsettings.php.
+ * Make sure to update twitter_oauth_access_token, twitter_oauth_access_token_secret, twitter_consumer_key, twitter_consumer_secret with twitter account details in localsettings.php.
  * handle attribute works only for the current user whose account details are used in localsettings.php file
 
 # The Kiosk Time Shortcode

@@ -225,10 +225,10 @@ HTML;
   public function get_tweets_json() {
     $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
     $json               = $twitter_api_helper->tweets_json(
-        $this->localsettings['oauth_access_token'],
-        $this->localsettings['oauth_access_token_secret'],
-        $this->localsettings['consumer_key'],
-        $this->localsettings['consumer_secret'],
+        $this->localsettings['twitter_oauth_access_token'],
+        $this->localsettings['twitter_oauth_access_token_secret'],
+        $this->localsettings['twitter_consumer_key'],
+        $this->localsettings['twitter_consumer_secret'],
         $this->query,
         $this->limit,
         $this->handle

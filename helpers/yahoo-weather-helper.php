@@ -57,7 +57,8 @@ class Yahoo_Weather_Api_Helper {
       'low'                   => '',
       'high'                  => '',
     );
-    $weather_icon       = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
+    //$weather_icon       = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
+    $weather_icon       = 'https://s.yimg.com/zz/combo?/a/i/us/we/52/%s.gif';
     $location_city      = $json_weather['query']
         ['results']
             ['channel']

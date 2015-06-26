@@ -327,7 +327,7 @@ class Twitter_Api_Helper {
   }
   public static function get_tweet_profile_image( $tweet ) {
     return array_key_exists( 'user', $tweet )
-        ? $tweet['user']['profile_image_url'] : '';
+        ? $tweet['user']['profile_image_url_https'] : '';
   }
   public static function get_tweet_created_date_short_form( $tweet ) {
     return array_key_exists( 'created_at', $tweet )
