@@ -1,0 +1,8 @@
+/*====
+  Logo
+  ====*/
+
+.kiosk-logo__image {
+  @include center-block;
+  @include img-responsive;  
+}

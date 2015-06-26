@@ -923,7 +923,7 @@
 /* =========
    Flex Grid
    =========*/
-.flex-container, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
+.flex-container, .kiosk-date-time, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
 .kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-third-floor {
   align-content: space-around;
   align-items: center;
@@ -1140,45 +1140,36 @@
    Calendar
    ========*/
 .kiosk-date-time {
-  display: flex;
   height: 100%;
-  justify-content: center;
   overflow: hidden;
   width: 100%;
-}
-
-.kiosk-date-time__calendar {
-  height: 25%;
-  margin: 0 15px;
-  width: 25%;
 }
 
 .kiosk-date-time__calendar-icon {
   background-color: #fff;
   border: .3em solid #818486;
   border-radius: .1em;
-  font-size: 1em;
   overflow: hidden;
 }
 .kiosk-date-time__calendar-icon * {
   display: inline-block;
-  font-size: 1.7em;
-  font-style: normal;
   font-weight: bold;
   text-align: center;
   width: 100%;
 }
-.kiosk-date-time__calendar-icon strong {
+
+.kiosk-date-time__calendar__month {
   background-color: #a20b09;
   color: #fff;
   font-size: 1.3em;
-  padding: 3px;
+  height: 20%;
 }
-.kiosk-date-time__calendar-icon span {
+
+.kiosk-date-time__calendar__date {
   color: #2f2f2f;
   font-size: 2.5em;
+  height: 80%;
   letter-spacing: -.05em;
-  padding: 0 5px;
 }
 
 .kiosk-date-time__time {
@@ -1186,7 +1177,6 @@
   font-size: 2em;
   font-weight: bold;
   letter-spacing: -.05em;
-  margin: 30px 10px 10px;
 }
 
 /* =======
@@ -1254,7 +1244,7 @@
   border-radius: 1px;
   background-color: #fff;
   background-image: url("../images/asunews_now_header.jpg"), url("../images/asunews_grass.png");
-  background-position: 20px 20px, center bottom;
+  background-position: 20px 20px, 0% 103%;
   background-repeat: no-repeat;
   background-size: auto, 100% 20%;
   height: 100%;
@@ -1451,6 +1441,18 @@
   width: 100%;
 }
 
+/*====
+  Logo
+  ====*/
+.kiosk-logo__image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 /* ===============
    Page Components
    =============== */
@@ -1464,7 +1466,7 @@
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 1.7vmin;
-  padding: 30px 0;
+  padding: 15px 0;
   width: 100%;
 }
 
@@ -1508,9 +1510,9 @@
 }
 
 .kiosk-lobby__time {
-  height: 140px;
+  height: 151px;
   max-width: 480px;
-  padding: 0 0 15px;
+  padding: 0 15% 15px;
   width: 100%;
 }
 
@@ -1596,7 +1598,7 @@
   height: 15%;
   max-height: 200px;
   max-width: 580px;
-  padding: 0 0 15px;
+  padding: 0 20% 15px;
   width: 100%;
 }
 

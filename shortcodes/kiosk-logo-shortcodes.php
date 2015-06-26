@@ -54,7 +54,7 @@ class Kiosk_Logo_Shortcodes extends Base_Registrar {
     $asu_logo  = <<<HTML
     <div class="kiosk-logo__logo">
       <img src="{$atts['path']}"
-       class="img-responsive center-block kiosk-logo__image">
+       class="kiosk-logo__image">
       </div>
 HTML;
     $kiosk_logo_div = '<div class="kiosk-logo">' . $asu_logo . '</div>';

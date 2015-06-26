@@ -1,3 +1,3 @@
 Deny from all
-RewriteRule ^kiosk/twitter/limit/([^/]*)/? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1 [QSA,L]
-RewriteRule ^kiosk/weather? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php? [QSA,L]
+RewriteRule ^(.*)kiosk/twitter/limit/([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1 [QSA,L]
+RewriteRule ^(.*)/kiosk/weather/location=([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php? [QSA,L]

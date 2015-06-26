@@ -57,7 +57,7 @@ class Kiosk_Tweets_Page extends Base_Registrar {
     // ======================================================
     // Rule: /kiosk/twitter/limit/{20} => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
     // ======================================================
-    $from_url = Kiosk_Tweets_Page::$page_name . '/'
+    $from_url = '(.*)' . Kiosk_Tweets_Page::$page_name . '/'
         . Kiosk_Tweets_Page::$param_slug . '/'
         . Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]+)?$';
     $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );

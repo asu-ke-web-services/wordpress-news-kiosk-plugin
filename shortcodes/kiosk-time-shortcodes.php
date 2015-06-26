@@ -48,8 +48,8 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
     $calender_template = <<<HTML
         <div class="kiosk-date-time__calendar">
           <div  class="kiosk-date-time__calendar-icon">
-            <strong>%s</strong>
-            <span>%s</span>
+            <div class="kiosk-date-time__calendar__month">%s</div>
+            <div class="kiosk-date-time__calendar__date">%s</div>
           </div>
         </div>
         <div class="kiosk-date-time__time" id="kiosk_display_time">

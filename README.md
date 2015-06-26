@@ -225,5 +225,13 @@ Json style synax should be given as part of content with keyword or keyword-slug
 * Keyword is the category name they belong to 
   `For example Keyword can be: Energy or food systems but not deforestation`
 
+Note: If you are on multi-site you need to access below lines to .htaccess file
+
+```
+RewriteRule ^kiosk/twitter/limit/([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1 [QSA,L]
+RewriteRule ^kiosk/weather/location=([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php? [QSA,L]
+
+```
+
 
 

@@ -57,9 +57,9 @@ class Kiosk_Weather_Page extends Base_Registrar {
     /* Rule: /kiosk/weather => wp-content/plugins/pages/views
         /kiosk-weather-presenter.php*/
     // ======================================================
-    $from_url = Kiosk_Weather_Page::$page_name . '/'
+    $from_url = '(.*)' . Kiosk_Weather_Page::$page_name . '/'
         . Kiosk_Weather_Page::$param_slug . '/'
-        . Kiosk_Weather_Page::$extra_params[0] . '=([^/][a-zA-Z,]+)?$';
+        . Kiosk_Weather_Page::$extra_params[0] . '=([^/][a-zA-Z,\s]+)?$';
     $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
     $to_url  .= '/views/kiosk-weather-presenter.php'
         . '?'. Kiosk_Weather_Page::$extra_params[0] . '=$1';

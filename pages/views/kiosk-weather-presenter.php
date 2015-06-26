@@ -9,7 +9,6 @@
 
 load_dependencies();
 do_request_processing();
-
 function load_dependencies() {
   $document_root  = filter_input(
       INPUT_SERVER,
