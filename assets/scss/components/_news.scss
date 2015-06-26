@@ -30,5 +30,11 @@
 }
 
 .kiosk-asu-news__slider {
+  @extend .carousel;
+
   overflow: hidden;
+}
+
+.kiosk-asu-news__slider__carousel-inner {
+  @extend .carousel-inner;
 }

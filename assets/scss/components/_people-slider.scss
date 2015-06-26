@@ -18,6 +18,8 @@
 }
 
 .kiosk-people-slider__slider {
+  @extend .carousel;
+
   bottom: 0;
   /* Using only 93% to fit to outer div as images pops out of div due to heading space*/
   height: 93%;
@@ -110,7 +112,13 @@
 
 
 .kiosk-people-slider__slider__carousel-indicators {
+  @extend .carousel-indicators;
   visibility: hidden;
+}
+
+.kiosk-people__slider__carousel-inner {
+  @extend .carousel-inner;
+  
 }
 
 .kiosk-people-slider__layout__header {
