@@ -38,8 +38,8 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    * @param $atts array
    * specifying handle overrides the query for search and displays user timeline
    * Generates a <div> tag with tweets
-   * update twitter_handle, oauth_access_token, oauth_access_token_secret,
-   * consumer_key,consumer_secret
+   * update twitter_oauth_access_token, twitter_oauth_access_token_secret,
+   * twitter_consumer_key,twitter_consumer_secret
    * with required account details in localsettings.php
    *
    */

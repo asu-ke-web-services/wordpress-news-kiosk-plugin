@@ -1,5 +1,6 @@
 /*! kisok v1.0 
  */
++function ($) {
 /**
  * Invokes itself with 5 seconds interval and updates Kiosk widget date and time
  *
@@ -107,8 +108,7 @@ var site_url          = $(location).attr("href");
 var tweets_limit      = 20;
 var $weather_location = $.trim($('.kiosk-weather__forecast__title').text());
 var tweets_url        = site_url + 'kiosk/twitter/limit/' + tweets_limit;
-// var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
-var weather_url       = site_url + 'kiosk/weather/location=paris texas';
+var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
 setInterval(function() {
   $.ajax({
     url: tweets_url,
@@ -168,3 +168,4 @@ if ($('.kiosk-page-template').length) {
     'overflow-x': 'hidden'
   });
 }
+}(jQuery);
