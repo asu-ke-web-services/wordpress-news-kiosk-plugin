@@ -1,0 +1,102 @@
+/* =================
+   Twitter Component
+   =================*/
+
+.kiosk-tweets {
+  @include boxify;
+
+  background: $kiosk-component-background;
+  color: #fff;
+  height: 100%;
+  overflow: hidden;
+  padding: 15px;
+  width: 100%;
+}
+
+.kiosk-tweets__container {
+  height: 86%;
+  overflow: hidden;
+  padding-bottom: 10px;
+  position: relative;
+}
+
+.kiosk-tweets__timeline__title {
+  color: #fff;
+  height: 13%;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.kiosk-tweets__timeline__title__text {
+  color: #fff;
+  font-size: 2.5em;
+}
+
+.kiosk-tweets__timeline__title__logo {
+  background: transparent url('../images/twitter-bird.png') no-repeat center;
+  background-size: 100%;
+  color: #fff;
+  display: inline-block;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  vertical-align: middle;
+  width: 3em;
+}
+
+.kiosk-tweets__tweets {
+  height: 100%;
+  list-style: none;
+  padding-left: 15px;
+  position: relative;
+}
+
+.kiosk-tweets__tweets__tweet {
+  clear: both;
+  margin-bottom: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.kiosk-tweets__tweet__avatar {
+  @include img-responsive;
+  @include center-block;
+
+  float: left;
+  margin-right: 15px;
+}
+
+.kiosk-tweets__tweet__details {
+  overflow: hidden;
+}
+
+.kiosk-tweets__tweet__details__header {
+  margin-bottom: 15px;
+}
+
+.kiosk-tweets__tweet__details__permalink {
+  border-bottom: 1px;
+  color: #fff;
+  float: right;
+  position: relative;
+}
+
+.kiosk-tweets__tweet__link {
+  border-bottom: 3px solid #039be5;
+  box-shadow: inset 0 -3px 0 #039be5;
+  color: #fff;
+  transition: background .15s cubic-bezier(.33, .66, .66, 1);
+}
+
+.kiosk-tweets__tweet__retweet__icon {
+  background: transparent url('../images/retweet.png') no-repeat center;
+  display: inline-block;
+  height: 16px;
+  vertical-align: middle;
+  width: 14px;
+}
+
+.kiosk-tweets__tweet__avatar__image {
+  @include img-responsive;
+  @include center-block;
+}

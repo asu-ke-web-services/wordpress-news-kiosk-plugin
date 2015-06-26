@@ -18,25 +18,21 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 class Kiosk_Slider_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
+  protected $feed_helper;
 
-  public function __construct()  {
+  public function __construct( $feed_helper ) {
     $this->plugin_slug = 'kiosk-slider-shortcodes';
     $this->version     = '0.1';
-
     $this->load_dependencies();
     $this->define_hooks();
+    //$this->feed_helper = new Feed_Helper();
+    $this->feed_helper = $feed_helper;
   }
 
   /**
    * @override
    */
   public function load_dependencies() {
-    if ( function_exists( 'fetch_feed' ) ) {
-      include_once(ABSPATH . WPINC . '/feed.php');               // include the required file
-    }else {
-      error_log( 'Required file missing to import feed' );
-      return '';
-    }
   }
 
   public function define_hooks() {
@@ -48,106 +44,57 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with slider from rss feed to display as slider
-   * To add feed from other urls update $feed_urls_array we can improve by accepting associative array
-   *
+   * To add feed from other urls update $feed_urls_array we can improve by
+   * accepting associative array
    */
   public function kiosk_slider( $atts, $content = null ) {
-    $total_feed_count = 0;
-    $atts = shortcode_atts(
+    $total_feed_count   = 0;
+    $atts               = shortcode_atts(
         array(
-          'limit' => '20',
+          'limit'       => '20',
+          'feed_urls'   => array(
+                            'https://api.flickr.com/services/feeds
+                            /photos_public.gne?id=55424394@N03
+                            &lang=en-us&format=rss_200',
+                          )
         ),
         $atts
     );
-    $feed_urls_array    = array(
-      'https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200',
-    );
-    $limit = $atts['limit'];
-    $current_post_count = 0;
-    $kiosk_gallery_slider_template      = '<li %s data-target="#kiosk_gallery_slider" data-slide-to="%d"></li>';
-    $kiosk_gallery_slider_item_template = <<<HTML
-    <div class="item %s">
-      <img src="%s" class="img-responsive" alt="%s">
-      <div class="kiosk-gallery__slider-caption carousel-caption">
-       <h3>%s</h3>
-      </div>
-    </div>
-HTML;
-    // Prepare carousel
-    $div_listitems = <<<HTML
-      <div id="kiosk_gallery_slider" class="kiosk-gallery__slider carousel slide" data-ride="carousel">
-         <ol class="kiosk-gallery__slider__carousel-indicators carousel-indicators">
-HTML;
-    $div_sliders        = '<div class="carousel-inner" role="listbox">';
-    for ( $feed_element = 0; $feed_element < count( $feed_urls_array ); $feed_element++ ){
-      $items = [];
-      //$feed = fetch_feed( $feed_urls_array[ $feed_element ] ); // specify the source feed
-      $feed = $this->kiosk_slider_fetch_feed( $feed_urls_array[ $feed_element ] );
-      if ( ! is_wp_error( $feed ) ) : // Checks that the object is created correctly
-        $items = array_merge( $items, $feed->get_items( 0 ) ); // create an array of items
-        $total_feed_count = $total_feed_count + count( $items );
-      endif;
-      if ( 0 == $total_feed_count ) {
-        if ( $feed_element == count( $feed_urls_array ) -1 ) {
-          $div_sliders .= '<div>The feed is either empty or unavailable.</div>';
-        }
-        else {
-          continue;
-        }
-      }
+    $feed_urls_array    = $atts['feed_urls'];
+    if ( ! is_array( $feed_urls_array ) ) {
+      $feed_urls_array  = explode( ',', $feed_urls_array );
     }
-    $kisok_news_shortcodes = new Kiosk_News_Shortcodes();
-    usort( $items, array( $kisok_news_shortcodes, 'rss_sort_date_dsc' ) );
-    //$items = $this->remove_duplicates_rss( $items );
-    for ( $current_feed = 0; ( $current_feed < $limit ) && $total_feed_count > 0 && ( $current_feed <= $total_feed_count ); $current_feed++ ){
-      $item = $items[ $current_feed ];
-      if ( 0 == $current_post_count ) {
-          $div_listitems_active = ' class = "active" ';
-          $div_slider_active    = ' active ';
-      }else {
-        $div_listitems_active = '';
-        $div_slider_active    = '';
-      }
-
-      // Take the image tag src attribute from the content and store it in pics variable
-      //(?<!_)negative lookbehind  [\'"] match either ' or " (abc)capture group \1 backreference to group #1
-      preg_match_all( '/<img[^>]+>/i', $item->get_description(), $pics );
-      if ( 1 <= count( $pics[0] ) ) {
-        $res = explode( '"', $pics[0][0] );
-        $div_listitems .= sprintf(
-            $kiosk_gallery_slider_template,
-            $div_listitems_active,
-            $current_post_count
-        );
-
-        $div_sliders  .= sprintf(
-            $kiosk_gallery_slider_item_template,
-            $div_slider_active,
-            str_replace( '_m.jpg', '_b.jpg', $res[1] ), // updating to pic large quality image
-            $res[7],
-            $res[7]
-        );
-        $current_post_count++;
-      }else {
-        continue;
-      }
-    }
-     $div_listitems .= '</ol>';
-     $div_listitems .= $div_sliders;
-     $div_listitems .= '</div>';
-     $div_listitems .= '</div>';
-     $kiosk_slider_div = '<div class="kiosk-gallery">' . $div_listitems . '</div>';
-    return $total_feed_count > 0 ? $kiosk_slider_div : '';
+    $limit              = $atts['limit'];
+    $list_items         = array();
+    $items              = $this->feed_helper->get_feed_data( $feed_urls_array );
+    usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
+    $list_items         = Feed_Helper::extract_images_from_flickr_feed( $items, $limit );
+    $carousel_slider    = $this->get_gallery_carousel_slider( $list_items );
+    $kiosk_slider_div   = '<div class="kiosk-gallery">' . $carousel_slider . '</div>';
+    return $kiosk_slider_div;
   }
-
   /**
-   * The function is seperated for unit test mocking purpose
-   * It returns either the actual feed in case of normal flow
-   * for unit test case it returns the mock up data.
-   * Returns a SimplePie object type
-   * @return SimplePie.
+   * Creates required template and invokes helper function to create carousel
+   * @param array
+   * @return string
    */
-  function kiosk_slider_fetch_feed( $feed_url){
-    return fetch_feed( $feed_url ); // specify the source feed
+  private function get_gallery_carousel_slider( $list_items ) {
+    $prefix          = 'kiosk-gallery';
+    $carousel_slider = '';
+    $layout_template = <<<HTML
+    <img src="%s" alt="%s">
+      <div class="kiosk-gallery__slider-caption carousel-caption">
+       <h3><strong>%s</strong></h3>
+      </div>
+HTML;
+    if ( count( $list_items ) > 0 ) {
+      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+          $prefix,
+          $layout_template,
+          $list_items
+      );
+    }
+    return $carousel_slider;
   }
+
 }

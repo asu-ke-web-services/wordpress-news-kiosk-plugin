@@ -1,120 +1,170 @@
 /*! kisok v1.0 
- * Scrolls tweets with slideDown effect and a delay of 5 seconds. 
- **/
-$(document).ready(function() {
-  setInterval(function scrollTweets() {
-    $('.kiosk-tweets__list li:last-child').slideDown('slow', function() {
-      $(this).prependTo($('.kiosk-tweets__list')).show();
-    });
-  }, 5000);
-});
-
-/*
- * Invokes itself with 5 seconds interval and updates the time
+ */
+/**
+ * Invokes itself with 5 seconds interval and updates Kiosk widget date and time
  *
  */
-function kioskTime() {
-  var date = new Date();
-  var hours = date.getHours();
-  var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'PM' : 'AM'
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  hours = hours < 10 ? '0' + hours : hours;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
-  document.getElementById('kiosk_display_time').innerHTML = strTime;
-  var t = setTimeout(function() {
-    kioskTime()
-  }, 5000);
++function updateKioskTime(time_selector, cal_month_selector, cal_date_selector) {
+  var date         = new Date();
+  var hours        = date.getHours();
+  var minutes      = date.getMinutes();
+  var date_string  = date.toString();
+  var month        = date_string.substring(4, 7);
+  var current_date = date_string.substring(8, 10);
+  var ampm         = hours >= 12 ? 'PM' : 'AM';
+  hours            = hours % 12;
+  hours            = hours ? hours : 12; // the hour '0' should be '12'
+  hours            = hours < 10 ? '0' + hours : hours;
+  minutes          = minutes < 10 ? '0' + minutes : minutes;
+  var strTime      = hours + ':' + minutes + ' ' + ampm;
+  $(time_selector).html(strTime);
+  $(cal_month_selector).html(month);
+  $(cal_date_selector).html(current_date);
+  setTimeout(function() {
+    updateKioskTime(time_selector, cal_month_selector, cal_date_selector);
+  }, 5000 /* 5 seconds */ );
+}('#kiosk_display_time', '.kiosk-date-time__calendar-icon strong', '.kiosk-date-time__calendar-icon span')
 
-}
-$(document).ready(function() {
-  kioskTime();
-});
-
-/*
- * Invokes ajax call to server every 5 minutes and 
- * replaces tweets block and weather block
- *
- */
-$(document).ready(function() {
-  setInterval(function() {
-    $.ajax({
-      url: $(location).attr("href"),
-      success: function(response) {
-        result_kiosk_tweets = $(".kiosk-tweets", response);
-        $(".kiosk-tweets").replaceWith(result_kiosk_tweets);
-        result_kiosk_weather = $(".kiosk-weather", response);
-        $(".kiosk-weather").replaceWith(result_kiosk_weather);
-      }
-    })
-  }, 300000);
-});
-
-
-/*
+/**
  * To update tweet time relative to current time every 10 seconds
  * For each tweet read the actual time got from server and update the tweet time
- * relative to the current time every 10 seconds interval
+ * relative to the current time
+ */
++function setRelativeTweetTime(old_time_selector) {
+  var $formated_time = $(old_time_selector);
+  $formated_time.each(function(_, tweet_time) {
+    var old_time   = $(tweet_time).html();
+    // Ignore the case there the date is already formatted
+    // as a month
+    if (old_time.length <= 3) {
+      var actual_time   = $(tweet_time).data('actualTime');
+      $(tweet_time).html(calculateRelativeTime(actual_time));
+    }
+  });
+  setTimeout(function() {
+    setRelativeTweetTime(old_time_selector);
+  }, 10000 /* 10 seconds */ );
+}('.kiosk-tweets__tweet__details__tweet-time');
+
+/**
  * If less than 1 second show as now
  * If less than minute display as seconds ago
  * If less than hours display as minutes ago
  * If less than 24 hours display as hours ago
- * Otherwise leave it as set by server.
+ * Otherwise return in days. This is duplicate functionality of php to update relative time
+ * @param tweet_time is Unix timestamp (the number of seconds since January 1 1970 00:00:00 GMT).
+ * @see Kiosk_WP::Twitter_Api_Helper::time_short_form
  */
-function kioskTweetTime() {
-  var time = Math.round(+new Date() / 1000);
-  var formated_time = $('.kiosk_date');
-  $('.kiosk_actualtweettime').each(function(index, timeTag) {
-    var oldTime = formated_time[index].innerHTML;
-    var lastChar = oldTime.charAt(oldTime.length - 1);
-    if (oldTime.length <= 3) {
-      var actualTime = timeTag.innerHTML;
-      var etime = time - actualTime;
-      if (etime < 1) {
-        formated_time[index].innerHTML = 'now';
-      }
-      var a = [];
-      a.push({
-        secs: 1,
-        str: 's'
-      });
-      a.push({
-        secs: 60,
-        str: 'm',
-      });
-      a.push({
-        secs: 60 * 60,
-        str: 'h',
-      });
+function calculateRelativeTime(tweet_time) {
+  var time         = Math.round(+new Date() / 1000);
+  var elapsed_time = time - tweet_time;
+  var temp         = '0h';
+  if (elapsed_time < 1) {
+    return 'now';
+  }
+  var time_conversion = [{
+    secs: 1,
+    unit: 's'
+  }, {
+    secs: 60,
+    unit: 'm'
+  }, {
+    secs: 60 * 60,
+    unit: 'h'
+  }, {
+    secs: 24 * 60 * 60,
+    unit: 'd'
+  }];
 
-      for (i = 0; i < a.length; i++) {
-        var d = etime / Number(a[i].secs);
-        if (d >= 1 && (a[i].str == 'h' && d < 24 || a[i].str == 'm' && d < 60 || a[i].str == 's' && d < 60)) {
-          r = Math.round(d);
-          formated_time[index].innerHTML = r + a[i].str;
-        }
+  for (var i = 0; i < time_conversion.length; i++) {
+    var ratio_elapsed_to_unit = elapsed_time / time_conversion[i].secs;
+    var rounded_time          = Math.round(ratio_elapsed_to_unit);
+    temp                      = rounded_time + time_conversion[i].unit;
+    var not_a_fractional_unit = ratio_elapsed_to_unit >= 1;
+    var less_than_one_day     = time_conversion[i].unit == 'h' && ratio_elapsed_to_unit < 24;
+    var less_than_one_hour    = time_conversion[i].unit == 'm' && ratio_elapsed_to_unit < 60;
+    var less_than_one_minute  = time_conversion[i].unit == 's' && ratio_elapsed_to_unit < 60;
+    if (not_a_fractional_unit && (less_than_one_day || less_than_one_hour || less_than_one_minute)) {
+      return temp;
+    }
+  }
+  return temp;
+}
+
+/**
+ * set carousel effect to 10 seconds
+ */
+$('.carousel').carousel({
+  interval: 10000
+});
+
+/**
+ * Invokes ajax call to server every 5 minutes and
+ * replaces tweets block and weather block
+ * Updates tweets and weather widgets only when servers returns valid data
+ */
+var site_url          = $(location).attr("href");
+var tweets_limit      = 20;
+var $weather_location = $.trim($('.kiosk-weather__forecast__title').text());
+var tweets_url        = site_url + 'kiosk/twitter/limit/' + tweets_limit;
+// var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
+var weather_url       = site_url + 'kiosk/weather/location=paris texas';
+setInterval(function() {
+  $.ajax({
+    url: tweets_url,
+    success: function(response) {
+      if(response.length){
+        $(".kiosk-tweets").replaceWith(response);
       }
     }
   });
-  var t = setTimeout(function() {
-    kioskTweetTime()
-  }, 10000);
 
+  $.ajax({
+    url: weather_url,
+    success: function(response) {
+       if(response.length){
+        $(".kiosk-weather").replaceWith(response);
+      }
+    }
+  });
+}, 300000 /* 5 minutes */ );
+
+/**
+ * every 10 seconds, move
+ * the first tweet up. After animation, reset list,
+ * and move first tweet to the end of the list
+ */
+var $tweet_list = $('#kiosk-tweets__tweets');
+setInterval(function tweetAnimate() {
+  var $first_tweet = $tweet_list.find('li:first');
+  $tweet_list.find('li').animate({
+    top: (-1 * $first_tweet.outerHeight(true)) + 'px' // calculate height of first element
+  }, 2000, function() {
+    $first_tweet.appendTo($tweet_list);
+    $first_tweet.show();
+    $tweet_list.find('li').css({
+      'top': '0px'
+    });
+  });
+}, 10000 /* 10 seconds */ );
+
+/**
+ * reloads page every night between 12 a.m to 1 a.m
+ */
+setTimeout(function() {
+  var hour = new Date().getHours();
+  if( 0 <= hour < 1 ) {
+    location.reload();
+  }
+}, 1 * 60 * 60 * 1000 /* 1 hour */ );
+
+/**
+ * Hide page scroll bars when current page template is set to Kiosk
+ *
+ */
+if ($('.kiosk-page-template').length) {
+  $('html').css({
+    'overflow-y': 'hidden',
+    'overflow-x': 'hidden'
+  });
 }
-$(document).ready(function() {
-  kioskTweetTime();
-});
-$(document).ready(function() {
-  var screen_height = 1080; //Not using window.screen.height as the posts image is not scaling unless increase width
-  $('.kiosk-tweets').height(screen_height - $('.kiosk-tweets').offset().top);
-  $('.kiosk-tweets_scroll-container').height($('.kiosk-tweets').height() - 120);
-  $('.kiosk-asu-news').height(screen_height - $('.kiosk-asu-news').offset().top);
-  $('.kiosk-events').height(screen_height - $('.kiosk-events').offset().top);
-});
-$(document).ready(function() {
-  $('.carousel').carousel({
-    interval: 10000
-  })
-});

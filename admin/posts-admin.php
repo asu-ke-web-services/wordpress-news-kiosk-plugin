@@ -14,7 +14,12 @@ class Posts_Admin extends Base_Registrar {
   public static $options_categories_name     = 'posts_categories_slugs';
   public static $section_name                = 'kiosk_posts_display_admin';
   public static $section_id                  = 'kiosk_posts_display_admin_id';
-  public static $section_post_categories_id  = 'kiosk_post_categories';
+  public static $section_post_tags           = 'kiosk_post_tags';
+  public static $kiosk_post_tags             = '';
+  public static $section_post_status         = 'kiosk_post_status';
+  public static $kiosk_post_status           = 'any';
+  public static $section_post_details        = 'Post Details';
+  public static $kiosk_post_statuses         = array();
 
   protected $plugin_slug;
   protected $version;
@@ -23,13 +28,7 @@ class Posts_Admin extends Base_Registrar {
     $this->plugin_slug = 'kiosk-post-admin';
     $this->version     = '0.1';
     $this->css         = plugin_dir_url( __FILE__ ) . 'css/posts-admin-manager.css';
-
-    // Set default options:
-    add_option(
-        Posts_Admin::$options_name,
-        array( Posts_Admin::$section_post_categories_id => 'posts-wrigley-lecture, posts-sustainability-series, posts-case-critical, posts-sustainability-after-school, posts-conferences, posts-defenses' )
-    );
-
+    self::$kiosk_post_statuses = get_post_statuses();
     $this->load_dependencies();
     $this->define_hooks();
     $general_admin->enqueue_panel(
@@ -60,194 +59,198 @@ class Posts_Admin extends Base_Registrar {
    * Enqueue styles so that Wordpress caches them.
    */
   public function admin_enqueue_scripts() {
-    wp_enqueue_script( 'jquery-ui', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.min.js', array(), $this->version, false );
+    $plugin_dir_url = plugin_dir_url( dirname( __FILE__ ) );
     wp_enqueue_style( $this->plugin_slug, $this->css, array(), $this->version, false );
+    wp_register_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
+    wp_enqueue_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
   }
 
   public function admin_init() {
-    // register settings
+    // register settings for form
     register_setting(
-        Posts_Admin::$options_group,
-        Posts_Admin::$options_name,
+        self::$options_group,
+        self::$options_name,
         array( $this, 'form_submit' )
     );
-
+    // register settings for post tags field
+    register_setting(
+        self::$options_group,
+        self::$section_post_tags,
+        array( $this, 'sanitize_post_tags_callback' )
+    );
+    // register settings for post status field
+    register_setting(
+        self::$options_group,
+        self::$section_post_status,
+        array( $this, 'sanitize_post_tags_callback' )
+    );
     add_settings_section(
-        Posts_Admin::$section_id,
-        'Post Settings',
+        self::$section_id,
+        'Posts Details',
         array(
           $this,
           'print_section_info',
         ),
-        Posts_Admin::$section_name
+        self::$section_name
     );
-
     add_settings_field(
-        Posts_Admin::$section_post_categories_id,
-        'Post Categories', // Title
+        self::$section_post_tags,
+        'Post Tags',
+        array(
+          $this,
+          'section_post_tags_callback',
+        ), // Callback
+        self::$section_name,
+        self::$section_id,
+        array( 'context' => self::$section_post_tags ) // custom arguments
+    );
+    add_settings_field(
+        self::$section_post_status,
+        'Post Status',
+        array(
+          $this,
+          'section_post_tags_callback',
+        ), // Callback
+        self::$section_name,
+        self::$section_id,
+        array( 'context' => self::$section_post_status ) // custom arguments
+    );
+    add_settings_field(
+        self::$section_post_details,
+        '',
         array(
           $this,
           'post_categories_callback',
         ), // Callback
-        Posts_Admin::$section_name,
-        Posts_Admin::$section_id
+        self::$section_name,
+        self::$section_id
     );
   }
+
 
   /**
    * Print the Section text
    */
   public function print_section_info() {
-    print 'Enter your settings below:';
+    // print 'Enter your settings below:';
   }
+  /**
+   * Print the form section for the post tags and post status
+   */
+  public function section_post_tags_callback( $args ) {
+    if ( self::$section_post_tags === $args['context'] ) {
+         $tags = get_option( self::$section_post_tags );
+      printf(
+          '<input type="text" id="%s" name="%s" value="%s"></input>',
+          self::$section_post_tags,
+          self::$section_post_tags,
+          $tags
+      );
+      self::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
+    } elseif ( self::$section_post_status === $args['context'] ) {
+      $status = get_option( self::$section_post_status );
+      $post_status_drop_down = '<select id="%s" name="%s">';
+      $selected = '';
+      foreach ( self::$kiosk_post_statuses as $key => $value ) {
+        if ( $key == $status ) {
+          $selected = 'selected="selected"';
+        } else {
+          $selected = '';
+        }
+        $post_status_drop_down  .= '<option value="' . $key . '"' . $selected . '>' . $value . '</option>';
+      }
+      $post_status_drop_down .= '</select>';
+      printf(
+          $post_status_drop_down,
+          self::$section_post_status,
+          self::$section_post_status
+      );
+      self::$kiosk_post_status = $this->sanitize_post_tags_callback( $status );
+    }
+  }
+
 
   /**
    * Print the form section for the post categories
    */
-  public function post_categories_callback() {
-    $default = '';
-    $options = get_option( \Kiosk_WP\Posts_Admin::$options_name );
-
-    if ( isset ( $options[ Posts_Admin::$section_post_categories_id ] ) ) {
-      $default = esc_attr( $options[ Posts_Admin::$section_post_categories_id ] );
+  public function post_categories_callback( ) {
+    $tags   = self::$kiosk_post_tags;
+    $status = self::$kiosk_post_status;
+    $limit                  = 20;
+    if ( empty( $status ) ) {
+      $status = 'any';
     }
-
-    /*$presenter  = new \Posts_Presenter();
-    $categories = $presenter->get_full_listing_of_categories();
-    $filtered   = '[';
-
-    for ( $i = 0; $i < count( $categories ); $i++ ) {
-      if ( 0 != $i ) {
-        $filtered .= ',';
-      }
-
-      $filtered .= '{';
-      $filtered .= 'slug : "' . $categories[ $i ]['slug'] . '",';
-      $filtered .= 'title : "' . $categories[ $i ]['title'] . '"';
-      $filtered .= '}';
-    }
-
-    $filtered .= ']';
-
-    */
-      $filtered   = '[';
-      $filtered .= '{';
-      $filtered .= 'slug :  1,';
-      $filtered .= 'title : 1';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  1,';
-      $filtered .= 'title : 2';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  3,';
-      $filtered .= 'title : 4';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  5,';
-      $filtered .= 'title : 6';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  7,';
-      $filtered .= 'title : 8';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  9,';
-      $filtered .= 'title : 10';
-      $filtered .= '}';
-      $filtered .= ',';
-      $filtered .= '{';
-      $filtered .= 'slug :  11,';
-      $filtered .= 'title : 12';
-      $filtered .= '}';
-       $filtered .= ']';
-
-    $javascript = <<<JAVASCRIPT
-<script>
-+function ($) {
-    'use strict';
-    
-    var allOptions = %s;
-    
-    var selectedOptions = '%s'.split(',');
-    selectedOptions     = $.map( selectedOptions, function ( v ) {
-      return v.trim();
-    } );
-    
-    // Populate sortables
-    
-    var allSelected = $.map( selectedOptions, function ( v ) {
-        for ( var i = 0; i < allOptions.length; i++ ) {
-            if ( allOptions[i].slug === v ) {
-                var value = allOptions[i].slug;
-                var read = allOptions[i].title;
-                allOptions[i].touched = true;
-                
-                return $( '<li class="ui-state-default" data-value="' +  value + '">' + read + '</li>' );
-            }
-        }
-        return null;
-    } );
-    
-    var allNotSelected = $.map( allOptions, function ( v ) {
-        if ( ! v.touched ) {
-            return $( '<li class="ui-state-default" data-value="' +  v.slug + '">' + v.title + '</li>' );
-        }
-    } );
- 
-    $( '#posts-sortable-selected' ).append( allSelected );
-    $( '#posts-sortable-all' ).append( allNotSelected );
-    
-    // Enable sorting
-    $( "#posts-sortable-selected, #posts-sortable-all" ).sortable({
-        connectWith: "ul",
-        placeholder: "ui-state-highlight",
-        stop : function ( e, ui ) {
-            var filtered = $.map( $( '#posts-sortable-selected li' ), function ( v ) {
-                return $( v ).attr('data-value')
-            } ).join(',')
-            
-            $( '#%s' ).val( filtered )
-        }
-    });
-    
-    $( "#posts-sortable-all, #posts-sortable-selected" ).disableSelection();
-}(jQuery);
-</script>
-JAVASCRIPT;
-
-    $html = <<<HTML
-<div class="sortable-panel">
-  <h4>Available Post Categories</h4>
-  <ul id="posts-sortable-all" class="droptrue sortable"></ul>
-</div>
-<div class="sortable-panel">
-  <h4>Selected Post Categories</h4>
-  <ul id="posts-sortable-selected" class="droptrue sortable"></ul>
-</div>
-<br style="clear:both">
-<input type="hidden" id="%s" name="%s[%s]" value="%s"/>
+    $query_post_options     = array(
+        'post_type'         => array( 'attachment', 'page', 'post' ),
+        'posts_per_page'    => $limit,
+        'orderby'           => 'post_date',
+        'order'             => 'DESC',
+        'tag'               => $tags,
+        'post_status'       => $status,
+    );
+    $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
+    usort( $list_items, array( 'Kiosk_WP\Kiosk_Helper', 'sort_by_date' ) );
+    echo $this->posts_items_display( $list_items );
+  }
+  /**
+   *
+   */
+  public function posts_items_display( $list_items ){
+    $table_template = <<<HTML
+      <div class="table-responsive">          
+        <table class="table table-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Post ID</th>
+              <th>Post Title</th>              
+              <th>Kiosk End Date</th>
+              <th>Post Status</th>
+              <th>Post Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            %s
+          </tbody>
+        </table>
+        </div>
+      </div>
 HTML;
-    // HTML before Javascript!
-    printf(
-        $html,
-        Posts_Admin::$section_post_categories_id,
-        Posts_Admin::$options_name,
-        Posts_Admin::$section_post_categories_id,
-        $default
-    );
-
-    printf(
-        $javascript,
-        $filtered,
-        $default,
-        Posts_Admin::$section_post_categories_id
-    );
+    $row_template = <<<HTML
+    <tr>
+    <td><a href="%s" target="_blank"><img src="%s" class='img-thumbnail posts-table__image'></a></td>
+    <td>%s</td>
+    <td>%s</td>    
+    <td>%s</td>
+    <td>%s</td>
+    <td>%s</td>
+    </tr>
+HTML;
+    $row_items = '';
+    $timeline = null;
+    foreach ( $list_items as $item ) {
+      $row_items .= sprintf(
+          $row_template,
+          $item['image'],
+          $item['image'],
+          $item['post-id'],
+          $item['post-title'],
+          $item['kiosk-end-date'],
+          $item['post-status'],
+          $item['post-date']
+      );
+      //prepare data for timeline
+      $timeline[]    = array(
+        'start-date' => $item['post-date'],
+        'end-date'   => $item['kiosk-end-date'],
+        'label'      => $item['post-title'],
+        'status'     => $item['post-status'],
+        );
+    }
+    if ( ! empty( $timeline ) ) {
+      print_r( TimeLine_Helper::create_timeline( $timeline ) );
+    }
+    return sprintf( $table_template, $row_items );
   }
 
   /**
@@ -256,5 +259,14 @@ HTML;
   public function form_submit( $input ) {
     // TODO filter and make sure that post categories are valid
     return $input;
+  }
+  /**
+   * Handle form submissions for post tags variable by removing
+   *  whitespace and escape any html junk.
+   */
+  public function sanitize_post_tags_callback( $input ) {
+    $input = rtrim( trim( $input ) );
+
+    return esc_html( $input );
   }
 }

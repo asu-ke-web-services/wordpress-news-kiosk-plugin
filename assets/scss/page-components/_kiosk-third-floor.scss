@@ -1,0 +1,79 @@
+/* ======================
+   Kiosk Third Floor Compoments
+   ======================*/
+$kiosk-padding: 15px;
+
+.kiosk-third-floor {
+  @extend .flex-container;
+
+  background: linear-gradient(to bottom, #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 54%, #9fd8ef 58%, #2ab0ed 100%);
+  color: #333;
+  font-family: $font-family-sans-serif;
+  font-size: 1.6vmin;
+  padding: $kiosk-padding;
+  width: 100%;
+}
+
+.kiosk-third-floor__column {
+  @extend .flex-column;
+
+  padding: $kiosk-padding;  
+}
+
+.kiosk-third-floor__column--1 {
+  @extend .kiosk-third-floor__column;
+
+  width: 70%;
+}
+
+.kiosk-third-floor__column--2 {
+  @extend .kiosk-third-floor__column;
+
+  width: 30%;
+}
+
+@media screen and (max-width: 1200px) {
+  .kiosk-third-floor__column--1 {
+    width: 100%;
+  }
+
+  .kiosk-third-floor__column--2 {
+    width: 100%;
+  }
+}
+
+.kiosk-third-floor__logo {
+  display: block;
+  height: 15%;  
+  padding: 0;  
+  width: 100%;  
+}
+
+.kiosk-third-floor__people-slider {
+  height: 85%;
+  width: 100%;
+}
+
+.kiosk-third-floor__weather {
+  height: 25%;
+  max-height: 300px;
+  max-width: 580px;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.kiosk-third-floor__tweets {
+  height: 60%;
+  max-height: 700px;
+  max-width: 580px;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.kiosk-third-floor__time {
+  height: 15%;
+  max-height: 200px;
+  max-width: 580px;
+  padding: 0 20% 15px;
+  width: 100%;
+}

@@ -1,0 +1,74 @@
+/* =================
+   Weather Component
+   =================*/
+
+.kiosk-weather {
+  @include boxify;
+
+  background: $kiosk-component-background;
+  overflow: hidden;
+  padding: 15px;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-weather__forecast {
+  @extend .container-fluid;
+  @extend .col-xs-9;
+
+  padding: 0;
+}
+
+.kiosk-weather__weather__row {
+  @extend .row;
+
+  @include center-block;
+}
+
+.kiosk-weather__current {
+  @extend .col-xs-3;
+
+  padding: 0;
+}
+
+.kiosk-weather__forecast__item {
+  @extend .col-xs-4;
+
+  color: $kiosk-color;
+  padding: 0;
+  text-align: center;
+}
+
+.kiosk-weather__forecast__item+.kiosk-weather__forecast__item {
+  padding: 0 10px;
+}
+
+.kiosk-weather__forecast__title {
+  color: $kiosk-color;
+  font-size: 2em;
+  font-weight: bold;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.kiosk-weather__current__item__image {
+  @include img-responsive;
+  @include center-block;
+  width: 90%;
+}
+
+.kiosk-weather_forecast__item_image {
+  @include img-responsive;
+  @include center-block;
+}
+
+.kiosk-weather__current__item__text {
+  color: $kiosk-color;
+  text-align: center;
+}
+
+.kiosk-weather__forecast__item__header {
+  color: $kiosk-color;
+  font-weight: bold;
+  padding: 5px;
+}

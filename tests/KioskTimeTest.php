@@ -17,7 +17,15 @@ class KioskTimeTest extends WP_UnitTestCase {
 
     // Test no tags
     $content = do_shortcode( '[kiosk-time]' );
-    $this->assertContains( 'kiosk-date-time__calendar', $content, 'Should return calender' );
-    $this->assertContains( 'kiosk-date-time__time', $content, 'Should return current time' );
+    $this->assertContains(
+        'kiosk-date-time__calendar',
+        $content,
+        'Should return calender'
+    );
+    $this->assertContains(
+        'kiosk-date-time__time',
+        $content,
+        'Should return current time'
+    );
   }
 }

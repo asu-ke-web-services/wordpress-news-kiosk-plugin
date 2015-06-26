@@ -1,0 +1,36 @@
+/* =====
+   Posts
+   =====*/
+
+.kiosk-posts {
+  display: block;
+  height: 1019px;
+  overflow: hidden;
+}
+
+.kiosk-posts__slider__carousel-indicators {
+  visibility: hidden;
+}
+
+.kiosk-posts__slider,
+.kiosk-posts__carousel-inner {
+  height: 100%;
+}
+
+.kiosk-posts__slider__slide {
+  height: 100%;
+
+  img {
+    @include center-block;
+    @include img-responsive;
+    
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;   
+  }
+}

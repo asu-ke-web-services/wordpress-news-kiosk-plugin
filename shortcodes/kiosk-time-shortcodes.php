@@ -19,7 +19,7 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
   protected $plugin_slug;
   protected $version;
 
-  public function __construct()  {
+  public function __construct() {
     $this->plugin_slug = 'kiosk-time-shortcodes';
     $this->version     = '0.1';
 
@@ -45,32 +45,29 @@ class Kiosk_Time_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_time( $atts, $content = null ) {
-
     $calender_template = <<<HTML
-      <div class="row">
-        <div class="kiosk-date-time__calendar col-xs-4 col-sm-4">
+        <div class="kiosk-date-time__calendar">
           <div  class="kiosk-date-time__calendar-icon">
-            <strong>%s</strong>
-            <span>%s</span>
+            <div class="kiosk-date-time__calendar__month">%s</div>
+            <div class="kiosk-date-time__calendar__date">%s</div>
           </div>
         </div>
-        <div class="kiosk-date-time__time col-xs-8 col-sm-8">
-          <p id="kiosk_display_time">%s</p>
+        <div class="kiosk-date-time__time" id="kiosk_display_time">
+          %s
         </div>
-      </div>
 HTML;
-
     date_default_timezone_set( 'America/Phoenix' );
-    $month = date( 'M' );
-    $dayOfMonth = date( 'd' );
-    $current_time = date( 'h:i A' );
-    $calender_time = sprintf(
+    $month          = date( 'M' );
+    $dayOfMonth     = date( 'd' );
+    $current_time   = date( 'h:i A' );
+    $calender_time  = sprintf(
         $calender_template,
         $month,
         $dayOfMonth,
         $current_time
     );
-    $kiosk_time_div = '<div class="kiosk-date-time" id="kiosk_time">' . $calender_time . '</div>';
+    $kiosk_time_div = '<div class="kiosk-date-time" id="kiosk_time">'
+        . $calender_time . '</div>';
     return $kiosk_time_div;
   }
 }

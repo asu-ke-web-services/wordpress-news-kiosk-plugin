@@ -1,0 +1,9 @@
+/* ===============
+   Color Variables
+   =============== */
+
+$scarab-green: #568e14;
+$kiosk-color-light: #fff !default;
+
+$kiosk-component-background: fade-out($scarab-green, .3) !default;
+$kiosk-color: $kiosk-color-light !default;
