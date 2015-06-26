@@ -17,10 +17,16 @@
 }
 
 .kiosk-gallery__slider {
+  @extend .carousel;
+
   height: 100%;
   overflow: hidden;
   vertical-align: middle;
   width: 100%;
+}
+
+.kiosk-gallery__slider__carousel-inner {
+  @extend .carousel-inner;
 }
 
 .kiosk-gallery__carousel-inner {
@@ -48,5 +54,7 @@
 }
 
 .kiosk-gallery__slider__carousel-indicators {
+  @extend .carousel-indicators;
+  
   visibility: hidden;
 }
