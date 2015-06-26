@@ -38,7 +38,7 @@ class Carosuel_Slider_Helper {
 HTML;
     $carousel_li_item          = '<li %s data-slide-to="%d" data-target="#%s">
         </li>';
-    $carousel_inner_div_start  = '<div class="carousel-inner '
+    $carousel_inner_div_start  = '<div class="%s__slider__carousel-inner carousel-inner '
         . $prefix
         . '__carousel-inner" role="listbox">';
     $carousel_ol_end           = '</ol>';
