@@ -937,7 +937,7 @@
 }
 
 .flex-column, .kiosk-people-slider__layout, .kiosk-people-slider__layout__row-middle--column1,
-.kiosk-people-slider__layout__row-middle--column3, .kiosk-lobby__column, .kiosk-lobby__column--1,
+.kiosk-people-slider__layout__row-middle--column3, .kiosk-lobby__column--1,
 .kiosk-lobby__column--3, .kiosk-lobby__column--2, .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
   align-content: space-around;
   align-items: center;
@@ -1035,14 +1035,13 @@
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
   color: #fff;
-  height: 100%;
   overflow: hidden;
   padding: 15px;
   width: 100%;
 }
 
 .kiosk-tweets__container {
-  height: 86%;
+  height: 40%;
   overflow: hidden;
   padding-bottom: 10px;
   position: relative;
@@ -1459,30 +1458,33 @@
 /* ======================
    Kiosk Lobby Compoments
    ======================*/
+* {
+  box-sizing: border-box;
+}
+
 .kiosk-lobby {
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  font-size: 1.7vmin;
   padding: 15px 0;
   width: 100%;
 }
 
-.kiosk-lobby__column, .kiosk-lobby__column--1,
+.kiosk-lobby__column--1,
 .kiosk-lobby__column--3, .kiosk-lobby__column--2 {
-  min-width: 500px;
+  flex: .3;
   padding: 10px;
 }
 
 .kiosk-lobby__column--1,
 .kiosk-lobby__column--3 {
-  max-width: 500px;
+  flex: .3;
 }
 
 .kiosk-lobby__column--2 {
-  max-width: 761px;
+  flex: .4;
 }
 
 @media screen and (max-width: 1500px) {
@@ -1504,7 +1506,7 @@
 }
 
 .kiosk-lobby__tweets {
-  height: 575px;
+  flex: 1;
   padding: 15px 0;
   width: 100%;
 }
