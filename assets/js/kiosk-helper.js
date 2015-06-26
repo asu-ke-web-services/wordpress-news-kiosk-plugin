@@ -107,14 +107,14 @@ var site_url          = $(location).attr("href");
 var tweets_limit      = 20;
 var $weather_location = $.trim($('.kiosk-weather__forecast__title').text());
 var tweets_url        = site_url + 'kiosk/twitter/limit/' + tweets_limit;
-var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
+// var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
+var weather_url       = site_url + 'kiosk/weather/location=paris texas';
 setInterval(function() {
   $.ajax({
     url: tweets_url,
     success: function(response) {
-      var $response_tweets = $(".kiosk-tweets", response);
-      if ($response_tweets.length) {
-        $(".kiosk-tweets").replaceWith($response_tweets);
+      if(response.length){
+        $(".kiosk-tweets").replaceWith(response);
       }
     }
   });
@@ -122,13 +122,12 @@ setInterval(function() {
   $.ajax({
     url: weather_url,
     success: function(response) {
-      var $response_weather = $(".kiosk-weather", response);
-      if ($response_weather.length) {
-        $(".kiosk-weather").replaceWith($response_weather);
+       if(response.length){
+        $(".kiosk-weather").replaceWith(response);
       }
     }
   });
-}, 100000 /* 5 minutes */ );
+}, 300000 /* 5 minutes */ );
 
 /**
  * every 10 seconds, move

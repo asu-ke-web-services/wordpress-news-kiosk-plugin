@@ -19,8 +19,7 @@ class Yahoo_Weather_Api_Helper {
    */
   public function get_weather_json( $location = 'tempe, az' ) {
     $BASE_URL       = 'http://query.yahooapis.com/v1/public/yql';
-    $yql_query      = 'select * from weather.forecast where woeid in 
-    (select woeid from geo.places(1) where text="' . $location . '")';
+    $yql_query      = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' . $location . '")';
     $yql_query_url  = $BASE_URL . '?q=' . urlencode( $yql_query )
         . '&format=json';
     // Make call with cURL

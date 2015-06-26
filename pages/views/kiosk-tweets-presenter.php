@@ -12,7 +12,6 @@ $range = array(
 );
 
 $limit = filter_input( INPUT_GET, 'limit', FILTER_VALIDATE_INT, $range );
-
 if ( false === $limit || null === $limit ) {
   die();
 } else {
