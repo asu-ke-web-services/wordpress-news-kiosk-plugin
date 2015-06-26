@@ -215,6 +215,13 @@ Attributes Description:
 [/kiosk_people_slider]
 ```
 
+Notes: This shortcode depends on GIOS API for fetching people and keywords for
+this to make it to work you need to add the the GIOS API plugin path to php.ini
+
+```
+include_path = "/usr/share/php:/usr/share/pearPHP:/path/to/the/gios2api2-php:."
+```
+
 Attributes Description:
 * Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available. 
 Json style synax should be given as part of content with keyword or keyword-slug, person-slug, quote.
@@ -225,13 +232,12 @@ Json style synax should be given as part of content with keyword or keyword-slug
 * Keyword is the category name they belong to 
   `For example Keyword can be: Energy or food systems but not deforestation`
 
-Note: If you are on multi-site you need to access below lines to .htaccess file
+
+
+Note: If you are on multi-site you need to add below lines to .htaccess file
 
 ```
 RewriteRule ^kiosk/twitter/limit/([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1 [QSA,L]
 RewriteRule ^kiosk/weather/location=([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php? [QSA,L]
 
 ```
-
-
-
