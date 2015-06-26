@@ -14,7 +14,7 @@
   color: #333;
   font-family: $font-family-sans-serif;
   //font-size: 1.7vmin;
-  padding: 15px 0;
+  //padding: 15px 0;
   width: 100%;
 }
 
@@ -64,20 +64,18 @@
 }
 
 .kiosk-lobby__time {
-  height: 151px;
-  max-width: 480px;
   padding: 0 15% 15px;
   width: 100%;
 }
 
 .kiosk-lobby__gallery {
-  height: 392px;
+  flex: 1;
   padding: 15px 0;  
   width: 100%;
 }
 
 .kiosk-lobby__asu-news {
-  height: 418px;
+  flex: 1;
   padding: 15px 0 10px;
   width: 100%;
 }

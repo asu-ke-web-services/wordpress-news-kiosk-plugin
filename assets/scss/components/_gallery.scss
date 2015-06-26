@@ -6,7 +6,14 @@
   @include boxify;
 
   background: $kiosk-component-background;
-  height: 360px;
+  overflow: hidden;
+  vertical-align: middle;
+  width: 100%;
+}
+
+.kiosk-gallery__slider {
+  @extend .carousel;
+
   overflow: hidden;
   vertical-align: middle;
   width: 100%;
@@ -16,21 +23,12 @@
   color: #fff;
 }
 
-.kiosk-gallery__slider {
-  @extend .carousel;
-
-  height: 100%;
-  overflow: hidden;
-  vertical-align: middle;
-  width: 100%;
-}
-
 .kiosk-gallery__slider__carousel-inner {
   @extend .carousel-inner;
 }
 
 .kiosk-gallery__carousel-inner {
-  height: 100%;
+  height: 35vh
 }
 
 .kiosk-gallery__slider__slide {
