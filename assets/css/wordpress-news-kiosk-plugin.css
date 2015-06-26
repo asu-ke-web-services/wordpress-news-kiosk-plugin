@@ -1512,7 +1512,6 @@
    =====*/
 .kiosk-posts {
   display: block;
-  height: 1019px;
   overflow: hidden;
 }
 
@@ -1541,7 +1540,6 @@
   bottom: 0;
   left: 0;
   margin: auto;
-  max-height: 100%;
   max-width: 100%;
   position: absolute;
   right: 0;
@@ -1771,7 +1769,6 @@
 }
 
 .kiosk-lobby__posts {
-  height: 1019px;
   width: 100%;
 }
 
