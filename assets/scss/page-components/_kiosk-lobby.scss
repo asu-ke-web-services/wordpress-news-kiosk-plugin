@@ -1,6 +1,9 @@
 /* ======================
    Kiosk Lobby Compoments
    ======================*/
+
+$kiosk-items-padding: 15px 0;
+
 * {
   box-sizing: border-box;
 }
@@ -13,16 +16,12 @@
   background-size: cover;
   color: #333;
   font-family: $font-family-sans-serif;
-  //font-size: 1.7vmin;
-  //padding: 15px 0;
-  width: 100%;
 }
 
 %kiosk-lobby__column {
   @extend .flex-column;
 
-  flex: .3;
-  padding: 10px;
+  padding: 15px;
 }
 
 .kiosk-lobby__column--1,
@@ -38,48 +37,80 @@
   flex: .4;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 900px) {
+  .kiosk-lobby {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
   .kiosk-lobby__column--1 {
+    flex: 1 1 100%;
     order: 1;
   }
 
   .kiosk-lobby__column--2 {
+    flex: 1 1 100%;
     order: 3;
   }
 
   .kiosk-lobby__column--3 {
+    flex: 1 1 100%;
     order: 2;
   }
+
+}
+
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+  .kiosk-lobby {
+    flex-direction: row;
+  }
+
+  .kiosk-lobby__column--1 {
+    flex: 1 1 50%;
+    order: 1;
+  }
+
+  .kiosk-lobby__column--2 {
+    flex: 1 1 100%;
+    order: 3;
+
+  }
+
+  .kiosk-lobby__column--3 {
+    flex: 1 1 50%;
+    order: 2;
+  }
+
+}
+
+.kiosk-lobby__time,
+.kiosk-lobby__logo {
+  padding: $kiosk-items-padding;
 }
 
 .kiosk-lobby__weather {
-  padding: 15px 0;
-  width: 100%;
+  padding: $kiosk-items-padding;
 }
 
 .kiosk-lobby__tweets {
-  flex: 1;
-  padding: 15px 0;
-  width: 100%;
-}
 
-.kiosk-lobby__time {
-  padding: 0 15% 15px;
-  width: 100%;
+  align-self: stretch;
+  display: flex;
+  flex: 1;
+  padding: $kiosk-items-padding;
 }
 
 .kiosk-lobby__gallery {
-  flex: 1;
-  padding: 15px 0;  
-  width: 100%;
+  padding: $kiosk-items-padding;
 }
 
 .kiosk-lobby__asu-news {
+  align-self: stretch;
+  display: flex;
   flex: 1;
-  padding: 15px 0 10px;
-  width: 100%;
+  padding: $kiosk-items-padding;
 }
 
 .kiosk-lobby__posts {
-  width: 100%;
+  padding: $kiosk-items-padding;
 }

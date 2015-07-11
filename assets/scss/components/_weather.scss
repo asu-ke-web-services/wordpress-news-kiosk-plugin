@@ -23,6 +23,7 @@
   @extend .row;
 
   @include center-block;
+  width: 100%;
 }
 
 .kiosk-weather__current {
@@ -47,14 +48,17 @@
   color: $kiosk-color;
   font-size: 2em;
   font-weight: bold;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   text-align: center;
 }
 
 .kiosk-weather__current__item__image {
   @include img-responsive;
   @include center-block;
+
+  max-width: 100px;
   width: 90%;
+  
 }
 
 .kiosk-weather_forecast__item_image {

@@ -7,6 +7,7 @@
 
   background: $kiosk-component-background;
   color: #fff;
+  display: block;
   overflow: hidden;
   padding: 15px;
   width: 100%;
@@ -15,7 +16,6 @@
 .kiosk-tweets__container {
   height: 40%;
   overflow: hidden;
-  padding-bottom: 10px;
   position: relative;
 }
 
@@ -45,7 +45,6 @@
 .kiosk-tweets__tweets {
   height: 100%;
   list-style: none;
-  padding-left: 15px;
   position: relative;
 }
 

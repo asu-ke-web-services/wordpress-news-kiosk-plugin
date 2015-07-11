@@ -5,14 +5,19 @@
 .kiosk-date-time {
   @extend .flex-container;
 
+  justify-content: center;
   overflow: hidden;
+}
+
+.kiosk-date-time__calendar {
+  padding: 0 20px;
 }
 
 .kiosk-date-time__calendar-icon {
   background-color: #fff;
   border: .3em solid #818486;
   border-radius: .1em;
-  overflow: hidden;
+  overflow: hidden;  
 
   * {
     display: inline-block;
@@ -35,8 +40,10 @@
 }
 
 .kiosk-date-time__time {
+  align-self: center;
   color: #900;
   font-size: 2em;
   font-weight: bold;
   letter-spacing: -.05em;
+  padding: 0 20px;  
 }

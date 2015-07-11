@@ -1105,7 +1105,7 @@
   background-color: #fff;
 }
 
-.carousel-caption {
+.carousel-caption, .kiosk-gallery__slider-caption {
   position: absolute;
   left: 15%;
   right: 15%;
@@ -1117,7 +1117,7 @@
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
-.carousel-caption .btn {
+.carousel-caption .btn, .kiosk-gallery__slider-caption .btn {
   text-shadow: none;
 }
 
@@ -1140,7 +1140,7 @@
     margin-right: -15px;
   }
 
-  .carousel-caption {
+  .carousel-caption, .kiosk-gallery__slider-caption {
     left: 20%;
     right: 20%;
     padding-bottom: 30px;
@@ -1174,28 +1174,26 @@
 .flex-container, .kiosk-date-time, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
 .kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-third-floor {
   align-content: space-around;
-  align-items: center;
+  align-items: stretch;
+  align-self: stretch;
   display: flex;
-  flex: auto;
+  flex: 1 1 100%;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  vertical-align: middle;
-  width: 100%;
 }
 
 .flex-column, .kiosk-people-slider__layout, .kiosk-people-slider__layout__row-middle--column1,
 .kiosk-people-slider__layout__row-middle--column3, .kiosk-lobby__column--1,
 .kiosk-lobby__column--3, .kiosk-lobby__column--2, .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
   align-content: space-around;
-  align-items: center;
+  align-items: stretch;
+  align-self: stretch;
   display: flex;
-  flex: auto;
+  flex: 1 1 100%;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 100%;
   justify-content: space-around;
-  vertical-align: middle;
 }
 
 /* =================
@@ -1220,6 +1218,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
 }
 
 .kiosk-weather__current {
@@ -1240,7 +1239,7 @@
   color: #fff;
   font-size: 2em;
   font-weight: bold;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   text-align: center;
 }
 
@@ -1251,6 +1250,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  max-width: 100px;
   width: 90%;
 }
 
@@ -1283,6 +1283,7 @@
   border-radius: 1px;
   background: rgba(86, 142, 20, 0.7);
   color: #fff;
+  display: block;
   overflow: hidden;
   padding: 15px;
   width: 100%;
@@ -1291,7 +1292,6 @@
 .kiosk-tweets__container {
   height: 40%;
   overflow: hidden;
-  padding-bottom: 10px;
   position: relative;
 }
 
@@ -1321,7 +1321,6 @@
 .kiosk-tweets__tweets {
   height: 100%;
   list-style: none;
-  padding-left: 15px;
   position: relative;
 }
 
@@ -1386,7 +1385,12 @@
    Calendar
    ========*/
 .kiosk-date-time {
+  justify-content: center;
   overflow: hidden;
+}
+
+.kiosk-date-time__calendar {
+  padding: 0 20px;
 }
 
 .kiosk-date-time__calendar-icon {
@@ -1415,10 +1419,12 @@
 }
 
 .kiosk-date-time__time {
+  align-self: center;
   color: #900;
   font-size: 2em;
   font-weight: bold;
   letter-spacing: -.05em;
+  padding: 0 20px;
 }
 
 /* =======
@@ -1428,51 +1434,38 @@
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.75);
   border: 3px solid #ffb310;
   border-radius: 1px;
-  background: rgba(86, 142, 20, 0.7);
   overflow: hidden;
-  vertical-align: middle;
-  width: 100%;
 }
 
-.kiosk-gallery__slider {
-  overflow: hidden;
-  vertical-align: middle;
-  width: 100%;
+.kiosk-gallery__slider__carousel-indicators {
+  visibility: hidden;
 }
 
-.kiosk-gallery__slider-caption h3 {
-  color: #fff;
-}
-
-.kiosk-gallery__carousel-inner {
-  height: 35vh;
+.kiosk-gallery__slider__carousel-inner {
+  height: 35%;
 }
 
 .kiosk-gallery__slider__slide {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
   height: 100%;
+  width: 100%;
 }
 .kiosk-gallery__slider__slide img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
   display: block;
   max-width: 100%;
   height: auto;
   bottom: 0;
   left: 0;
   margin: auto;
-  max-height: 100%;
-  max-width: 100%;
   position: absolute;
   right: 0;
   top: 0;
 }
 
-.kiosk-gallery__slider__carousel-indicators {
-  visibility: hidden;
+.kiosk-gallery__slider-caption {
+  color: #fff;
+  display: block;
+  font-weight: bold;
 }
 
 /* ====
@@ -1511,7 +1504,6 @@
    Posts
    =====*/
 .kiosk-posts {
-  display: block;
   overflow: hidden;
 }
 
@@ -1519,30 +1511,22 @@
   visibility: hidden;
 }
 
-.kiosk-posts__slider {
-  height: 100%;
-}
-
-.kiosk-posts__carousel-inner {
+.kiosk-posts__slider__carousel-inner {
   height: 100%;
 }
 
 .kiosk-posts__slider__slide {
+  display: block;
   height: 100%;
+  width: 100%;
 }
 .kiosk-posts__slider__slide img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
   display: block;
   max-width: 100%;
   height: auto;
   bottom: 0;
-  height: auto !important;
   left: 0;
   margin: auto;
-  max-height: 100% !important;
-  max-width: 100%;
   position: absolute;
   right: 0;
   top: 0;
@@ -1711,13 +1695,11 @@
   background-size: cover;
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
-  width: 100%;
 }
 
 .kiosk-lobby__column--1,
 .kiosk-lobby__column--3, .kiosk-lobby__column--2 {
-  flex: .3;
-  padding: 10px;
+  padding: 15px;
 }
 
 .kiosk-lobby__column--1,
@@ -1729,49 +1711,76 @@
   flex: .4;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 900px) {
+  .kiosk-lobby {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
   .kiosk-lobby__column--1 {
+    flex: 1 1 100%;
     order: 1;
   }
 
   .kiosk-lobby__column--2 {
+    flex: 1 1 100%;
     order: 3;
   }
 
   .kiosk-lobby__column--3 {
+    flex: 1 1 100%;
     order: 2;
   }
 }
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+  .kiosk-lobby {
+    flex-direction: row;
+  }
+
+  .kiosk-lobby__column--1 {
+    flex: 1 1 50%;
+    order: 1;
+  }
+
+  .kiosk-lobby__column--2 {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .kiosk-lobby__column--3 {
+    flex: 1 1 50%;
+    order: 2;
+  }
+}
+.kiosk-lobby__time,
+.kiosk-lobby__logo {
+  padding: 15px 0;
+}
+
 .kiosk-lobby__weather {
   padding: 15px 0;
-  width: 100%;
 }
 
 .kiosk-lobby__tweets {
+  align-self: stretch;
+  display: flex;
   flex: 1;
   padding: 15px 0;
-  width: 100%;
-}
-
-.kiosk-lobby__time {
-  padding: 0 15% 15px;
-  width: 100%;
 }
 
 .kiosk-lobby__gallery {
-  flex: 1;
   padding: 15px 0;
-  width: 100%;
 }
 
 .kiosk-lobby__asu-news {
+  align-self: stretch;
+  display: flex;
   flex: 1;
-  padding: 15px 0 10px;
-  width: 100%;
+  padding: 15px 0;
 }
 
 .kiosk-lobby__posts {
-  width: 100%;
+  padding: 15px 0;
 }
 
 /* ======================

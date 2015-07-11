@@ -83,9 +83,9 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $carousel_slider = '';
     $layout_template = <<<HTML
     <img src="%s" alt="%s">
-      <div class="kiosk-gallery__slider-caption carousel-caption">
-       <h3><strong>%s</strong></h3>
-      </div>
+    <div  class="kiosk-gallery__slider-caption">
+       %s
+    </div>
 HTML;
     if ( count( $list_items ) > 0 ) {
       $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
