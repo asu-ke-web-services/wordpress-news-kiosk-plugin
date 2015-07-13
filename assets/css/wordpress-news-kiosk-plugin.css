@@ -1172,12 +1172,13 @@
    Flex Grid
    =========*/
 .flex-container, .kiosk-date-time, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
-.kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-third-floor {
+.kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-lobby__tweets,
+.kiosk-lobby__asu-news, .kiosk-third-floor {
   align-content: space-around;
   align-items: stretch;
   align-self: stretch;
   display: flex;
-  flex: 1 1 100%;
+  flex: 1 1 auto;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -1190,7 +1191,7 @@
   align-items: stretch;
   align-self: stretch;
   display: flex;
-  flex: 1 1 100%;
+  flex: 1 1 auto;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -1390,6 +1391,7 @@
 }
 
 .kiosk-date-time__calendar {
+  align-self: center;
   padding: 0 20px;
 }
 
@@ -1718,17 +1720,17 @@
   }
 
   .kiosk-lobby__column--1 {
-    flex: 1 1 100%;
+    flex: 100%;
     order: 1;
   }
 
   .kiosk-lobby__column--2 {
-    flex: 1 1 100%;
+    flex: 100%;
     order: 3;
   }
 
   .kiosk-lobby__column--3 {
-    flex: 1 1 100%;
+    flex: 100%;
     order: 2;
   }
 }
@@ -1738,48 +1740,30 @@
   }
 
   .kiosk-lobby__column--1 {
-    flex: 1 1 50%;
+    flex: 1;
     order: 1;
   }
 
   .kiosk-lobby__column--2 {
-    flex: 1 1 100%;
+    flex: 100%;
     order: 3;
   }
 
   .kiosk-lobby__column--3 {
-    flex: 1 1 50%;
+    flex: 1;
     order: 2;
   }
 }
+.kiosk-lobby__logo,
+.kiosk-lobby__weather,
 .kiosk-lobby__time,
-.kiosk-lobby__logo {
-  padding: 15px 0;
-}
-
-.kiosk-lobby__weather {
-  padding: 15px 0;
-}
-
-.kiosk-lobby__tweets {
-  align-self: stretch;
-  display: flex;
-  flex: 1;
-  padding: 15px 0;
-}
-
-.kiosk-lobby__gallery {
-  padding: 15px 0;
-}
-
-.kiosk-lobby__asu-news {
-  align-self: stretch;
-  display: flex;
-  flex: 1;
-  padding: 15px 0;
-}
-
+.kiosk-lobby__gallery,
 .kiosk-lobby__posts {
+  padding: 15px 0;
+}
+
+.kiosk-lobby__tweets,
+.kiosk-lobby__asu-news {
   padding: 15px 0;
 }
 
