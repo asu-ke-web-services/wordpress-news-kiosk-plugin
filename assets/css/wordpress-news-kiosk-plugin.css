@@ -1514,7 +1514,7 @@
 }
 
 .kiosk-posts__slider__carousel-inner {
-  height: 100%;
+  height: calc(100% - 60px);
 }
 
 .kiosk-posts__slider__slide {
