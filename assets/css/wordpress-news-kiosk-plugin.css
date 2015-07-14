@@ -1758,7 +1758,6 @@
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 1.6vmin;
-  padding: 15px;
 }
 
 .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
@@ -1774,12 +1773,9 @@
 }
 
 @media screen and (max-width: 1200px) {
-  .kiosk-third-floor__column--1 {
-    flex: 1;
-  }
-
+  .kiosk-third-floor__column--1,
   .kiosk-third-floor__column--2 {
-    flex: 1;
+    flex: 100%;
   }
 }
 .kiosk-third-floor__people-slider,
