@@ -67,8 +67,8 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
         )
     );
     $kiosk_people_slider_div = '<div class="kiosk-people-slider">
-    <div class="kiosk-people-slider__aspect-ratio">' . $carousel_slider
-    . '</div></div>';
+    <!--<div class="kiosk-people-slider__aspect-ratio">-->' . $carousel_slider
+    . '<!--</div>--></div>';
     return $kiosk_people_slider_div;
   }
 

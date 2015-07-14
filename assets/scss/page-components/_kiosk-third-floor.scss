@@ -3,6 +3,10 @@
    ======================*/
 $kiosk-padding: 15px;
 
+* {
+  box-sizing: border-box;
+}
+
 .kiosk-third-floor {
   @extend .flex-container;
 
@@ -11,7 +15,6 @@ $kiosk-padding: 15px;
   font-family: $font-family-sans-serif;
   font-size: 1.6vmin;
   padding: $kiosk-padding;
-  width: 100%;
 }
 
 .kiosk-third-floor__column {
@@ -23,57 +26,35 @@ $kiosk-padding: 15px;
 .kiosk-third-floor__column--1 {
   @extend .kiosk-third-floor__column;
 
-  width: 70%;
+  flex: .7;
 }
 
 .kiosk-third-floor__column--2 {
   @extend .kiosk-third-floor__column;
 
-  width: 30%;
+  flex: .3;
 }
 
 @media screen and (max-width: 1200px) {
   .kiosk-third-floor__column--1 {
-    width: 100%;
+    flex: 1;
   }
 
   .kiosk-third-floor__column--2 {
-    width: 100%;
+    flex: 1;
   }
 }
 
-.kiosk-third-floor__logo {
-  display: block;
-  height: 15%;  
-  padding: 0;  
-  width: 100%;  
-}
-
-.kiosk-third-floor__people-slider {
-  height: 85%;
-  width: 100%;
-}
-
-.kiosk-third-floor__weather {
-  height: 25%;
-  max-height: 300px;
-  max-width: 580px;
-  padding: 15px 0;
-  width: 100%;
-}
-
+.kiosk-third-floor__people-slider,
 .kiosk-third-floor__tweets {
-  height: 60%;
-  max-height: 700px;
-  max-width: 580px;
-  padding: 15px 0;
+  @extend .flex-container;
+  padding: $kiosk-padding;
   width: 100%;
 }
 
-.kiosk-third-floor__time {
-  height: 15%;
-  max-height: 200px;
-  max-width: 580px;
-  padding: 0 20% 15px;
-  width: 100%;
+.kiosk-third-floor__time,
+.kiosk-third-floor__weather,
+.kiosk-third-floor__logo
+ {
+  padding: $kiosk-padding;
 }
