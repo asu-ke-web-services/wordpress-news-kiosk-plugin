@@ -39,8 +39,7 @@ HTML;
     $carousel_li_item          = '<li %s data-slide-to="%d" data-target="#%s">
         </li>';
     $carousel_inner_div_start  = '<div class="%s__slider__carousel-inner carousel-inner '
-        . $prefix
-        . '__carousel-inner" role="listbox">';
+        . ' %s__carousel-inner" role="listbox">';
     $carousel_ol_end           = '</ol>';
     $carousel_div_end          = '</div></div>';
     $carousel_list_items       = '';
@@ -77,6 +76,11 @@ HTML;
     $carousel_div_start = sprintf(
         $carousel_div_start,
         $prefix,
+        $prefix,
+        $prefix
+    );
+    $carousel_inner_div_start = sprintf(
+        $carousel_inner_div_start,
         $prefix,
         $prefix
     );

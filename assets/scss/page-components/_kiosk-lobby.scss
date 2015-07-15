@@ -2,6 +2,12 @@
    Kiosk Lobby Compoments
    ======================*/
 
+$kiosk-items-padding: 15px 0;
+
+* {
+  box-sizing: border-box;
+}
+
 .kiosk-lobby {
   @extend .flex-container;
 
@@ -10,76 +16,85 @@
   background-size: cover;
   color: #333;
   font-family: $font-family-sans-serif;
-  font-size: 1.7vmin;
-  padding: 15px 0;
-  width: 100%;
 }
 
-.kiosk-lobby__column {
+%kiosk-lobby__column {
   @extend .flex-column;
 
-  min-width: 500px;
-  padding: 10px;
+  padding: 15px;
 }
 
 .kiosk-lobby__column--1,
 .kiosk-lobby__column--3 {
-  @extend .kiosk-lobby__column;
+  @extend %kiosk-lobby__column;
 
-  max-width: 500px;
+  flex: .3;
 }
 
 .kiosk-lobby__column--2 {
-  @extend .kiosk-lobby__column;
+  @extend %kiosk-lobby__column;
 
-  max-width: 761px;
+  flex: .4;
 }
 
-@media screen and (max-width: 1500px) {
+@media screen and (max-width: 900px) {
+  .kiosk-lobby {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
   .kiosk-lobby__column--1 {
+    flex: 100%;
     order: 1;
   }
 
   .kiosk-lobby__column--2 {
+    flex: 100%;
     order: 3;
+
   }
 
   .kiosk-lobby__column--3 {
+    flex: 100%;
     order: 2;
   }
+
 }
 
-.kiosk-lobby__weather {
-  padding: 15px 0;
-  width: 100%;
+@media screen and (min-width: 900px) and (max-width: 1200px) {
+  .kiosk-lobby {
+    flex-direction: row;
+  }
+
+  .kiosk-lobby__column--1 {
+    flex: 1;
+    order: 1;
+  }
+
+  .kiosk-lobby__column--2 {
+    flex: 100%;
+    order: 3;
+
+  }
+
+  .kiosk-lobby__column--3 {
+    flex: 1;
+    order: 2;
+  }
+
 }
 
-.kiosk-lobby__tweets {
-  height: 575px;
-  padding: 15px 0;
-  width: 100%;
-}
-
-.kiosk-lobby__time {
-  height: 151px;
-  max-width: 480px;
-  padding: 0 15% 15px;
-  width: 100%;
-}
-
-.kiosk-lobby__gallery {
-  height: 392px;
-  padding: 15px 0;  
-  width: 100%;
-}
-
-.kiosk-lobby__asu-news {
-  height: 418px;
-  padding: 15px 0 10px;
-  width: 100%;
-}
-
+.kiosk-lobby__logo,
+.kiosk-lobby__weather,
+.kiosk-lobby__time,
+.kiosk-lobby__gallery,
 .kiosk-lobby__posts {
-  height: 1019px;
-  width: 100%;
+  padding: $kiosk-items-padding;
+}
+
+.kiosk-lobby__tweets,
+.kiosk-lobby__asu-news {
+  @extend .flex-container;
+
+  padding: $kiosk-items-padding;
 }

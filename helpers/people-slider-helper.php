@@ -122,6 +122,7 @@ class People_Slider_Helper {
   public static function create_slider_layout( $section, $gios_url ) {
     $layout_template = <<<HTML
 	<div class='kiosk-people-slider__layout__header'>%s</div>
+  <div class="kiosk-people-slider__aspect-ratio">
     <div class="kiosk-people-slider__layout">
       <div class="kiosk-people-slider__layout__row-top">
         %s
@@ -141,6 +142,7 @@ class People_Slider_Helper {
         %s
       </div>
     </div>
+  </div>
 HTML;
     $layout_center_with_quote = <<<HTML
     <div class="kiosk-people-slider__layout__featured--column1">

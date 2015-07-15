@@ -4,24 +4,22 @@
 
 .flex-container {
   align-content: space-around;
-  align-items: center;
+  align-items: stretch;
+  align-self: stretch;
   display: flex;
-  flex: auto;
+  flex: 1 1 auto;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  vertical-align: middle;
-  width: 100%;
 }
 
 .flex-column {
   align-content: space-around;
-  align-items: center;
+  align-items: stretch;
+  align-self: stretch;
   display: flex;
-  flex: auto;
+  flex: 1 1 auto;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 100%;
   justify-content: space-around;
-  vertical-align: middle;
 }

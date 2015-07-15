@@ -3,46 +3,37 @@
    =====*/
 
 .kiosk-posts {
-  display: block;
-  height: 1019px;
   overflow: hidden;
-}
-
-.kiosk-posts__slider__carousel-indicators {
-  @extend .carousel-indicators;
-
-  visibility: hidden;
 }
 
 .kiosk-posts__slider {
   @extend .carousel;
+}
 
-  height: 100%;
+.kiosk-posts__slider__carousel-indicators {
+  @extend .carousel-indicators;
+  visibility: hidden;
 }
 
 .kiosk-posts__slider__carousel-inner {
   @extend .carousel-inner;
-}
 
-
-.kiosk-posts__carousel-inner {
-  height: 100%;
+  height: calc(100% - 60px);
 }
 
 .kiosk-posts__slider__slide {
+  display: block;
   height: 100%;
+  width: 100%;
 
   img {
-    @include center-block;
-    @include img-responsive;
-    
+    @include img-responsive;  
     bottom: 0;
     left: 0;
     margin: auto;
-    max-height: 100%;
-    max-width: 100%;
+    max-height: 100% !important;
     position: absolute;
     right: 0;
-    top: 0;   
+    top: 0; 
   }
 }
