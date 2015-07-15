@@ -41,11 +41,14 @@ $kiosk-padding: 15px;
   }
 }
 
-.kiosk-third-floor__people-slider,
-.kiosk-third-floor__tweets {
+.kiosk-third-floor__people-slider {
   @extend .flex-container;
   padding: $kiosk-padding;
   width: 100%;
+}
+.kiosk-third-floor__tweets {
+  @extend .flex-container;
+  padding: $kiosk-padding;
 }
 
 .kiosk-third-floor__time,

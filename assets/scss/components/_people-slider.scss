@@ -12,7 +12,7 @@
   @extend .carousel;
   @extend .flex-column; 
 
-  flex: 1;
+  flex: 100%;
 }
 
 .kiosk-people-slider__aspect-ratio {
@@ -85,13 +85,13 @@
 }
 
 .kiosk-people-slider__layout__featured--column1 {
-  flex: .6;
+  flex: 60%;
   overflow: hidden;
 }
 
 .kiosk-people-slider__layout__featured--column2 {
   align-self: center;
-  flex: .4;
+  flex: 40%;
   font-size: 1.2em;
   font-style: italic;
   overflow: hidden;

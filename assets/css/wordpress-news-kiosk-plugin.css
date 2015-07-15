@@ -1174,8 +1174,7 @@
 .flex-container, .kiosk-date-time, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
 .kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column, .kiosk-people-slider__layout__row-middle--column1,
 .kiosk-people-slider__layout__row-middle--column3, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-lobby__tweets,
-.kiosk-lobby__asu-news, .kiosk-third-floor, .kiosk-third-floor__people-slider,
-.kiosk-third-floor__tweets {
+.kiosk-lobby__asu-news, .kiosk-third-floor, .kiosk-third-floor__people-slider, .kiosk-third-floor__tweets {
   align-content: space-around;
   align-items: stretch;
   align-self: stretch;
@@ -1545,7 +1544,7 @@
 }
 
 .kiosk-people-slider__slider {
-  flex: 1;
+  flex: 100%;
 }
 
 .kiosk-people-slider__aspect-ratio {
@@ -1606,13 +1605,13 @@
 }
 
 .kiosk-people-slider__layout__featured--column1 {
-  flex: .6;
+  flex: 60%;
   overflow: hidden;
 }
 
 .kiosk-people-slider__layout__featured--column2 {
   align-self: center;
-  flex: .4;
+  flex: 40%;
   font-size: 1.2em;
   font-style: italic;
   overflow: hidden;
@@ -1778,10 +1777,13 @@
     flex: 100%;
   }
 }
-.kiosk-third-floor__people-slider,
-.kiosk-third-floor__tweets {
+.kiosk-third-floor__people-slider {
   padding: 15px;
   width: 100%;
+}
+
+.kiosk-third-floor__tweets {
+  padding: 15px;
 }
 
 .kiosk-third-floor__time,
