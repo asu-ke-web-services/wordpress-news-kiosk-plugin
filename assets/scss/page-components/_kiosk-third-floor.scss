@@ -46,6 +46,7 @@ $kiosk-padding: 15px;
   padding: $kiosk-padding;
   width: 100%;
 }
+
 .kiosk-third-floor__tweets {
   @extend .flex-container;
   padding: $kiosk-padding;
