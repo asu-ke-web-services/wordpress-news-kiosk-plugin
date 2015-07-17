@@ -1,69 +1,70 @@
 /*
  * Posts Admin Manager CSS
  */
-.timeline-block{
-  width:70vw;
-  height: 100%;
-  padding-top: 10px;
-}
-.timeline_header{
-  width:100%;
-  height: 2vh;
+
+.posts-admin-flex {
+  align-content: space-between;
+  align-items: stretch;
   display: flex;
-}
-.timeline_header_section{
-  align-items:stretch;
-  width:100%;
-  text-align: center;
-}
-.timeline_header_section:nth-child(even) {
-  background-color: tomato; 
-
-}
-.timeline_header_section:nth-child(odd) {
-  background-color: orange; 
-}
-.timeline-row-item{
-  margin-top: 5px;
-  margin-bottom: 5px;
-  position: relative;
-  display: flex;
+  justify-content: space-between;
 }
 
-.timeline-row-item:nth-child(even) .timeline-row-item__margin{
-  background: rgba(42,176,237,1);
-  border-radius: 10px;
-}
-.timeline-row-item:nth-child(odd) .timeline-row-item__margin{
-  background: rgba(188,232,30,1);
-  border-radius: 10px;
-}
-.timeline-row-item__text{
-  position: absolute;
-  top:0;
-  left:0;
-  bottom:0;
-  text-align: center;
-  z-index: 10;
-}
-.timeline-row-item__duration{
-  position: absolute;
-  top:0;
-  right: 0;
-  bottom:0;
-  text-align: center;
-  z-index: 10;
-}
-.timeline-row-item__status{
-  position: absolute;
-  top:0;
-  right: 0;
-  left: 0;
-  bottom:0;
-  text-align: center;
-  z-index: 10;
-}
-.posts-table__image{
-  width: 100px;
+.posts-admin {
+  flex-direction: column;
 }
 
+.posts-admin__row {
+  align-items: stretch;
+}
+
+.posts-admin__row:nth-child(odd) {
+  background: #fff;
+}
+
+.posts-admin__row:nth-child(even) {
+  background: #eee;
+}
+
+.posts-admin__image {
+  border: 1px solid #ddd;
+  flex: 0.1;
+  padding: 5px;
+}
+
+.posts-admin__image > a > img {
+  display: block;
+  height: auto;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.posts-admin__id {
+  border: 1px solid #ddd;
+  flex: 0.1;
+  padding: 5px;
+}
+
+.posts-admin__title {
+  border: 1px solid #ddd;
+  flex: 1;
+  padding: 5px;
+  word-wrap: break-word;
+}
+
+.posts-admin__date {
+  border: 1px solid #ddd;
+  flex: 0.3;
+  padding: 5px;
+}
+
+.posts-admin__status {
+  border: 1px solid #ddd;
+  flex: 0.2;
+  padding: 5px;
+}
+
+.posts-admin__head-text {
+  font-weight: bold;
+  font-size: 1.2em;
+}

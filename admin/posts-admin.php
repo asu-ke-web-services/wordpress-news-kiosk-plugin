@@ -5,7 +5,7 @@ namespace Kiosk_WP;
 /**
  * Posts Administraion Class
  *
- * Creates and handles data and views for the admin panel
+ * Creates and handles post_item and views for the admin panel
  * in Wordpress
  */
 class Posts_Admin extends Base_Registrar {
@@ -59,10 +59,8 @@ class Posts_Admin extends Base_Registrar {
    * Enqueue styles so that Wordpress caches them.
    */
   public function admin_enqueue_scripts() {
-    $plugin_dir_url = plugin_dir_url( dirname( __FILE__ ) );
     wp_enqueue_style( $this->plugin_slug, $this->css, array(), $this->version, false );
-    wp_register_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
-    wp_enqueue_style( 'bootstrap-css', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/css/bootstrap.min.css', array(), '3.1.1', 'all' );
+    wp_enqueue_style( 'timeline-css',plugin_dir_url( __FILE__ ) . 'css/timeline.css', array(), $this->version, false );
   }
 
   public function admin_init() {
@@ -139,7 +137,8 @@ class Posts_Admin extends Base_Registrar {
    */
   public function section_post_tags_callback( $args ) {
     if ( self::$section_post_tags === $args['context'] ) {
-         $tags = get_option( self::$section_post_tags );
+
+      $tags = get_option( self::$section_post_tags );
       printf(
           '<input type="text" id="%s" name="%s" value="%s"></input>',
           self::$section_post_tags,
@@ -147,7 +146,9 @@ class Posts_Admin extends Base_Registrar {
           $tags
       );
       self::$kiosk_post_tags = $this->sanitize_post_tags_callback( $tags );
-    } elseif ( self::$section_post_status === $args['context'] ) {
+
+    } else if ( self::$section_post_status === $args['context'] ) {
+
       $status = get_option( self::$section_post_status );
       $post_status_drop_down = '<select id="%s" name="%s">';
       $selected = '';
@@ -180,7 +181,7 @@ class Posts_Admin extends Base_Registrar {
     if ( empty( $status ) ) {
       $status = 'any';
     }
-    $query_post_options     = array(
+    $query_options          = array(
         'post_type'         => array( 'attachment', 'page', 'post' ),
         'posts_per_page'    => $limit,
         'orderby'           => 'post_date',
@@ -188,58 +189,74 @@ class Posts_Admin extends Base_Registrar {
         'tag'               => $tags,
         'post_status'       => $status,
     );
-    $list_items             = Kiosk_Helper::get_posts_items_from_db( $query_post_options );
-    usort( $list_items, array( 'Kiosk_WP\Kiosk_Helper', 'sort_by_date' ) );
-    echo $this->posts_items_display( $list_items );
+    $posts          = Kiosk_Helper::get_posts_from_db( $query_options );
+    $posts_list     = array();
+    foreach ( $posts as $post ) {
+      if ( Kiosk_Helper::has_post_expired( $post->ID ) ) {
+        continue;
+      }
+      $post_item                   = array();
+      $post_item['image']          = Kiosk_Helper::get_image(
+          $post->ID,
+          $post->post_content
+      );
+      $post_item['post-title']     = trim( $post->post_title );
+      $post_item['kiosk-end-date'] = trim( get_post_meta(
+          $post->ID,
+          'kiosk-end-date',
+          true
+      ) );
+      $post_item['post-status']    = trim( $post->post_status );
+      $post_item['post-id']        = trim( $post->ID );
+      $post_item['post-permalink'] = trim( get_permalink( $post->ID ) );
+      $post_item['post-date']      = trim( $post->post_date );
+      $posts_list[] = $post_item;
+    }
+    usort( $posts_list, array( 'Kiosk_WP\Kiosk_Helper', 'sort_by_date' ) );
+    echo $this->posts_items_display( $posts_list );
   }
   /**
    *
    */
-  public function posts_items_display( $list_items ){
+  public function posts_items_display( $posts_list ){
     $table_template = <<<HTML
-      <div class="table-responsive">          
-        <table class="table table-striped table-condensed">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Post ID</th>
-              <th>Post Title</th>              
-              <th>Kiosk End Date</th>
-              <th>Post Status</th>
-              <th>Post Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            %s
-          </tbody>
-        </table>
+      <div class="posts-admin-flex posts-admin">
+        <div class="posts-admin-flex posts-admin__row posts-admin__head-text">
+          <div class="posts-admin__image">Image</div>
+          <div class="posts-admin__id">Post ID</div>
+          <div class="posts-admin__title">Post Title</div>
+          <div class="posts-admin__date">Kiosk End Date</div>
+          <div class="posts-admin__status">Post Status</div>
+          <div class="posts-admin__date">Post Date</div>
         </div>
+        %s
       </div>
 HTML;
     $row_template = <<<HTML
-    <tr>
-    <td><a href="%s" target="_blank"><img src="%s" class='img-thumbnail posts-table__image'></a></td>
-    <td>%s</td>
-    <td>%s</td>    
-    <td>%s</td>
-    <td>%s</td>
-    <td>%s</td>
-    </tr>
+    <div class="posts-admin-flex posts-admin__row">
+      <div class="posts-admin__image"><a href="%s" target="_blank"><img src="%s" class='posts-table__image' alt='No Image'/></a></div>
+      <div class="posts-admin__id"><a href="%s" target="_blank">%s</a></div>
+      <div class="posts-admin__title">%s</div>
+      <div class="posts-admin__date">%s</div>
+      <div class="posts-admin__status">%s</div>
+      <div class="posts-admin__date">%s</div>
+    </div>
 HTML;
     $row_items = '';
     $timeline = null;
-    foreach ( $list_items as $item ) {
+    foreach ( $posts_list as $item ) {
       $row_items .= sprintf(
           $row_template,
           $item['image'],
           $item['image'],
+          $item['post-permalink'],
           $item['post-id'],
           $item['post-title'],
           $item['kiosk-end-date'],
           $item['post-status'],
           $item['post-date']
       );
-      //prepare data for timeline
+      //prepare post_item for timeline
       $timeline[]    = array(
         'start-date' => $item['post-date'],
         'end-date'   => $item['kiosk-end-date'],

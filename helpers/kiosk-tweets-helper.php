@@ -65,20 +65,21 @@ class Kiosk_Tweets_Helper {
    * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
    * screen_name text, retweet_link, retweet_by>
    */
-  private function kiosk_parse_tweets( $decode, $limit ) {
+  private function kiosk_parse_tweets( $tweets_json, $limit ) {
     $kiosk_tweet_items = array();
     /*
-     $decode array will have 'statuses' as column name in case of twitter
-     search api is used to read actual tweets take data from statutses column.
+     $tweets_json will have 'statuses' as column name in case of twitter
+     search api is used. To read actual tweets take data from statutses column.
+
      For user timeline we do not have statuses column so read data as it comes
-     form tiwtter user timelineapi */
-    if ( array_key_exists( 'statuses', $decode ) ) {
-      $decode = $decode['statuses'];
+     form twitter user_timeline api */
+    if ( array_key_exists( 'statuses', $tweets_json ) ) {
+      $tweets_json = $tweets_json['statuses'];
     }
-    for ( $i = 0; $i < count( $decode ) && $i < $limit ; $i++ ) {
+    for ( $i = 0; $i < count( $tweets_json ) && $i < $limit ; $i++ ) {
       $twitter_api_helper   = new \Kiosk_WP\Twitter_Api_Helper();
       $kiosk_tweet_items[]  = $twitter_api_helper->extract_tweet_details(
-          $decode[ $i ],
+          $tweets_json[ $i ],
           'kiosk-tweets__tweet__link'
       );
     }
@@ -173,13 +174,13 @@ HTML;
    */
   public function kiosk_tweets( $atts, $content = null ) {
 
-    $this->limit          = array_key_exists( 'limit', $atts )
+    $this->limit   = array_key_exists( 'limit', $atts )
                                 ? $atts['limit'] : '20';
     $this->query   = array_key_exists( 'query', $atts )
                                 ? $atts['query'] : '@asugreen';
     $this->handle  = array_key_exists( 'handle', $atts )
                                 ? $atts['handle'] : '';
-    $json = $this->get_tweets_json();
+    $json          = $this->get_tweets_json();
     if ( empty( $json ) ) {
       if ( $this->request_not_from_wp ) {
         $kiosk_tweets_div = '';
@@ -189,18 +190,18 @@ HTML;
       }
     } else {
       $json = Json_Decode_Helper::remove_unwanted_chars( $json );
-      $decode = json_decode( $json, true ); //getting the file content as array
+      $tweets_json = json_decode( $json, true ); //getting the file content as array
 
-      if ( $decode != null && json_last_error( ) === JSON_ERROR_NONE ) {
-        if ( array_key_exists( 'errors' , $decode )
-              && array_key_exists( 0 , $decode['errors'] )
-              && array_key_exists( 'message' , $decode['errors'][0] ) ) {
+      if ( $tweets_json != null && json_last_error( ) === JSON_ERROR_NONE ) {
+        if ( array_key_exists( 'errors' , $tweets_json )
+              && array_key_exists( 0 , $tweets_json['errors'] )
+              && array_key_exists( 'message' , $tweets_json['errors'][0] ) ) {
           $kiosk_tweets_div   = '<div class="kiosk-tweets">'
-              . $decode['errors'][0]['message']
+              . $tweets_json['errors'][0]['message']
               . '</div>';
         } else {
           $kiosk_tweet_items  = $this->kiosk_parse_tweets(
-              $decode,
+              $tweets_json,
               $this->limit
           );
           $kiosk_tweets_div   = '<div class="kiosk-tweets">'

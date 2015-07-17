@@ -68,7 +68,7 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
     $list_items         = array();
     $items              = $this->feed_helper->get_feed_data( $feed_urls_array );
     usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
-    $list_items         = Feed_Helper::extract_images_from_flickr_feed( $items, $limit );
+    $list_items         = Feed_Helper::extract_data_from_flickr_feed( $items, $limit );
     $carousel_slider    = $this->get_gallery_carousel_slider( $list_items );
     $kiosk_slider_div   = '<div class="kiosk-gallery">' . $carousel_slider . '</div>';
     return $kiosk_slider_div;

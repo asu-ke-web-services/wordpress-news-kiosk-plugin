@@ -46,7 +46,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   public function kiosk_tweets( $atts, $content = null ) {
     $atts                   = shortcode_atts(
         array(
-          'limit'           => '20',
+          'limit'    => '20',
           'query'    => '@asugreen',
           'handle'   => '',
         ),

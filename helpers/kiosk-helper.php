@@ -7,111 +7,78 @@ namespace Kiosk_WP;
 class Kiosk_Helper {
 
   /**
-   * Pulls images that are as attachment or content or page_feature_image
-   * attribute and if found returns and array with image_url and alt text
+   * Fetches all the posts with a limit until all posts are read
    * @param string string
-   * @return array<image_url, alt_text>
+   * @return array<Post>
    */
-  public static function get_posts_items_from_db( $query_post_options ) {
-     $exit_while             = false;
-     $cureent_offset_posts   = 0;
-     $list_items = array();
-     $limit      = array_key_exists( 'limit', $query_post_options )
-                      ? $query_post_options['limit'] : 20;
-    while ( ! $exit_while ) {
-      $query_post_options['offset'] = $cureent_offset_posts;
-      $cureent_offset_posts = $cureent_offset_posts + $limit;
-      $posts                = get_posts( $query_post_options );
-
+  public static function get_posts_from_db( $query_options ) {
+     $current_offset = 0;
+     $posts_list     = array();
+     $limit          = array_key_exists( 'limit', $query_options )
+                          ? $query_options['limit'] : 20;
+    while ( true ) {
+      $query_options['offset'] = $current_offset;
+      $current_offset          = $current_offset + $limit;
+      $posts                   = get_posts( $query_options );
       if ( $posts ) {
-        $next_list_items = Kiosk_Helper::check_for_image( $posts );
-        if ( null != $next_list_items ) {
-          $list_items = array_merge( $list_items, $next_list_items );
-        }
+          $posts_list = array_merge( $posts_list, $posts );
       }else {
-        //No posts or reached end of posts query by offset
-        $exit_while = true;
+        break;
       }
     }
-    return $list_items;
+    return $posts_list;
   }
 
   /**
-   * Check for images that are as attachment or content or page_feature_image
-   * attribute and if found returns and array with image_url and alt text
-   * @param array $posts
-   * @return array<image_url, alt_text>
+   * Check for image that can be as attachment or content or page_feature_image
+   * attribute if found returns url as string else false;
+   * @param int $post_id String $content
+   * @return String
    */
-  public static function check_for_image( $posts ) {
-    $list_items = null;
-    foreach ( $posts as $post ) {
-      if ( Kiosk_Helper::is_post_expired( $post ) ) {
-        continue;
-      }
-      //Check if featured image is present or not
-      $attachment_image         = Kiosk_Helper::get_attachment_image_src(
-          $post
-      );
-      $content_image            = Kiosk_Helper::get_content_image( $post );
-      $page_feature_attr_image  = Kiosk_Helper::get_page_feature_attr_image(
-          $post
-      );
-      if ( null != $attachment_image ) {
-        $list_items[]  = self::prepare_kiosk_posts_data(
-            $attachment_image,
-            $post
-        );
-        //Check if posts had images in its body
-      } else if ( null != $content_image ) {
-        $list_items[]  = self::prepare_kiosk_posts_data(
-            $content_image,
-            $post
-        );
-        //Check if page_feature_image custom field has image and if it
-        //absolute else make absolute url from relative url
-      } else if ( null != $page_feature_attr_image ) {
-        $list_items[]  = self::prepare_kiosk_posts_data(
-            $page_feature_attr_image,
-            $post
-        );
-      }
+  public static function get_image( $post_id = null, $content = null ) {
+    if ( empty( $post_id ) && empty( $content ) ) {
+      return false;
     }
-    return $list_items;
+
+    //Get image from atachment
+    $attachment_image        = self::get_attachment_image_src(
+        $post_id
+    );
+    if ( $attachment_image ) {
+      return $attachment_image;
+    }
+
+    //Get image from Content
+    $content_image           = self::get_content_image(
+        $content
+    );
+    if ( $content_image ) {
+      return $content_image;
+
+    }
+
+    //Get image from page feature attribute
+    $page_feature_attr_image = self::get_page_feature_attr_image(
+        $post_id
+    );
+    if ( $page_feature_attr_image ) {
+      return $page_feature_attr_image;
+    }
+
+    return false;
   }
 
   /**
-   * Extracts the required post details from the post object
-   */
-  private static function prepare_kiosk_posts_data( $post_image, $post ) {
-    $list_items                     = array(
-      'image' => '',
-      'post-title' => '',
-      'kiosk-end-date' => '',
-      'post-status' => '',
-      'post-id' => '',
-      'post-date' => '',
-    );
-    $list_items['image']            = $post_image[0];
-    $list_items['post-title']       = $post->post_title;
-    $list_items['kiosk-end-date']   = get_post_meta(
-        $post->ID,
-        'kiosk-end-date',
-        true
-    );
-    $list_items['post-status']      = $post->post_status;
-    $list_items['post-id']          = $post->ID;
-    $list_items['post-date']        = $post->post_date;
-    return $list_items;
-  }
-
-    /**
-   * is_post_expired( $post ) checks if a post has passed its end date
+   * Checks if a post has passed its end date
    * defined by kiosk-end-date attribute
-   * @param $post
+   * @param int $post_id
    * @return boolean
    */
-  public static function is_post_expired( $post ) {
-    $kiosk_end_date     = get_post_meta( $post->ID, 'kiosk-end-date', true );
+  public static function has_post_expired( $post_id ) {
+    if ( empty( $post_id ) ) {
+      return true;
+    }
+    $kiosk_end_date     = get_post_meta( $post_id, 'kiosk-end-date', true );
     $today              = strtotime( date( 'd-m-Y' ) );
     $expiration_date    = strtotime( $kiosk_end_date );
     //Do not show posts which are expired or doesn't have expiration date
@@ -124,102 +91,101 @@ class Kiosk_Helper {
 
   /**
    * Checks for image as an attachment and if present
-   * returns an array with image url and alt text else null
-   * @param $post
-   * @return array
+   * returns image url else false
+   * @param int $post_id
+   * @return String
    */
-  public static function get_attachment_image_src( $post ) {
-    $list_item          = null;
-    $image_attributes   = wp_get_attachment_image_src(
-        get_post_thumbnail_id( $post->ID )
+  public static function get_attachment_image_src( $post_id ) {
+    if ( empty( $post_id ) ) {
+      return false;
+    }
+
+    $image_attributes = wp_get_attachment_image_src(
+        get_post_thumbnail_id( $post_id )
     );
     if ( $image_attributes ) {
-      $list_item = array( $image_attributes[0], $post->post_title, );
-
+      return self::relative_to_absolute_url( $image_attributes[0] );
     }
-    return $list_item;
+    return false;
   }
 
    /**
-   * Checks for image in content and if present
-   * returns an array with image url and alt text else null
-   * @param $post
-   * @return array
+   * Checks for image in content and if present in HTML markup with img tag
+   * returns image url else false
+   * @param String $content
+   * @return String
    */
-  public static function get_content_image( $post ) {
-    $content    = $post->post_content;
-    $list_item  = null;
+  public static function get_content_image( $content ) {
+    if ( empty( $content ) ) {
+      return false;
+    }
+
     // Take the image tag src attribute from the content and store it in pics
     // variable (?<!_)negative lookbehind  [\'"] match either ' or
     // " (abc)capture group \1 backreference to group #1
     preg_match_all( '/(?<!_)src=([\'"])?(.*?)\\1/', $content, $pics );
+
     if ( ! empty( $pics[2] ) ) {
-      if ( parse_url( $pics[2][0], PHP_URL_SCHEME ) == '' ) {
-        $pics[2][0] = home_url( $pics[2][0] );
-      }
-      $list_item = array( $pics[2][0], $post->post_title, );
+      return self::relative_to_absolute_url( $pics[2][0] );
     }
-    return $list_item;
+    return false;
   }
 
   /**
    * Checks for image as page_feature_attribute and if present
-   * returns an array with image url and alt text else null
-   * @param $post
-   * @return array
+   * returns image url else false
+   * @param int $post_id
+   * @return String
    */
-  public static function get_page_feature_attr_image( $post ) {
-    $list_item          = null;
+  public static function get_page_feature_attr_image( $post_id ) {
+    if ( empty ( $post_id ) ) {
+      return false;
+    }
     $page_feature_image = get_post_meta(
-        $post->ID,
+        $post_id,
         'page_feature_image',
         true
     );
     if ( ! empty( $page_feature_image ) ) {
-      if ( parse_url( $page_feature_image, PHP_URL_SCHEME ) == '' ) {
-        $page_feature_image = home_url( $page_feature_image );
-      }
-      $list_item = array( $page_feature_image, $post->post_title, );
+      return self::relative_to_absolute_url( $page_feature_image );
     }
-    return $list_item;
+    return false;
   }
 
   /**
-   * Splits the string delimited by "," and creates absolute path image url
+   * Splits the string delimited by "," and converts to absolute path urls
+   * If input empty returns null
    * @param string
-   * @return array<image_url, alt_text>
+   * @return array<image_url>
    */
-  public static function get_default_images( $default_image ) {
-    $list_items = null;
-    $list_item  = array(
-      'image' => '',
-      'post-title' => '',
-    );
-    if ( ! empty( $default_image ) ) {
-      $default_image_array = explode( ',', $default_image );
-      for ( $k = 0 ; $k < count( $default_image_array ); $k++ ) {
-        if ( parse_url( $default_image_array[ $k ], PHP_URL_SCHEME ) == '' ) {
-          $default_image_array[ $k ] = home_url( $default_image_array[ $k ] );
-        }
-        $list_item['image'] = trim( $default_image_array[ $k ] );
-        $list_item['post-title'] = '';
-        $list_items[] = $list_item;
+  public static function explode_urls( $urls ) {
+    if ( empty( $urls ) ) {
+      return null;
+    }
+    $paths = array();
+    if ( ! empty( $urls ) ) {
+      $url_array = explode( ',', $urls );
+      for ( $k = 0 ; $k < count( $url_array ); $k++ ) {
+        $paths[] = trim( self::relative_to_absolute_url( $url_array[ $k ] ) );
       }
     }
-    return $list_items;
+    return $paths;
   }
 
   /**
-   * If url is not of absolute path prefix it to make it
-   * @param string
+   * If url is not of absolute path prefix it to make it absolute
+   * If prefix is null the returns prefixing home url
+   * @param string string
    * @return string
    */
-  public static function relative_to_absolute_url( $url, $prefix )
+  public static function relative_to_absolute_url( $url, $prefix = null )
   {
     /* return if already absolute URL */
     if ( parse_url( $url, PHP_URL_SCHEME ) != '' ) {
       return $url;
-    } else {
+    }else if ( empty( $prefix ) ){
+      return home_url( $url );
+    }else {
       return $prefix . $url;
     }
   }

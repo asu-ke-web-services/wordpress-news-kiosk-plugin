@@ -51,7 +51,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
   public function kiosk_asu_news( $atts, $content = null ) {
     $atts                  = shortcode_atts(
         array(
-          'feed_ids'           => '153,178,358,40',
+          'feed_ids'       => '153,178,358,40',
           'limit'          => '20',
           'content_limit'  => '50',
         ),
@@ -72,7 +72,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     $items              = Feed_Helper::remove_duplicate_rss_items( $items );
     // extract the required content from the feed
     if ( count( $items ) > 0 ) {
-      $list_items         = Feed_Helper::extract_news_from_rss_feed(
+      $list_items         = Feed_Helper::extract_data_from_rss_feed(
           $limit, $content_limit, $items
       );
       // get the carousel slider

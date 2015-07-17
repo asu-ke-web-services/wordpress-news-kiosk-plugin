@@ -10,7 +10,7 @@ class Carosuel_Slider_Helper {
    * Generates the bootstrap carousel div block
    * @param $prefix to prepend use as classes and id as part of carousel div
    * @param $layout_template markup of the content to display in carousel slider
-   * @param $list_items array<array> data that needs to be substitute
+   * @param $slider_data array<array> data that needs to be substitute
    * in the layout
    *                          Example:
    *                          ```
@@ -22,7 +22,7 @@ class Carosuel_Slider_Helper {
    *                                  </h3></a>
    *                               </div>
    *                           HTML;
-   *                          $list_items = array( array( 'a', 'b', '1' ),
+   *                          $slider_data = array( array( 'a', 'b', '1' ),
    *                           array('c', 'd', '2' ), array('e', 'f', '3' ) )
    *                          ```
    * @return string HTML markup
@@ -30,7 +30,7 @@ class Carosuel_Slider_Helper {
   public static function generate_carousel_slider(
       $prefix,
       $layout_template,
-      $list_items
+      $slider_data
   ) {
     $carousel_div_start = <<<HTML
       <div class="carousel slide %s__slider" data-ride="carousel" id="%s">
@@ -42,10 +42,10 @@ HTML;
         . ' %s__carousel-inner" role="listbox">';
     $carousel_ol_end           = '</ol>';
     $carousel_div_end          = '</div></div>';
-    $carousel_list_items       = '';
+    $carousel_slider_data       = '';
     $carousel_div_items        = '';
 
-    for ( $i = 0 ; $i < count( $list_items ); $i++ ) {
+    for ( $i = 0 ; $i < count( $slider_data ); $i++ ) {
       // Set active for the 1st element of li
       if ( 0 === $i ) {
         $div_li_active       = ' class = "active" ';
@@ -54,7 +54,7 @@ HTML;
         $div_li_active       = '';
         $div_item_active     = '';
       }
-      $carousel_list_items  .= sprintf(
+      $carousel_slider_data  .= sprintf(
           $carousel_li_item,
           $div_li_active,
           $i,
@@ -62,7 +62,7 @@ HTML;
       );
       $prepare_div_items     = vsprintf(
           $layout_template,
-          $list_items[ $i ]
+          $slider_data[ $i ]
       );
       $carousel_div_items   .= sprintf(
           '<div class="item %s %s__slider__slide">'
@@ -85,7 +85,7 @@ HTML;
         $prefix
     );
     $carousel_template  = $carousel_div_start
-        . $carousel_list_items
+        . $carousel_slider_data
         . $carousel_ol_end
         . $carousel_inner_div_start
         . $carousel_div_items
