@@ -138,7 +138,7 @@ class Kiosk_Helper {
    * @return String
    */
   public static function get_page_feature_attr_image( $post_id ) {
-    if ( empty ( $post_id ) ) {
+    if ( empty( $post_id ) ) {
       return false;
     }
     $page_feature_image = get_post_meta(
