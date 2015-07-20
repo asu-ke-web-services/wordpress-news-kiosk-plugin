@@ -60,7 +60,7 @@ class TimeLine_Helper {
           $post_status
       );
     }
-    return '<div class="timeline-block">' . $timeline_header . $rows . '</div>';
+    return '<div class="timeline-flex timeline-block">' . $timeline_header . $rows . '</div>';
   }
 
   /**
@@ -100,7 +100,7 @@ class TimeLine_Helper {
           . $i
           .'</div>';
     }
-    $html = '<div class="timeline_header">' . $html . '</div>';
+    $html = '<div class="timeline-flex timeline_header">' . $html . '</div>';
     return $html;
   }
   /**
@@ -143,19 +143,21 @@ class TimeLine_Helper {
     <div class="timeline-row-item">
       <div class="timeline-row-item__margin" style="margin-left:%s;width:%s;">
       &nbsp;</div>
-      <div class="timeline-row-item__duration">%s to %s</div>
-      <div class="timeline-row-item__status">%s</div>
-      <div class="timeline-row-item__text">%s</div>
+      <div class="timeline-flex timeline-row-item__details">
+        <div class="timeline-row-item__text">%s</div>
+        <div class="timeline-row-item__status">%s</div>
+        <div class="timeline-row-item__duration">%s to %s</div>
+      </div>
     </div>
 HTML;
     return sprintf(
         $html,
         $margin_left,
         $row_width,
-        date( 'm/d/y', $post_start_time ),
-        date( 'm/d/y', $post_end_time ),
+        $post_label,
         $post_status,
-        $post_label
+        date( 'm/d/y', $post_start_time ),
+        date( 'm/d/y', $post_end_time )
     );
   }
 }

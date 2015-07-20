@@ -61,42 +61,54 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    $default_image          = $atts['default_image'];
-    $tags                   = $atts['tags'];
-    $query_post_options   = array(
+    $query_options          = array(
         'post_type'         => array( 'attachment', 'page', 'post' ),
         'posts_per_page'    => $limit,
         'orderby'           => 'post_date',
         'order'             => 'DESC',
-        'tag'               => $tags,
+        'tag'               => $atts['tags'],
         'post_status'       => 'publish',
     );
-    $list_items             = Kiosk_Helper::get_posts_items_from_db(
-        $query_post_options
-    );
-    $total_post_count       = count( $list_items );
-    if ( 0 === $total_post_count ) {
-      $list_items = Kiosk_Helper::get_default_images( $default_image );
+    $slider_data = array();
+    $posts      = Kiosk_Helper::get_posts_from_db( $query_options );
+    foreach ( $posts as $post ) {
+      if ( Kiosk_Helper::has_post_expired( $post->ID ) ) {
+        continue;
+      }
+
+      $image_url = Kiosk_Helper::get_image( $post->ID, $post->post_content );
+
+      if ( $image_url ) {
+        $slider_data[] = array( $image_url );
+      }
     }
-    $carousel_slider        = $this->get_posts_carousel_slider( $list_items );
+
+    if ( 0 === count( $slider_data ) ) {
+      $slider_data = Kiosk_Helper::explode_urls( $atts['default_image'] );
+    }
+
+    $carousel_slider = '';
+    if ( 0 != count( $slider_data ) ) {
+      $carousel_slider     = $this->get_posts_carousel_slider( $slider_data );
+    }
     $kiosk_posts_div       = '<div class="kiosk-posts">'
         . $carousel_slider . '</div>';
     return $kiosk_posts_div;
   }
   /**
    * Creates required template and invokes helper function to create carousel
-   * @param array
+   * @param array<array> $slider_data
    * @return string
    */
-  private function get_posts_carousel_slider( $list_items ) {
+  private function get_posts_carousel_slider( $slider_data ) {
     $prefix          = 'kiosk-posts';
     $carousel_slider = '';
-    $layout_template = '<img src="%s" alt="%s">';
-    if ( count( $list_items ) > 0 ) {
+    $layout_template = '<img src="%s" alt="">';
+    if ( count( $slider_data ) > 0 ) {
       $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
           $prefix,
           $layout_template,
-          $list_items
+          $slider_data
       );
     }
     return $carousel_slider;

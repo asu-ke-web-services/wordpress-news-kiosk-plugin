@@ -12,10 +12,10 @@ class KioskSliderTest extends WP_UnitTestCase {
     // Mockup data
     $this->feed_stub = $this->getMock(
         'Kiosk_WP\Feed_Helper',
-        array( 'fetch_feed' )
+        array( 'fetch_feed_data' )
     );
     $this->feed_stub->expects( $this->any() )
-         ->method( 'fetch_feed' )
+         ->method( 'fetch_feed_data' )
          ->with( $this->stringContains( 'flickr' ) )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
     $this->stub = $this->getMockBuilder( 'Kiosk_WP\Kiosk_Slider_Shortcodes' )

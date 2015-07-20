@@ -1,0 +1,79 @@
+/*
+ * Posts Admin Manager CSS
+ */
+ .timeline-flex {
+  align-content: space-around;
+  align-items: stretch;
+  display: flex;
+  flex: 100%;  
+  justify-content: space-around;
+ }
+
+.timeline-block {
+  align-self: stretch;
+  background-color: #2D2B2B;
+  flex-direction: column;
+  padding: 10px 10px;
+  margin: 20px 0;
+  color: #fff;
+}
+
+.timeline_header {
+  align-self: stretch;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.timeline_header_section {
+  align-self: stretch;
+  flex: 100%;
+  text-align: center;
+}
+
+.timeline_header_section:nth-child(even) {
+  background-color: rgba(100,100,100,1);
+}
+
+.timeline_header_section:nth-child(odd) {
+  background-color: rgba(75,75,75,1); 
+}
+
+.timeline-row-item {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.timeline-row-item:nth-child(even) .timeline-row-item__margin {
+  background: rgba(100,100,100,1);
+  border-radius: 10px;
+}
+.timeline-row-item:nth-child(odd) .timeline-row-item__margin {
+  background: rgba(75,75,75,1);
+  border-radius: 10px;
+}
+.timeline-row-item__text {
+  flex: 1;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-align: left;
+}
+.timeline-row-item__duration {
+  flex: 1;
+  text-align: right;
+}
+.timeline-row-item__status {
+  flex: 1;
+  text-align: center;
+}
+
+.timeline-row-item__details {
+  align-self: stretch;
+  flex: 100%; 
+  bottom: 0;
+  left: 0;
+  position: absolute;  
+  right: 0;  
+  top: 0;
+  z-index: 10;
+}

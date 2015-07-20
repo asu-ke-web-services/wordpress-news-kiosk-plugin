@@ -46,11 +46,11 @@ class Feed_Helper {
         $rss[ $newlength++ ] = $rss[ $i ];
       }
     }
-    return array_slice( $rss, 0, $newlength - 1 );
+    return array_slice( $rss, 0, $newlength == 1 ? 1 : ( $newlength - 1 ) );
   }
 
   /**
-   * Iterates through list of urls passed and fetches the combined feed data
+   * Iterates through list of urls passed and fetches the feed data
    * @param array $feed_urls_array
    * @return array<SimplePie>
    */
@@ -59,7 +59,7 @@ class Feed_Helper {
     $total_feed_count      = 0;
     for ( $i = 0 ; $i < count( $feed_urls_array ); $i++ ) {
       $feed_url = $feed_urls_array[ $i ];
-      $feed     = $this->fetch_feed( $feed_url );
+      $feed     = $this->fetch_feed_data( $feed_url );
       // Checks that the object is created correctly
       if ( ! empty( $feed ) ) {
         // create an array of items
@@ -89,7 +89,7 @@ class Feed_Helper {
   * @param string $feed_url
   * @return SimplePie
   */
-  public function fetch_feed( $feed_url ) {
+  public function fetch_feed_data( $feed_url ) {
     if ( function_exists( 'fetch_feed' ) ) {
       // include the required file to pull feed
       include_once( ABSPATH . WPINC . '/feed.php' );
@@ -113,7 +113,7 @@ class Feed_Helper {
    * @param int $limit
    * @return array with image_url, alt text, title
    */
-  public static function extract_images_from_flickr_feed( $items, $limit ) {
+  public static function extract_data_from_flickr_feed( $items, $limit ) {
     $total_feed_count = count( $items );
     $list_item = null;
     $image_regex = '/<img[^>]+>/i';
@@ -154,7 +154,7 @@ class Feed_Helper {
    * @param array $items the rss feed data items
    * @return array<array<news_url,title, title, date, content>>
    */
-  public static function extract_news_from_rss_feed(
+  public static function extract_data_from_rss_feed(
     $limit,
     $content_limit,
     $items ) {

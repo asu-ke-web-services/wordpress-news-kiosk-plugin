@@ -1,4 +1,4 @@
-/*! kisok v1.0 
+/*! kisok v1.0
  */
 +function ($) {
 /**

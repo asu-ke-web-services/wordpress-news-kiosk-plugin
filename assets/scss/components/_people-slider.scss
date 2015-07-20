@@ -3,14 +3,14 @@
    =============*/
 
 .kiosk-people-slider {
-  
+
   align-self: stretch;
   flex: 100%;
 }
 
 .kiosk-people-slider__slider {
   @extend .carousel;
-  @extend .flex-column; 
+  @extend .flex-column;
 
   flex: 100%;
 }
@@ -18,23 +18,23 @@
 .kiosk-people-slider__aspect-ratio {
   @extend .flex-column;
   height: 0;
-  /* maintain 7:5 aspect ratio*/  
+  /* maintain 7:5 aspect ratio*/
   padding-bottom: calc(100%*5/7);
-  position: relative;   
+  position: relative;
 }
 
 .kiosk-people-slider__layout {
   @extend .flex-column;
 
   bottom: 0;
-  flex: 100%;  
+  flex: 100%;
   flex-wrap: nowrap;
   left: 0;
   margin: auto;
   overflow: hidden;
-  position: absolute;  
+  position: absolute;
   right: 0;
-  top: 0;  
+  top: 0;
 }
 
 .kiosk-people-slider__layout__row {
@@ -48,22 +48,23 @@
 .kiosk-people-slider__layout__row-bottom {
   @extend .kiosk-people-slider__layout__row;
 
+  align-content: space-between;
   height: 20%;
-  justify-content: space-between;   
+  justify-content: space-between;
 }
 
 .kiosk-people-slider__layout__row-middle {
   @extend .kiosk-people-slider__layout__row;
-  
+
   height: 60%;
 }
 
 .kiosk-people-slider__layout__row-middle--column {
   @extend .flex-container;
-  
-  align-content: flex-start;
+
+  align-content: space-between;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   overflow: hidden;
 }
 
@@ -72,16 +73,12 @@
   @extend .kiosk-people-slider__layout__row-middle--column;
 
   flex: calc(100% / 7);
-
-  .kiosk-people-slider__layout__image {
-    flex: 100%;
-  }
 }
 
 .kiosk-people-slider__layout__row-middle--column2 {
   @extend .kiosk-people-slider__layout__row-middle--column;
 
-  flex: calc(100% / 7 * 5);   
+  flex: calc(100% / 7 * 5);
 }
 
 .kiosk-people-slider__layout__featured--column1 {
@@ -95,7 +92,7 @@
   font-size: 1.2em;
   font-style: italic;
   overflow: hidden;
-  padding: 5px;  
+  padding: 5px;
   word-wrap: break-word;
 }
 
@@ -105,14 +102,14 @@
 }
 
 .kiosk-people__slider__carousel-inner {
-  @extend .carousel-inner;  
+  @extend .carousel-inner;
 }
 
 .kiosk-people-slider__layout__header {
   font-size: 2em;
   font-weight: bold;
   margin-bottom: 5px;
-  margin-top: 0;  
+  margin-top: 0;
   text-align: center;
 }
 
@@ -120,9 +117,10 @@
   @include img-responsive;
   @include center-block;
 
+  margin: auto;
   max-height: 100%;
   overflow: hidden;
-  padding: 5px;  
+  padding: 5px;
 }
 
 .kiosk-people-slider__layout__featured-image {

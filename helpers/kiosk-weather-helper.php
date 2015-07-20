@@ -22,7 +22,7 @@ class Kiosk_Weather_Helper {
    * and creates a div block for the current and next 3 days forecast
    * @return string HTML markup
    */
-  function kiosk_parse_weather( $json_weather ) {
+  function kiosk_parse_weather( $weather_json ) {
     $forecast_weather_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item'>
         <div class="kiosk-weather__forecast__item__header">%s</div>
@@ -32,7 +32,7 @@ class Kiosk_Weather_Helper {
 HTML;
     $yahoo_weather_helper    = new \Kiosk_WP\Yahoo_Weather_Api_Helper();
     $weather_details         = $yahoo_weather_helper->extract_weather_data(
-        $json_weather
+        $weather_json
     );
     $location_title          = $weather_details['location_title'];
 
@@ -94,10 +94,10 @@ HTML;
     } else {
       // Convert JSON to PHP array
       $json         = Json_Decode_Helper::remove_unwanted_chars( $json );
-      $json_weather = json_decode( $json, true );
-      if ( $json_weather != null && json_last_error() === JSON_ERROR_NONE ) {
+      $weather_json = json_decode( $json, true );
+      if ( $weather_json != null && json_last_error() === JSON_ERROR_NONE ) {
         $kiosk_weather_div = '<div class="kiosk-weather">'
-          . $this->kiosk_parse_weather( $json_weather )
+          . $this->kiosk_parse_weather( $weather_json )
           . '</div>';
       } else {
         $kiosk_weather_div = '';
