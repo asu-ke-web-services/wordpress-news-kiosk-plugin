@@ -1171,7 +1171,7 @@
 /* =========
    Flex Grid
    =========*/
-.flex-container, .kiosk-date-time, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
+.flex-container, .kiosk-date-time, .kiosk-people-slider__layout__body, .kiosk-people-slider__layout__row, .kiosk-people-slider__layout__row-top,
 .kiosk-people-slider__layout__row-bottom, .kiosk-people-slider__layout__row-middle, .kiosk-people-slider__layout__row-middle--column, .kiosk-people-slider__layout__row-middle--column1,
 .kiosk-people-slider__layout__row-middle--column3, .kiosk-people-slider__layout__row-middle--column2, .kiosk-lobby, .kiosk-lobby__tweets,
 .kiosk-lobby__asu-news, .kiosk-third-floor, .kiosk-third-floor__people-slider, .kiosk-third-floor__tweets {
@@ -1185,7 +1185,7 @@
   justify-content: space-around;
 }
 
-.flex-column, .kiosk-people-slider__slider, .kiosk-people-slider__aspect-ratio, .kiosk-people-slider__layout, .kiosk-lobby__column--1,
+.flex-column, .kiosk-people-slider__slider, .kiosk-lobby__column--1,
 .kiosk-lobby__column--3, .kiosk-lobby__column--2, .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
   align-content: space-around;
   align-items: stretch;
@@ -1291,7 +1291,7 @@
 }
 
 .kiosk-tweets__container {
-  height: 40%;
+  height: 47%;
   overflow: hidden;
   position: relative;
 }
@@ -1547,20 +1547,23 @@
   flex: 100%;
 }
 
+.kiosk-people-slider__layout__body {
+  flex: 100%;
+}
+
 .kiosk-people-slider__aspect-ratio {
-  height: 0;
-  /* maintain 7:5 aspect ratio*/
-  padding-bottom: calc(100%*5/7);
+  display: inline-block;
+  max-width: 100%;
   position: relative;
+}
+
+.kiosk-people-slider__aspect-ratio__dummy {
+  height: calc(100%*7/5);
 }
 
 .kiosk-people-slider__layout {
   bottom: 0;
-  flex: 100%;
-  flex-wrap: nowrap;
   left: 0;
-  margin: auto;
-  overflow: hidden;
   position: absolute;
   right: 0;
   top: 0;
@@ -1775,18 +1778,16 @@
   }
 }
 .kiosk-third-floor__people-slider {
-  padding: 15px;
   width: 100%;
 }
 
 .kiosk-third-floor__tweets {
-  padding: 15px;
+  padding: 15px 0 0;
 }
 
 .kiosk-third-floor__time,
-.kiosk-third-floor__weather,
-.kiosk-third-floor__logo {
-  padding: 15px;
+.kiosk-third-floor__weather {
+  padding: 15px 0;
 }
 
 /*# sourceMappingURL=wordpress-news-kiosk-plugin.css.map */

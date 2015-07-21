@@ -43,18 +43,16 @@ $kiosk-padding: 15px;
 
 .kiosk-third-floor__people-slider {
   @extend .flex-container;
-  padding: $kiosk-padding;
+
   width: 100%;
 }
 
 .kiosk-third-floor__tweets {
   @extend .flex-container;
-  padding: $kiosk-padding;
+  padding: 15px 0 0;
 }
 
 .kiosk-third-floor__time,
-.kiosk-third-floor__weather,
-.kiosk-third-floor__logo
- {
-  padding: $kiosk-padding;
+.kiosk-third-floor__weather {
+  padding: 15px 0;
 }

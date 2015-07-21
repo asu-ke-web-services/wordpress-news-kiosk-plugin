@@ -15,23 +15,25 @@
   flex: 100%;
 }
 
+.kiosk-people-slider__layout__body {
+  @extend .flex-container;
+
+  flex: 100%;
+}
+
 .kiosk-people-slider__aspect-ratio {
-  @extend .flex-column;
-  height: 0;
-  /* maintain 7:5 aspect ratio*/
-  padding-bottom: calc(100%*5/7);
+  display: inline-block;
+  max-width: 100%;
   position: relative;
 }
 
-.kiosk-people-slider__layout {
-  @extend .flex-column;
+.kiosk-people-slider__aspect-ratio__dummy {
+  height: calc(100%*7/5);
+}
 
+.kiosk-people-slider__layout {
   bottom: 0;
-  flex: 100%;
-  flex-wrap: nowrap;
   left: 0;
-  margin: auto;
-  overflow: hidden;
   position: absolute;
   right: 0;
   top: 0;
