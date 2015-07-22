@@ -93,9 +93,9 @@ function calculateRelativeTime(tweet_time) {
 }
 
 function resizePeopleSlider() {
-  logoHeight   = $('.kiosk-third-floor__logo').outerHeight(true);
-  peopleSliderheaderHeight = $('.kiosk-people-slider__layout__header').outerHeight(true);
-  remainHeight = peopleSliderheaderHeight + logoHeight + 30;
+  var logoHeight   = $('.kiosk-third-floor__logo').outerHeight(true);
+  var peopleSliderheaderHeight = $('.kiosk-people-slider__layout__header').outerHeight(true);
+  var remainHeight = peopleSliderheaderHeight + logoHeight + 30;
   $('.kiosk-people-slider__aspect-ratio').css('height', 'calc( 100vh - ' + remainHeight + 'px)');
   if ($(window).width() < $(window).height()) {
       $('.kiosk-people-slider__aspect-ratio').css('height', $(window).width() * 5 / 7);
