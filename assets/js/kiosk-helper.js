@@ -92,6 +92,17 @@ function calculateRelativeTime(tweet_time) {
   return temp;
 }
 
+/**
+ * Resizes People Slider by calculating space occupied by logo and People slider
+ * header and the padding of 1st column so the height and width accomdate to
+ * aspect ratio of width: height :: 7:5
+ * If window width is smaller then height use width for calculating aspect ratio
+ * as when resized to width of max 1200px each column occupies full width slider
+ * layout can still fit in available height.
+ * Note: Default setting height will take care of aspect ratio which is handled
+ * in CSS when width > height for other case calculate the ratio of width and
+ * set height.
+ */
 function resizePeopleSlider() {
   var logoHeight   = $('.kiosk-third-floor__logo').outerHeight(true);
   var peopleSliderheaderHeight = $('.kiosk-people-slider__layout__header').outerHeight(true);
