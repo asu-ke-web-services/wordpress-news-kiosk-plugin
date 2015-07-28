@@ -22,9 +22,10 @@ class People_Slider_Helper {
    */
   public function get_people( $keyword ) {
     $people_presenter                 = new \People_Presenter();
+
     return $people_presenter
                      ->get_sustainability_scientists_by_expertise_keyword(
-                         slugify( $keyword->keyword )
+                         $keyword->keyword
                      );
   }
 
@@ -41,9 +42,7 @@ class People_Slider_Helper {
       $featured_image = false;
       // Get all the images for the people in those keywords
       $people = $this->get_people( $keyword );
-      //var_dump($people);
       $images = array();
-
       foreach ( $people as $person ) {
         $image = $person->photo_url();
 
@@ -182,7 +181,7 @@ HTML;
     $center_right_column = '';
     $title               = $section['keyword'];
     $quote               = $section['quote'];
-    $images_to_display   = $count_images < 23 ? $count_images : 21;
+    $images_to_display   = $count_images < 21 ? $count_images : 21;
     for ( $i = 0; $i < $images_to_display - 1; $i++ ) {
       $surrond_image = sprintf(
           $image_tag_template,
@@ -202,11 +201,15 @@ HTML;
         $left_column .= $surrond_image;
       }
     }
-    $center_image = sprintf(
-        $image_tag_template,
-        'kiosk-people-slider__layout__featured-image',
-        Kiosk_Helper::relative_to_absolute_url( $content_image, $gios_url )
-    );
+    if ( ! empty( $content_image ) ) {
+      $center_image = sprintf(
+          $image_tag_template,
+          'kiosk-people-slider__layout__featured-image',
+          Kiosk_Helper::relative_to_absolute_url( $content_image, $gios_url )
+      );
+    } else {
+      $center_image = '';
+    }
     $layout_center = sprintf(
         $layout_center_with_quote,
         $center_image,

@@ -180,6 +180,9 @@ class Kiosk_Helper {
    */
   public static function relative_to_absolute_url( $url, $prefix = null )
   {
+    if ( empty( $url ) ) {
+      return;
+    }
     /* return if already absolute URL */
     if ( parse_url( $url, PHP_URL_SCHEME ) != '' ) {
       return $url;

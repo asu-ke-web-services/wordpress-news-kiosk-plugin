@@ -24,7 +24,7 @@ define( 'KIOSK_API_REQUIRED_VERSION', '~2' );
 /**
  * Load all the dependent files to use kiosk plugin
  */
-function load_dependencies() {
+function load_kiosk_dependencies() {
   // Require all the files for the Kiosk plugin
   /*
    * For unit test this file will not be available during the travis build time
@@ -43,16 +43,18 @@ function load_dependencies() {
   require_once plugin_dir_path( __FILE__ ) . 'localsettings.php';
 }
 
-function require_once_directory( $directory ) {
-  $files = glob( $directory . '/*.php' );
-  foreach ( $files as $file ) {
-    require_once( $file );
+if ( ! function_exists( 'require_once_directory' ) ) {
+  function require_once_directory( $directory ) {
+    $files = glob( $directory . '/*.php' );
+    foreach ( $files as $file ) {
+      require_once( $file );
+    }
   }
 }
 /**
  * Initialize the required classes for kiosk plugin
  */
-function run_loaded_classes() {
+function run_kiosk_loaded_classes() {
   $version = KIOSK_WP_VERSION;
   // ==========
   // Helpers
@@ -124,7 +126,7 @@ function setup_kiosk_wp_plugin() {
   // =================
   // Load Dependencies
   // =================
-  load_dependencies();
+  load_kiosk_dependencies();
 
   // ===================
   // Plugin Registration
@@ -133,6 +135,6 @@ function setup_kiosk_wp_plugin() {
   $plugin->run();
 
   // Intialize the dependent classes
-  run_loaded_classes();
+  run_kiosk_loaded_classes();
 }
 setup_kiosk_wp_plugin();
