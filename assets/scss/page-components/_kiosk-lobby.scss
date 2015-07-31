@@ -4,10 +4,6 @@
 
 $kiosk-items-padding: 15px 0;
 
-* {
-  box-sizing: border-box;
-}
-
 .kiosk-lobby {
   @extend .flex-container;
 
@@ -16,6 +12,10 @@ $kiosk-items-padding: 15px 0;
   background-size: cover;
   color: #333;
   font-family: $font-family-sans-serif;
+
+  * {
+    box-sizing: border-box;
+  }
 }
 
 %kiosk-lobby__column {

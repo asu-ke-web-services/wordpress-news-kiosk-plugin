@@ -1665,16 +1665,15 @@
 /* ======================
    Kiosk Lobby Compoments
    ======================*/
-* {
-  box-sizing: border-box;
-}
-
 .kiosk-lobby {
   background-image: url("../images/bg-display.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
+}
+.kiosk-lobby * {
+  box-sizing: border-box;
 }
 
 .kiosk-lobby__column--1,
@@ -1748,15 +1747,14 @@
 /* ======================
    Kiosk Third Floor Compoments
    ======================*/
-* {
-  box-sizing: border-box;
-}
-
 .kiosk-third-floor {
   background: linear-gradient(to bottom, #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 54%, #9fd8ef 58%, #2ab0ed 100%);
   color: #333;
   font-family: "Helvetica Neue Bold", arial, helvetica, sans-serif;
   font-size: 1.6vmin;
+}
+.kiosk-third-floor * {
+  box-sizing: border-box;
 }
 
 .kiosk-third-floor__column, .kiosk-third-floor__column--1, .kiosk-third-floor__column--2 {
