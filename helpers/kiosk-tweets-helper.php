@@ -97,7 +97,7 @@ class Kiosk_Tweets_Helper {
     $div_start   = <<<HTML
     <div class="kiosk-tweets__timeline__title">
        <b class="kiosk-tweets__timeline__title__text">Tweets</b>
-       <p class="kiosk-tweets__timeline__title__logo"  title="Twitter" 
+       <p class="kiosk-tweets__timeline__title__logo"  title="Twitter"
        target="_blank">Twitter</p>
     </div>
     <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets__container">
@@ -110,7 +110,7 @@ HTML;
           </div>
           <div class="kiosk-tweets__tweet__details">
             <div class="kiosk-tweets__tweet__details__permalink">
-              <div class="kiosk-tweets__tweet__details__tweet-time" 
+              <div class="kiosk-tweets__tweet__details__tweet-time"
               data-actual-time="%s">%s</div>
             </div>
             <div class="kiosk-tweets__tweet__details__header">
@@ -122,7 +122,7 @@ HTML;
                </div>
             </div>
             <div>
-              <div class="kiosk-tweets__tweet__details__text"> %s </div> 
+              <div class="kiosk-tweets__tweet__details__text"> %s </div>
               <div>%s</div>
             </div>
           </div>
@@ -132,10 +132,10 @@ HTML;
         <div class="kiosk-tweets__tweet__retweet">
           <i class="kiosk-tweets__tweet__retweet__icon"></i>
           Retweeted by
-          <a target="_blank" href="%s" class="kiosk-tweets__tweet__link"> 
-            %s 
+          <a target="_blank" href="%s" class="kiosk-tweets__tweet__link">
+            %s
           </a>
-        </div>        
+        </div>
 HTML;
     $div_end = '</ul></div>';
     $tweet_items  = '';
@@ -185,7 +185,7 @@ HTML;
       if ( $this->request_not_from_wp ) {
         $kiosk_tweets_div = '';
       } else {
-        $kiosk_tweets_div = '<div class="kiosk-tweets">Twitter API Errored
+        $kiosk_tweets_div = '<div class="kiosk-tweets">Cannot load tweets
         </div>';
       }
     } else {
@@ -225,16 +225,27 @@ HTML;
    */
   public function get_tweets_json() {
     $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
-    $json               = $twitter_api_helper->tweets_json(
-        $this->localsettings['twitter_oauth_access_token'],
-        $this->localsettings['twitter_oauth_access_token_secret'],
-        $this->localsettings['twitter_consumer_key'],
-        $this->localsettings['twitter_consumer_secret'],
-        $this->query,
-        $this->limit,
-        $this->handle
-    );
-
-    return $json;
+    if ( isset( $this->localsettings['twitter_oauth_access_token'] )
+      && isset( $this->localsettings['twitter_oauth_access_token_secret'] )
+      && isset( $this->localsettings['twitter_consumer_key'] )
+      && isset( $this->localsettings['twitter_consumer_secret'] )
+    ) {
+      $json = $twitter_api_helper->tweets_json(
+          $this->localsettings['twitter_oauth_access_token'],
+          $this->localsettings['twitter_oauth_access_token_secret'],
+          $this->localsettings['twitter_consumer_key'],
+          $this->localsettings['twitter_consumer_secret'],
+          $this->query,
+          $this->limit,
+          $this->handle
+      );
+      return $json;
+    } else {
+      error_log(
+          basename( __FILE__ )
+          . " Missing one or more required Twitter authentication details\n"
+      );
+      return null;
+    }
   }
 }

@@ -93,7 +93,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
     $prefix = 'kiosk-asu-news';
     $layout_template = <<<HTML
       <div class="kiosk-asu-news__slider__header">
-        <a href="%s" title="%s"><h3><p>%s</p></h3></a>
+        <a href="%s" title="%s" class="kiosk-asu-news__slider__header-link no-border"><h3><p>%s</p></h3></a>
       </div>
       <div class="kiosk-asu-news__slider__time">
         <p>%s</p>

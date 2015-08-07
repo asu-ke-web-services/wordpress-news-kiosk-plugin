@@ -1502,6 +1502,12 @@
   overflow: hidden;
 }
 
+.kiosk-asu-news__slider__header-link {
+  border: 0;
+  color: black;
+  font-weight: bold;
+}
+
 /* =====
    Posts
    =====*/
