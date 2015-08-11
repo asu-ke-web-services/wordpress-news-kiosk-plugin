@@ -16,8 +16,6 @@ class Kiosk_Tweets_Helper {
   protected $localsettings    = array();
   protected $limit;
   protected $query;
-  protected $handle;
-  public $request_not_from_wp = false;
 
   public function __construct() {
     $this->load_dependencies();
@@ -28,74 +26,18 @@ class Kiosk_Tweets_Helper {
    */
   public function load_dependencies() {
     // file must be present to include account settings;
-    if ( function_exists( 'plugin_dir_path' ) ) {
-      if ( file_exists( plugin_dir_path( __FILE__ )
-      . '../localsettings.php' )
-      ) {
-        require( plugin_dir_path( __FILE__ ) . '../localsettings.php' );
-        $this->localsettings = $localsettings;
-      }
-    } else {
-      $document_root  = filter_input(
-          INPUT_SERVER,
-          'DOCUMENT_ROOT',
-          FILTER_SANITIZE_STRING
-      );
-      $php_self       = filter_input(
-          INPUT_SERVER,
-          'PHP_SELF',
-          FILTER_SANITIZE_STRING
-      );
-      $plugin_path    = $document_root . dirname( $php_self ) . '/../';
-      if ( file_exists( $plugin_path . '../localsettings.php' ) ) {
-        require( $plugin_path . '../localsettings.php' );
-        $this->localsettings = $localsettings;
-      }
-      $this->request_not_from_wp = true ;
-    }
+    require(  plugin_dir_path( __FILE__ ) . '../localsettings.php' );
+    $this->localsettings = $localsettings;
   }
 
   /**
-   * Creates a div block with all the tweets and by converting the hash tags
-   * and @ and urls to hyperlinks returns html formated string.
-   * If retweeted by some one it displays the original tweet by the
-   * user and who retweeted.
-   * @param string json array
-   * @param int $limit number of tweets
-   * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
-   * screen_name text, retweet_link, retweet_by>
-   */
-  private function kiosk_parse_tweets( $tweets_json, $limit ) {
-    $kiosk_tweet_items = array();
-    /*
-     $tweets_json will have 'statuses' as column name in case of twitter
-     search api is used. To read actual tweets take data from statutses column.
-
-     For user timeline we do not have statuses column so read data as it comes
-     form twitter user_timeline api */
-    if ( array_key_exists( 'statuses', $tweets_json ) ) {
-      $tweets_json = $tweets_json['statuses'];
-    }
-    for ( $i = 0; $i < count( $tweets_json ) && $i < $limit ; $i++ ) {
-      $twitter_api_helper   = new \Kiosk_WP\Twitter_Api_Helper();
-      $kiosk_tweet_items[]  = $twitter_api_helper->extract_tweet_details(
-          $tweets_json[ $i ],
-          'kiosk-tweets__tweet__link'
-      );
-    }
-    return $kiosk_tweet_items;
-  }
-
-  /**
-   * kiosk_tweets_block( $kiosk_tweet_items )
    * creates a div block with the tweets passed to it
-   * @param array<profile_pic, relative_date_time, actual_date_time, full_name,
-   * screen_name, text, retweet_link, retweet_by>
+   * @param array $tweets
    * @return string
    */
-  private function kiosk_tweets_block( $kiosk_tweet_items ) {
+  private function generate_tweet_block( $tweets ) {
     $div_start   = <<<HTML
-    <div class="kiosk-tweets__timeline__title">
+    <div class="kiosk-tweets__timeline__title" data-query="%s" data-limit="%s">
        <b class="kiosk-tweets__timeline__title__text">Tweets</b>
        <p class="kiosk-tweets__timeline__title__logo"  title="Twitter"
        target="_blank">Twitter</p>
@@ -139,27 +81,32 @@ HTML;
 HTML;
     $div_end = '</ul></div>';
     $tweet_items  = '';
-    foreach ( $kiosk_tweet_items as $item ) {
+    for ( $i = 0; $i < $this->limit && $i < count( $tweets ); $i++ ) {
+      $tweet_data = Twitter_Api_Helper::extract_tweet_data(
+          $tweets[ $i ],
+          'kiosk-tweets__tweet__link'
+      );
       $retweet  = '';
-      if ( ! empty( $item['retweet_by'] ) ) {
+      if ( ! empty( $tweet_data['retweet_by'] ) ) {
         $retweet = sprintf(
             $retweet_template,
-            $item['retweet_link'],
-            $item['retweet_by']
+            $tweet_data['retweet_link'],
+            $tweet_data['retweet_by']
         );
       }
       $tweet_items .= sprintf(
           $item_template,
-          $item['profile_pic'],
-          $item['actual_date_time'],
-          $item['relative_date_time'],
-          $item['full_name'],
-          $item['screen_name'],
-          $item['text'],
+          $tweet_data['profile_pic'],
+          $tweet_data['actual_date_time'],
+          $tweet_data['relative_date_time'],
+          $tweet_data['full_name'],
+          $tweet_data['screen_name'],
+          $tweet_data['text'],
           $retweet
       );
     }
-
+    // Sending Search query and limit as data-uri's to client so it can send back via rewrites
+    $div_start = sprintf( $div_start, $this->query, $this->limit );
     return $div_start . $tweet_items . $div_end;
   }
 
@@ -172,80 +119,66 @@ HTML;
    * @param array
    * @return string
    */
-  public function kiosk_tweets( $atts, $content = null ) {
+  public function get_kiosk_tweets_html( $atts, $content = null ) {
+    $atts = shortcode_atts(
+        array(
+          'limit'    => '20',
+          'query'    => '@asugreen',
+        ),
+        $atts
+    );
+    $this->limit  = $atts['limit'];
+    $this->query  = $atts['query'];
+    $tweets_json  = $this->get_tweets_json();
+    if ( empty( $tweets_json ) ) {
 
-    $this->limit   = array_key_exists( 'limit', $atts )
-                                ? $atts['limit'] : '20';
-    $this->query   = array_key_exists( 'query', $atts )
-                                ? $atts['query'] : '@asugreen';
-    $this->handle  = array_key_exists( 'handle', $atts )
-                                ? $atts['handle'] : '';
-    $json          = $this->get_tweets_json();
-    if ( empty( $json ) ) {
-      if ( $this->request_not_from_wp ) {
-        $kiosk_tweets_div = '';
-      } else {
-        $kiosk_tweets_div = '<div class="kiosk-tweets">Cannot load tweets
-        </div>';
-      }
+      $kiosk_tweets_data = 'Cannot load tweets';
+
     } else {
-      $json = Json_Decode_Helper::remove_unwanted_chars( $json );
-      $tweets_json = json_decode( $json, true ); //getting the file content as array
+      $twitter_api_error_message = Twitter_Api_Helper::get_twitter_api_error_message( $tweets_json );
 
-      if ( $tweets_json != null && json_last_error( ) === JSON_ERROR_NONE ) {
-        if ( array_key_exists( 'errors' , $tweets_json )
-              && array_key_exists( 0 , $tweets_json['errors'] )
-              && array_key_exists( 'message' , $tweets_json['errors'][0] ) ) {
-          $kiosk_tweets_div   = '<div class="kiosk-tweets">'
-              . $tweets_json['errors'][0]['message']
-              . '</div>';
-        } else {
-          $kiosk_tweet_items  = $this->kiosk_parse_tweets(
-              $tweets_json,
-              $this->limit
-          );
-          $kiosk_tweets_div   = '<div class="kiosk-tweets">'
-          . $this->kiosk_tweets_block( $kiosk_tweet_items )
-          . '</div>';
-        }
+      if ( empty( $twitter_api_error_message ) ) {
+        $kiosk_tweets_data = $this->generate_tweet_block(
+            Twitter_Api_Helper::get_tweets_column_from_twitter_api_response( $tweets_json )
+        );
       } else {
-        $kiosk_tweets_div   = '';
-        error_log(
-            basename( __FILE__ )
-            . ' Twitter API error: JSON '
-            . json_last_error_msg() . "\n"
+        $kiosk_tweets_data = 'Cannot load tweets';
+
+        error_log( basename( __FILE__ )
+            . 'Twitter API Errored with: '
+            . $twitter_api_error_message . "\n"
         );
       }
     }
-    return $kiosk_tweets_div;
+    return '<div class="kiosk-tweets">'
+        . $kiosk_tweets_data
+        . '</div>';
   }
+
   /**
    * Reads localsettings.php file and invokes twitter helper class methods
-   * @return JSON object
+   * @return JSON object or '' on failure
    */
   public function get_tweets_json() {
-    $twitter_api_helper = new \Kiosk_WP\Twitter_Api_Helper();
     if ( isset( $this->localsettings['twitter_oauth_access_token'] )
       && isset( $this->localsettings['twitter_oauth_access_token_secret'] )
       && isset( $this->localsettings['twitter_consumer_key'] )
       && isset( $this->localsettings['twitter_consumer_secret'] )
     ) {
-      $json = $twitter_api_helper->tweets_json(
+      $json = Twitter_Api_Helper::get_tweets_json(
           $this->localsettings['twitter_oauth_access_token'],
           $this->localsettings['twitter_oauth_access_token_secret'],
           $this->localsettings['twitter_consumer_key'],
           $this->localsettings['twitter_consumer_secret'],
           $this->query,
-          $this->limit,
-          $this->handle
+          $this->limit
       );
       return $json;
     } else {
-      error_log(
-          basename( __FILE__ )
+      error_log( basename( __FILE__ )
           . " Missing one or more required Twitter authentication details\n"
       );
-      return null;
+      return '';
     }
   }
 }

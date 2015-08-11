@@ -33,10 +33,11 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
   }
 
   /**
-   * [kiosk_tweets limit="20" query="#sustainabity" handle="asugreen"]
+   * [kiosk_tweets limit="20" query="@asugreen"]
    *
    * @param $atts array
-   * specifying handle overrides the query for search and displays user timeline
+   * If query for search is not passed it displays user timeline
+   * else it display the tweets for given query
    * Generates a <div> tag with tweets
    * update twitter_oauth_access_token, twitter_oauth_access_token_secret,
    * twitter_consumer_key,twitter_consumer_secret
@@ -48,11 +49,10 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
         array(
           'limit'    => '20',
           'query'    => '@asugreen',
-          'handle'   => '',
         ),
         $atts
     );
-    $kiosk_tweet_helper     = new \Kiosk_WP\Kiosk_Tweets_Helper();
-    return $kiosk_tweet_helper->kiosk_tweets( $atts, $content );
+    return ( new \Kiosk_WP\Kiosk_Tweets_Helper() )
+        ->get_kiosk_tweets_html( $atts, $content );
   }
 }

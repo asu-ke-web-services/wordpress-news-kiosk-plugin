@@ -16,12 +16,8 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Weather_Shortcodes extends Base_Registrar {
-
-  protected $plugin_slug;
-  protected $version;
+  private $kiosk_weather_helper = null;
   public function __construct() {
-    $this->plugin_slug = 'kiosk-weather-shortcodes';
-    $this->version     = '0.1';
     $this->define_hooks();
   }
 
@@ -37,13 +33,13 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
    *
    */
   public function kiosk_weather( $atts, $content = null ) {
-    $atts                   = shortcode_atts(
+    $atts = shortcode_atts(
         array(
-          'location'        => 'tempe, az',
+          'location' => 'tempe, az',
         ),
         $atts
     );
-    $kiosk_weather_helper   = new \Kiosk_WP\Kiosk_Weather_Helper();
-    return $kiosk_weather_helper->kiosk_weather( $atts['location'] );
+    return (new \Kiosk_WP\Kiosk_Weather_Helper())
+        ->get_kiosk_weather_html( $atts['location'] );
   }
 }

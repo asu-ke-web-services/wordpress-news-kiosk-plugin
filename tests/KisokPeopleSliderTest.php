@@ -159,6 +159,7 @@ class Person {
     return $this->person_values['photo_path'];
   }
 }
+
 class Keyword {
   public $keyword = 'Biodiversity and preservation of natural environment';
 }

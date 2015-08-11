@@ -26,7 +26,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode() {
     $this->assertTrue( shortcode_exists( 'kiosk-tweets' ) );
 
-    $content = $this->stub->kiosk_tweets( array() );
+    $content = $this->stub->get_kiosk_tweets_html( array() );
     $this->assertContains(
         'kiosk-tweets__tweet',
         $content,
@@ -42,7 +42,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
   }
   function test_kiosk_tweets_shortcode_limit_4() {
 
-    $content = $this->stub->kiosk_tweets( array( 'limit' => 4 ) );
+    $content = $this->stub->get_kiosk_tweets_html( array( 'limit' => 4 ) );
     $this->assertContains(
         'kiosk-tweets__tweet',
         $content,

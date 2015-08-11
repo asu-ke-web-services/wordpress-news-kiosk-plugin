@@ -14,11 +14,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Tweets_Page extends Base_Registrar {
-  public static $page_name          = 'kiosk';
-  public static $param_slug         = 'twitter';
-  public static $extra_params       = array( 'limit' );
+  public static $page_name     = 'kiosk';
+  public static $param_slug    = 'twitter';
+  public static $extra_params  = array( 'limit', 'query' );
 
-  protected $page_data              = null;
+  protected $page_data         = null;
   public function __construct() {
     $this->define_hooks();
   }
@@ -50,19 +50,25 @@ class Kiosk_Tweets_Page extends Base_Registrar {
     add_rewrite_tag( '%' . Kiosk_Tweets_Page::$extra_params[0]
         . '%' , '([^&]+)'
     );
+    add_rewrite_tag( '%' . Kiosk_Tweets_Page::$extra_params[1]
+        . '%' , '([^&]+)'
+    );
 
     /*
      * Add the rewrite rules
      */
     // ======================================================
-    // Rule: /kiosk/twitter/limit/{20} => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
+    // Rule: /kiosk/twitter/limit={20}/query={@asugreen}/handle={asugreen}/ => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
     // ======================================================
     $from_url = '.*' . Kiosk_Tweets_Page::$page_name . '/'
         . Kiosk_Tweets_Page::$param_slug . '/'
-        . Kiosk_Tweets_Page::$extra_params[0] . '/([^/][0-9]*)?$';
+        . Kiosk_Tweets_Page::$extra_params[0] . '=([^/][0-9]*)/'
+        . Kiosk_Tweets_Page::$extra_params[1] . '=([^/][a-zA-Z@0-9]*)?$';
     $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
     $to_url  .= '/views/kiosk-tweets-presenter.php'
-        . '?' . Kiosk_Tweets_Page::$extra_params[0] . '=$1';
+        . '?'
+        . Kiosk_Tweets_Page::$extra_params[0] . '=$1&'
+        . Kiosk_Tweets_Page::$extra_params[1] . '=$2';
 
     add_rewrite_rule( $from_url, $to_url, 'top' );
 

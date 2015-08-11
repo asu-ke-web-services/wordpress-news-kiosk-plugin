@@ -41,9 +41,22 @@ class Yahoo_Weather_Api_Helper {
    * Parses weather json object and creates a
    * array with current and forecast weather
    * @param JSON object
-   * @return array
+   * @return array or empty string bad data
    */
   public function extract_weather_data( $json_weather ) {
+
+    $json_weather = json_decode(
+        Json_Decode_Helper::remove_unwanted_chars( $json_weather ),
+        true
+    );
+    if ( empty( $json_weather ) || json_last_error() !== JSON_ERROR_NONE ) {
+      error_log( basename( __FILE__ )
+          .' Weather API error: JSON '
+          . json_last_error_msg()
+          . "\n"
+      );
+      return '';
+    }
     $weather_details          = array(
       'location_title'        => '',
       'forecast'              => array( 3 ),
@@ -57,7 +70,6 @@ class Yahoo_Weather_Api_Helper {
       'low'                   => '',
       'high'                  => '',
     );
-    //$weather_icon       = 'http://l.yimg.com/a/i/us/we/52/%s.gif';
     $weather_icon       = 'https://s.yimg.com/zz/combo?/a/i/us/we/52/%s.gif';
     $location_city      = $json_weather['query']
         ['results']

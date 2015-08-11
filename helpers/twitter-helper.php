@@ -55,7 +55,6 @@ class Twitter_Api_Helper {
   /**
    * Connects to twitter streaming API using given credentails
    * and creates a json formatted string with all the given limit of tweets
-   * This function returns mock up data incase of unit testing.
    * @param string $oauth_access_token
    * @param string $oauth_access_token_secret
    * @param string $consumer_key
@@ -66,22 +65,19 @@ class Twitter_Api_Helper {
    * @return string
    *
    */
-  public static function tweets_json(
+  public static function get_tweets_json(
     $oauth_access_token,
     $oauth_access_token_secret,
     $consumer_key,
     $consumer_secret,
     $query,
-    $limit,
-    $handle ) {
+    $limit ) {
 
-    if ( empty( $handle ) ) {
+    if ( ! empty( $query ) ) {
       $twitter_api_url = 'https://api.twitter.com/1.1/search/tweets.json';
     } else {
       $twitter_api_url = 'https://api.twitter.com/1.1/'
           . 'statuses/user_timeline.json';
-      //Override query with handle to get user timeline
-      $query           = $handle;
     }
     $oauth                    = array(
      'oauth_consumer_key'     => $consumer_key,
@@ -253,12 +249,54 @@ class Twitter_Api_Helper {
     return $tweet_text;
   }
   /**
+   * JSON return by twitter API will have 'statuses' key in case of twitter
+   * search api is used. To read actual tweets take data from statutses key.
+   *
+   * For user timeline we do not have 'statuses' key so read data as it comes
+   * form twitter user_timeline api
+   * @param JSON
+   * @return array
+   */
+  public static function get_tweets_column_from_twitter_api_response( $json ) {
+    if ( empty( self::get_twitter_api_error_message( $json ) ) ) {
+      $tweets = json_decode( $json, true );
+      if ( array_key_exists( 'statuses', $tweets ) ) {
+        $tweets = $tweets['statuses'];
+      }
+    }
+    return $tweets;
+  }
+  /**
+   * Gives error message in case of failure
+   * @param JSON
+   * @return String or '' if no error
+   */
+  public static function get_twitter_api_error_message( $tweets_json ) {
+    $tweets_json = Json_Decode_Helper::remove_unwanted_chars( $tweets_json );
+    $tweets_json = json_decode( $tweets_json, true );
+
+    if ( $tweets_json != null && json_last_error( ) === JSON_ERROR_NONE ) {
+      // Good JSON but there could be error response
+      // from twitter API so check and return it.
+      if ( array_key_exists( 'errors' , $tweets_json )
+            && array_key_exists( 0 , $tweets_json['errors'] )
+            && array_key_exists( 'message' , $tweets_json['errors'][0] ) ) {
+        return $tweets_json['errors'][0]['message'];
+      }
+    } else {
+      return json_last_error_msg();
+    }
+    return '';
+  }
+  /**
    * Extracts the tweet details and return thems
-   * @param JSON object
+   * @param JSON string $tweet
+   * @param String $class_hyperlink_prefix
    * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
    * screen_name,text retweet_link retweet_by
    */
-  public static function extract_tweet_details( $tweet, $link_classes ) {
+  public static function extract_tweet_data( $tweet, $class_hyperlink_prefix ) {
+
     $tweet_info                           = array(
       'text'                              => '',
       'screen_name'                       => '',
@@ -300,16 +338,16 @@ class Twitter_Api_Helper {
     );
     $tweet_info['text']               = self::convert_url_text_to_hyperlink(
         $tweet_info['text'],
-        $link_classes
+        $class_hyperlink_prefix
     );
     $tweet_info['text']               = self::convert_hash_text_to_hyperlink(
         $tweet_info['text'],
-        $link_classes
+        $class_hyperlink_prefix
     );
     $tweet_info['text']               = self::
         convert_twitter_handle_text_to_hyperlink(
             $tweet_info['text'],
-            $link_classes
+            $class_hyperlink_prefix
         );
     return $tweet_info ;
   }

@@ -63,7 +63,6 @@ class Kiosk_Weather_Page extends Base_Registrar {
     $to_url   = 'wp-content/plugins/' . plugin_basename( dirname( __FILE__ ) );
     $to_url  .= '/views/kiosk-weather-presenter.php'
         . '?'. Kiosk_Weather_Page::$extra_params[0] . '=$1';
-
     add_rewrite_rule( $from_url, $to_url, 'top' );
 
     // Flush them!

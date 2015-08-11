@@ -86,13 +86,13 @@ dereference it so that the garbage collector can free up the space.
 **Notes**
 
 We do not have test data for you to use, you will have to create your own. Create around 20 posts with date ranges that do and do not
-lie within today's date range; and have categories, try uses two or three different categories.  Have the post bodies have 
+lie within today's date range; and have categories, try uses two or three different categories.  Have the post bodies have
 image tags randomly placed through some random text. You can use
 [this lorem ipsum generator](http://www.lipsum.com/) to make some random text for you.
 
 You should test this by creating some Pages in your local WordPress and add the shortcode to them with different categories to try it out.
 
-Check out [get_posts documentation](http://codex.wordpress.org/Template_Tags/get_posts) on how to get posts that are in categories.  
+Check out [get_posts documentation](http://codex.wordpress.org/Template_Tags/get_posts) on how to get posts that are in categories.
 
 ```php
 $args = array(
@@ -115,7 +115,7 @@ To get the image from the post, check for the following in the following order:
 
 `[kiosk-weather location='tempe,az']`
 
-Kiosk Weather shortcode pulls the weather forecast from the yahoo weather API. 
+Kiosk Weather shortcode pulls the weather forecast from the yahoo weather API.
 
 Attributes Description:
 
@@ -126,7 +126,7 @@ Note: If the location you are trying doesn't work try without comma
 
 # The Kiosk Tweets Shortcode
 
-`[kiosk_tweets limit="20" query="#sustainabity" handle="asugreen"]`
+`[kiosk_tweets limit="20" query="@asugreen"]`
 
 Kiosk Tweets shorcode displays the tweets requested by the given search parameters.
 
@@ -134,12 +134,12 @@ Attributes Description:
 
  * limit attribute is optional and defaults to 20.
 
- * Either one of the query or handle attribute is required if both are specified handle overrides the query for search and displays tweets from user timeline.
+ * query attribute is optional if passed displays tweets for that query else displays user timeline.
 
 Note:
 
  * Make sure to update twitter_oauth_access_token, twitter_oauth_access_token_secret, twitter_consumer_key, twitter_consumer_secret with twitter account details in localsettings.php.
- * handle attribute works only for the current user whose account details are used in localsettings.php file
+
 
 # The Kiosk Time Shortcode
 
@@ -159,7 +159,7 @@ Attributes Description:
 
 * feed_urls is optional and defaults to GIOS flickr feed.
 
-* Default feed url: 
+* Default feed url:
 
 `https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200`
 
@@ -188,7 +188,7 @@ Displays a logo by fetching from the given path.
 
 Attributes Description:
 
-* path attribute is optional and defaults to GIOS logo which is located in github 
+* path attribute is optional and defaults to GIOS logo which is located in github
 `assets/images/logo-gios.jpg`.
 
 #Kiosk People Slider Shortcode
@@ -223,13 +223,13 @@ include_path = "/usr/share/php:/usr/share/pearPHP:/path/to/the/gios2api2-php:."
 ```
 
 Attributes Description:
-* Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available. 
+* Kiosk People Slider shortcode displays the random list of people from each category they belong to and scrolls through different keywords available.
 Json style synax should be given as part of content with keyword or keyword-slug, person-slug, quote.
 
 * For the given keyword shortcode displays the person's image identified using person-slug is displayed as featued image for that keyword and given quote is shown next to it.
 
 * Person-slug and quote attributes are optional and by default they are empty.
-* Keyword is the category name they belong to 
+* Keyword is the category name they belong to
   `For example Keyword can be: Energy or food systems but not deforestation`
 
 
@@ -237,7 +237,6 @@ Json style synax should be given as part of content with keyword or keyword-slug
 Note: If you are on multi-site you need to add below lines to .htaccess file
 
 ```
-RewriteRule ^kiosk/twitter/limit/([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1 [QSA,L]
-RewriteRule ^kiosk/weather/location=([^/]*)? /wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php? [QSA,L]
-
+RewriteRule ^.*kiosk/twitter/limit=([^/][0-9]*)/query=([^/][a-zA-Z@0-9]*)?$ /wordpress/wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-tweets-presenter.php?limit=$1&query=$2 [QSA,L]
+RewriteRule ^.*kiosk/weather/location=([^/][a-zA-Z,\s]+)?$ /wordpress/wp-content/plugins/wordpress-news-kiosk-plugin/pages/views/kiosk-weather-presenter.php?location=$1 [QSA,L]
 ```
