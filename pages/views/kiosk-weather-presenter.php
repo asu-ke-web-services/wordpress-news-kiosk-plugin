@@ -11,8 +11,8 @@ load_kiosk_weather_presenter_dependencies();
 do_kiosk_weather_presenter_request_processing();
 
 function load_kiosk_weather_presenter_dependencies() {
-  require('../../../../../wp-blog-header.php');
-  require('../../kiosk-plugin.php');
+  require( '../../../../../wp-blog-header.php' );
+  require( '../../kiosk-plugin.php' );
 }
 
 function do_kiosk_weather_presenter_request_processing() {
