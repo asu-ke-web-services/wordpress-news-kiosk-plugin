@@ -53,8 +53,7 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
     $parsed_content   = $this->parse_content( $content );
     // Get all the keywords
     $keywords         = $this->people_slider_helper->get_keywords();
-    $data_sections    = $this
-        ->people_slider_helper
+    $data_sections    = $this->people_slider_helper
         ->get_sliders_data( $keywords, $parsed_content );
     $carousel_slider  = $this->get_carousel_slider(
         People_Slider_Helper::get_sliders(

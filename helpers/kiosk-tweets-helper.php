@@ -26,7 +26,7 @@ class Kiosk_Tweets_Helper {
    */
   public function load_dependencies() {
     // file must be present to include account settings;
-    require(  plugin_dir_path( __FILE__ ) . '../localsettings.php' );
+    require( plugin_dir_path( __FILE__ ) . '../localsettings.php' );
     $this->localsettings = $localsettings;
   }
 
@@ -138,7 +138,7 @@ HTML;
             Twitter_Api_Helper::get_tweets_data( $tweets_json )
         );
       } else {
-        error_log( basename( __FILE__ ) . 'Twitter API Errored with: '
+        error_log( basename( __FILE__ ) . ' Twitter API Errored with: '
             . $twitter_api_error_message . "\n"
         );
       }
