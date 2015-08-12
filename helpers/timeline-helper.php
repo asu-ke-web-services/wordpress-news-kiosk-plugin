@@ -5,10 +5,6 @@
    */
 namespace Kiosk_WP;
 class TimeLine_Helper {
-
-  public function __construct() {
-  }
-
   /**
    * Sorts the start dates and gets least date value of all(start year)
    * Sorts the end dates and gets highest data value of all(end year)

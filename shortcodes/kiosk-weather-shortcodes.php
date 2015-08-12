@@ -38,7 +38,8 @@ class Kiosk_Weather_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    return (new \Kiosk_WP\Kiosk_Weather_Helper())
+    $weather_details = (new \Kiosk_WP\Kiosk_Weather_Handler())
         ->get_kiosk_weather_html( $atts['location'] );
+    return $weather_details['response'];
   }
 }

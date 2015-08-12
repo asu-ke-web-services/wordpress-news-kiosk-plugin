@@ -136,18 +136,14 @@ setInterval(function() {
   $.ajax({
     url: tweets_url,
     success: function(response) {
-       if(! (response.indexOf('Cannot Load Tweets') > -1 ) ){
-        $(".kiosk-tweets").replaceWith(response);
-      }
+      $(".kiosk-tweets").replaceWith(response);
     }
   });
 
   $.ajax({
     url: weather_url,
     success: function(response) {
-       if(! (response.indexOf('Weather Data Not Available') > -1 ) ){
-        $(".kiosk-weather").replaceWith(response);
-      }
+      $(".kiosk-weather").replaceWith(response);
     }
   });
 }, 300000 /* 5 minutes */ );

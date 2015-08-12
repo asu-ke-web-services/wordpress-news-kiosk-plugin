@@ -35,6 +35,7 @@ if ( ! function_exists( 'load_kiosk_dependencies' ) ) {
       require_once 'gios-api-v2.0.php';
     }
     require_once_directory( plugin_dir_path( __FILE__ ) . 'includes' );
+    require_once_directory( plugin_dir_path( __FILE__ ) . 'handlers' );
     require_once_directory( plugin_dir_path( __FILE__ ) . 'helpers' );
     require_once_directory( plugin_dir_path( __FILE__ ) . 'plugin' );
     require_once_directory( plugin_dir_path( __FILE__ ) . 'admin' );
@@ -63,7 +64,10 @@ if ( ! function_exists( 'run_kiosk_loaded_classes' ) ) {
     // Helpers
     // ==========
     $feed_helper          = new \Kiosk_WP\Feed_Helper();
-    $people_slider_helper = new \Kiosk_WP\People_Slider_Helper();
+    // ==========
+    // Handler
+    // ==========
+    $people_slider_handler = new \Kiosk_WP\People_Slider_Handler();
     // =====
     // Admin
     // =====
@@ -97,7 +101,7 @@ if ( ! function_exists( 'run_kiosk_loaded_classes' ) ) {
     $posts_shortcodes->run();
 
     $posts_shortcodes = new \Kiosk_WP\Kiosk_People_Slider_Shortcodes(
-        $people_slider_helper
+        $people_slider_handler
     );
     $posts_shortcodes->run();
 

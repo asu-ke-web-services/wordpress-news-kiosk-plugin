@@ -45,7 +45,8 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    return ( new \Kiosk_WP\Kiosk_Tweets_Helper() )
+    $tweets = ( new \Kiosk_WP\Kiosk_Tweets_Handler() )
         ->get_kiosk_tweets_html( $atts, $content );
+    return $tweets['response'];
   }
 }

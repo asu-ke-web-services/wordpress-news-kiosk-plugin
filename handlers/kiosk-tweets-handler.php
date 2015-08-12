@@ -12,7 +12,7 @@ namespace Kiosk_WP;
  * Helper file to get tweets for kiosk-tweets shortcode
  * and lives out of wordpress
  */
-class Kiosk_Tweets_Helper {
+class Kiosk_Tweets_Handler {
   protected $localsettings    = array();
   protected $limit;
   protected $query;
@@ -81,6 +81,9 @@ HTML;
 HTML;
     $div_end = '</ul></div>';
     $tweet_items  = '';
+    if ( empty( $tweets ) ) {
+      return '';
+    }
     for ( $i = 0; $i < $this->limit && $i < count( $tweets ); $i++ ) {
       $tweet_data = Twitter_Api_Helper::extract_tweet_data(
           $tweets[ $i ],
@@ -111,15 +114,14 @@ HTML;
   }
 
   /**
-   * kiosk_tweets( $atts, $content = null )
-   * sets tweets limit, search string, handle  and request to tweets helper
-   * to get the data and creates html to return
-   * Returns empty string when there are any errors and invoked using wordpress
-   * rewrite urls otherwise returns HTML markup
+   * Creates a Tweets widget
+   * Returns array with two keys status and response.
+   * response contains HTML mark up to be displayed.
    * @param array
-   * @return string
+   * @return array< int status, String response<HTML markup>>
+   * status = 0 if success else non-negative
    */
-  public function get_kiosk_tweets_html( $atts, $content = null ) {
+  public function get_kiosk_tweets_html( $atts ) {
     $atts = shortcode_atts(
         array(
           'limit'    => '20',
@@ -127,6 +129,7 @@ HTML;
         ),
         $atts
     );
+    $status            = 0;
     $kiosk_tweets_data = '<div class="kiosk-tweets__no-data">Cannot Load Tweets</div>';
     $this->limit  = $atts['limit'];
     $this->query  = $atts['query'];
@@ -143,9 +146,15 @@ HTML;
         );
       }
     }
-    return '<div class="kiosk-tweets">'
+    if ( empty( $tweets_json ) || empty( $kiosk_tweets_data ) || ! empty( $twitter_api_error_message ) ) {
+      $status = 1;
+    }
+    return array(
+        'status'    => $status,
+        'response'  => '<div class="kiosk-tweets">'
         . $kiosk_tweets_data
-        . '</div>';
+        . '</div>',
+    );
   }
 
   /**

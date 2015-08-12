@@ -17,7 +17,7 @@ class Yahoo_Weather_Api_Helper {
    * Returns a JSON type formatted string.
    * @return string
    */
-  public function get_weather_json( $location = 'tempe, az' ) {
+  public static function get_weather_json( $location = 'tempe, az' ) {
     $BASE_URL       = 'http://query.yahooapis.com/v1/public/yql';
     $yql_query      = 'select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="' . $location . '")';
     $yql_query_url  = $BASE_URL . '?q=' . urlencode( $yql_query )
@@ -43,7 +43,7 @@ class Yahoo_Weather_Api_Helper {
    * @param JSON object
    * @return array or empty string bad data
    */
-  public function extract_weather_data( $json_weather ) {
+  public static function extract_weather_data( $json_weather ) {
 
     $json_weather = Kiosk_Helper::convert_json_to_array( $json_weather );
     if ( ! empty( $json_weather ) && ! is_array( $json_weather ) ) {
@@ -53,10 +53,10 @@ class Yahoo_Weather_Api_Helper {
       return '';
     }
 
-    if ( empty( $json_weather ) ) {
+    if ( empty( $json_weather )
+        || ! self::has_weather_location_details( $json_weather ) ) {
       return '';
     }
-
     $weather_data = array(
       'location' => '',
       'forecast' => array(),
@@ -89,6 +89,19 @@ class Yahoo_Weather_Api_Helper {
     }
     $weather_data['forecast'] = $forecast_data;
     return $weather_data;
+  }
+
+  /**
+   * Checks whether any results found for search location or not
+   * @param array
+   * @return boolean
+   */
+  public static function has_weather_location_details( $yahoo_weather_array ) {
+    $query = Kiosk_Helper::get_value_by_key( $yahoo_weather_array, 'query' );
+    if ( Kiosk_Helper::get_value_by_key( $query, 'count' ) > 0 ) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -193,6 +206,7 @@ class Yahoo_Weather_Api_Helper {
    * Get the weather image url for given code
    */
   public static function get_yahoo_weather_code_image_url( $code ){
-    return "https://s.yimg.com/zz/combo?/a/i/us/we/52/$code.gif";
+    return empty( $code )
+        ? '' : "https://s.yimg.com/zz/combo?/a/i/us/we/52/$code.gif";
   }
 }

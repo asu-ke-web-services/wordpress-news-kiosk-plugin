@@ -16,7 +16,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function setUp() {
     // Mockup good json data
     $this->good_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
     $this->good_stub->expects( $this->any() )
@@ -24,7 +24,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->will( $this->returnValue( $this->get_unit_test_good_data() ) );
     // Mockup good json data for query attribute
     $this->good_data_query = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
     $this->good_data_query->expects( $this->any() )
@@ -32,7 +32,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->will( $this->returnValue( $this->get_unit_test_good_data_query() ) );
     // Mockup bad json data
     $this->bad_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
     $this->bad_stub->expects( $this->any() )
@@ -40,7 +40,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->will( $this->returnValue( $this->get_unit_test_bad_data() ) );
     // Mockup data some error message from twitter
     $this->twitter_error_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
     $this->twitter_error_stub->expects( $this->any() )
@@ -48,7 +48,7 @@ class KioskTweetsTest extends WP_UnitTestCase {
          ->will( $this->returnValue( $this->get_unit_test_error_data() ) );
     // Mockup for empty data
     $this->empty_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
     $this->empty_stub->expects( $this->any() )
@@ -69,13 +69,18 @@ class KioskTweetsTest extends WP_UnitTestCase {
    */
   function test_kiosk_tweets_shortcode() {
     $content = $this->good_stub->get_kiosk_tweets_html( array() );
+    $this->assertEquals(
+        0,
+        $content['status'],
+        'Status should be 0 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return all current tweets item max default 20'
     );
 
-    $number_of_items = substr_count( $content, '<li' );
+    $number_of_items = substr_count( $content['response'], '<li' );
     $this->assertLessThanOrEqual(
         8,
         $number_of_items,
@@ -85,12 +90,17 @@ class KioskTweetsTest extends WP_UnitTestCase {
   // Test with attribute limit
   function test_kiosk_tweets_shortcode_limit_4() {
     $content = $this->good_stub->get_kiosk_tweets_html( array( 'limit' => 4 ) );
+    $this->assertEquals(
+        0,
+        $content['status'],
+        'Status should be 0 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return current tweets item'
     );
-    $number_of_items = substr_count( $content, '<li' );
+    $number_of_items = substr_count( $content['response'], '<li' );
     $this->assertLessThanOrEqual(
         4,
         $number_of_items,
@@ -101,9 +111,14 @@ class KioskTweetsTest extends WP_UnitTestCase {
   //Test with attribute query
   function test_kiosk_tweets_shortcode_query() {
     $content = $this->good_data_query->get_kiosk_tweets_html( array( 'query' => '@asugreen' ) );
+    $this->assertEquals(
+        0,
+        $content['status'],
+        'Status should be 0 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return current tweets item'
     );
   }
@@ -116,12 +131,17 @@ class KioskTweetsTest extends WP_UnitTestCase {
             'query' => '@asugreen',
         )
     );
+    $this->assertEquals(
+        0,
+        $content['status'],
+        'Status should be 0 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return current tweets item'
     );
-    $number_of_items = substr_count( $content, '<li' );
+    $number_of_items = substr_count( $content['response'], '<li' );
     $this->assertLessThanOrEqual(
         4,
         $number_of_items,
@@ -132,27 +152,42 @@ class KioskTweetsTest extends WP_UnitTestCase {
   //Test with bad Json data
   function test_kiosk_tweets_shortcode_bad_data() {
     $content = $this->bad_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        0,
+        $content['status'],
+        'Status should not be 0 on failure'
+    );
     $this->assertContains(
         'Cannot Load Tweets',
-        $content,
+        $content['response'],
         'Should contain Cannot load tweets'
     );
   }
   //Test for error message from twitter api
   function test_kiosk_tweets_shortcode_error_data() {
     $content = $this->twitter_error_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        0,
+        $content['status'],
+        'Status should not be 0 on failure'
+    );
     $this->assertContains(
         'Cannot Load Tweets',
-        $content,
+        $content['response'],
         'Should contain Cannot load tweets'
     );
   }
   //Test for empty response
   function test_kiosk_tweets_shortcode_empty_data() {
     $content = $this->empty_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        0,
+        $content['status'],
+        'Status should not be 0 on failure'
+    );
     $this->assertContains(
         'Cannot Load Tweets',
-        $content,
+        $content['response'],
         'Should contain Cannot load tweets'
     );
   }

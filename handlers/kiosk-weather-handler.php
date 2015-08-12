@@ -7,7 +7,7 @@
 
 namespace Kiosk_WP;
 
-class Kiosk_Weather_Helper {
+class Kiosk_Weather_Handler {
   /**
    * Retrieves the current and forecast weather data
    * and creates a div block for the current and next 3 days forecast
@@ -22,8 +22,9 @@ class Kiosk_Weather_Helper {
         <div class="kiosk-weather__forecast__item__text"><b>%s° / %s°</b></div>
       </div>
 HTML;
-    $weather_details = (new \Kiosk_WP\Yahoo_Weather_Api_Helper())
-        ->extract_weather_data( $weather_json );
+    $weather_details = Yahoo_Weather_Api_Helper::extract_weather_data(
+        $weather_json
+    );
     if ( empty( $weather_details ) ) {
       return '';
     }
@@ -67,19 +68,28 @@ HTML;
     );
   }
   /**
-   * Create a weather widget
-   * If any error occurs while pulling data will return empty string when
-   * invoked using wordpress rewrite urls else returns the HTML markup.
+   * Create a weather widget. Returns array with two keys status and response.
+   * response contains HTML mark up to be displayed.
    * @param string $location
-   * @param string HTML markup
+   * @return array< int status, String response<HTML markup>>
+   * status = 0 if success else non-negative
    */
-  public function get_kiosk_weather_html( $location ) {
-    $weather_json = $this->get_weather_json( $location );
+  public function get_kiosk_weather_html( $location = 'tempe, az' ) {
+    $weather_json       = $this->get_weather_json( $location );
+    $status             = 0;
     $kiosk_weather_data = '<div class="kiosk-weather__no-data">Weather Data Not Available</div>';
     if ( ! empty( $weather_json ) ) {
       $kiosk_weather_data = $this->kiosk_populate_weather_data( $weather_json );
     }
-    return '<div class="kiosk-weather">' . $kiosk_weather_data . '</div>';
+    if ( empty( $weather_json ) || empty( $kiosk_weather_data ) ) {
+      $status = 1;
+    }
+    return array(
+        'status'    => $status,
+        'response'  => '<div class="kiosk-weather">'
+            . $kiosk_weather_data
+            . '</div>',
+    );
   }
   /**
    * Invoked the yahoo weather helper class method to get weather info
@@ -87,7 +97,6 @@ HTML;
    * @return json
    */
   public function get_weather_json( $location ) {
-    return (new \Kiosk_WP\Yahoo_Weather_Api_Helper())
-        ->get_weather_json( $location );
+    return Yahoo_Weather_Api_Helper::get_weather_json( $location );
   }
 }

@@ -5,10 +5,6 @@
    */
 namespace Kiosk_WP;
 class Feed_Helper {
-
-  public function __construct() {
-  }
-
   /**
    * Compares two items by date and returns 0 if they are equal else 1 or -1
    * Example: usort( $items, array( 'Kiosk_Helper', 'rss_sort_date_dsc' ) )

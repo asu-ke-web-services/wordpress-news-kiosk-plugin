@@ -1,7 +1,7 @@
 <?php
 
 class KioskPeopleSliderTest extends WP_UnitTestCase {
-  private $people_slider_helper_stub = null;
+  private $People_Slider_Handler_stub = null;
   private $stub                      = null;
   // @codingStandardsIgnoreStart
   static function setUpBeforeClass() {
@@ -9,15 +9,15 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
 
   }
   function setUp() {
-    $this->people_slider_helper_stub = $this->getMock(
-        'Kiosk_WP\People_Slider_Helper',
+    $this->People_Slider_Handler_stub = $this->getMock(
+        'Kiosk_WP\People_Slider_Handler',
         array(
             'get_keywords',
             'get_people',
         )
     );
 
-    $this->people_slider_helper_stub->expects( $this->any() )
+    $this->People_Slider_Handler_stub->expects( $this->any() )
                               ->method( 'get_keywords' )
                               ->will(
                                   $this->returnValue(
@@ -27,7 +27,7 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
                                   )
                               );
 
-    $this->people_slider_helper_stub->expects( $this->any() )
+    $this->People_Slider_Handler_stub->expects( $this->any() )
                               ->method( 'get_people' )
                               ->will(
                                   $this->returnValue(
@@ -39,7 +39,7 @@ class KioskPeopleSliderTest extends WP_UnitTestCase {
 
     $this->stub = $this
           ->getMockBuilder('Kiosk_WP\Kiosk_People_Slider_Shortcodes' )
-          ->setConstructorArgs( array( $this->people_slider_helper_stub ) )
+          ->setConstructorArgs( array( $this->People_Slider_Handler_stub ) )
           ->setMethods( null )
           ->getMock();
 

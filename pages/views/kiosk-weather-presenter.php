@@ -16,15 +16,19 @@ function load_kiosk_weather_presenter_dependencies() {
 }
 
 function do_kiosk_weather_presenter_request_processing() {
+  global $kiosk_weather_api_status;
   $location = filter_input(
       INPUT_GET,
       'location',
       FILTER_SANITIZE_STRING
   );
-  if ( shortcode_exists( 'kiosk-weather' ) ) {
-    status_header( 200 );
-    echo do_shortcode( "[kiosk-weather location=$location]" );
+  $weather_details = (new \Kiosk_WP\Kiosk_Weather_Handler())
+      ->get_kiosk_weather_html( $location );
+
+  if ( 0 != $weather_details['status'] ) {
+    status_header( 502 );
   } else {
-    echo '';
+    status_header( 200 );
+    echo $weather_details['response'];
   }
 }

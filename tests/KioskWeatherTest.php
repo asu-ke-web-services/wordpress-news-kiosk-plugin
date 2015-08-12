@@ -3,7 +3,7 @@
  * @group weather
  */
 class KioskWeatherTest extends WP_UnitTestCase {
-  private $good_stub                 = null;
+  private $good_stub            = null;
   private $empty_stub           = null;
   private $bad_stub             = null;
   // @codingStandardsIgnoreStart
@@ -14,7 +14,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
   function setUp() {
     // Mockup good data
     $this->good_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Weather_Helper',
+        'Kiosk_WP\Kiosk_Weather_Handler',
         array( 'get_weather_json' )
     );
     $this->good_stub->expects( $this->any() )
@@ -24,7 +24,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
 
     // Mockup empty data
     $this->empty_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Weather_Helper',
+        'Kiosk_WP\Kiosk_Weather_Handler',
         array( 'get_weather_json' )
     );
     $this->empty_stub->expects( $this->any() )
@@ -34,7 +34,7 @@ class KioskWeatherTest extends WP_UnitTestCase {
 
     // Mockup bad data
     $this->bad_stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Weather_Helper',
+        'Kiosk_WP\Kiosk_Weather_Handler',
         array( 'get_weather_json' )
     );
     $this->bad_stub->expects( $this->any() )
@@ -56,17 +56,22 @@ class KioskWeatherTest extends WP_UnitTestCase {
     $content = $this->good_stub->get_kiosk_weather_html( 'tempe, az' );
     $this->assertContains(
         'kiosk-weather__current',
-        $content,
+        $content['response'],
         'Should return current weather block'
+    );
+    $this->assertEquals(
+        '0',
+        $content['status'],
+        'Status should be 0 on success'
     );
     $this->assertContains(
         'kiosk-weather__forecast',
-        $content,
+        $content['response'],
         'Should return forecast weather block'
     );
     $this->assertContains(
         'kiosk-weather__forecast__title',
-        $content,
+        $content['response'],
         'Should return location block'
     );
   }
@@ -75,12 +80,17 @@ class KioskWeatherTest extends WP_UnitTestCase {
    * To Test Kiosk weather for failure case
    * [kiosk-weather]
    */
-  function test_kiosk_weather_shortcode_failure_case() {
+  function test_kiosk_weather_shortcode_empty_data() {
     $content = $this->empty_stub->get_kiosk_weather_html( 'tempe, az' );
     $this->assertContains(
         'Weather Data Not Available',
-        $content,
+        $content['response'],
         'Should return Weather Data Not Available message'
+    );
+    $this->assertNotEquals(
+        '0',
+        $content['status'],
+        'Status should not be 0 on success'
     );
   }
   /**
@@ -89,7 +99,15 @@ class KioskWeatherTest extends WP_UnitTestCase {
    */
   function test_kiosk_weather_shortcode_bad_data() {
     $content = $this->bad_stub->get_kiosk_weather_html( 'tempe, az' );
-    $this->assertEquals( '<div class="kiosk-weather"></div>', $content );
+    $this->assertEquals(
+        '<div class="kiosk-weather"></div>',
+        $content['response']
+    );
+    $this->assertNotEquals(
+        '0',
+        $content['status'],
+        'Status should not be 0 on failure'
+    );
   }
 
   /**

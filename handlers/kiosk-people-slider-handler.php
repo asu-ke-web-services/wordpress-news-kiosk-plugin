@@ -4,7 +4,7 @@
    *
    */
 namespace Kiosk_WP;
-class People_Slider_Helper {
+class People_Slider_Handler {
 
   /**
    * Gets the list of keywords from GIOS_API

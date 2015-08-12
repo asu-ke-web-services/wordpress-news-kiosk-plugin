@@ -28,10 +28,12 @@ function load_kiosk_tweets_dependencies() {
 function do_kiosk_tweets_request_processing() {
   global $limit;
   $query  = filter_input( INPUT_GET, 'query', FILTER_SANITIZE_STRING );
-  if ( shortcode_exists( 'kiosk-tweets' ) ) {
-    status_header( 200 );
-    echo do_shortcode( "[kiosk-tweets limit=$limit query=$query]" );
+  $tweet_details = (new \Kiosk_WP\Kiosk_Tweets_Handler())
+      ->get_kiosk_tweets_html( array( 'limit' => $limit, 'query' => $query, ) );
+  if ( 0 != $tweet_details['status'] ) {
+    status_header( 502 );
   } else {
-    echo '';
+    status_header( 200 );
+    echo $tweet_details['response'];
   }
 }
