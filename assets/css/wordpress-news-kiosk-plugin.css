@@ -1275,6 +1275,10 @@
   padding: 5px;
 }
 
+.kiosk-weather__no-data {
+  text-align: center;
+}
+
 /* =================
    Twitter Component
    =================*/
@@ -1322,6 +1326,7 @@
 .kiosk-tweets__tweets {
   height: 100%;
   list-style: none;
+  padding: 0;
   position: relative;
 }
 
@@ -1380,6 +1385,10 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.kiosk-tweets__no-data {
+  text-align: center;
 }
 
 /* ========
@@ -1470,6 +1479,10 @@
   font-weight: bold;
 }
 
+.kiosk-gallery__no-data {
+  text-align: center;
+}
+
 /* ====
    News
    ====*/
@@ -1508,6 +1521,10 @@
   font-weight: bold;
 }
 
+.kiosk-asu-news__no-data {
+  text-align: center;
+}
+
 /* =====
    Posts
    =====*/
@@ -1539,6 +1556,10 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.kiosk-posts__no-data {
+  text-align: center;
 }
 
 /* =============

@@ -16,7 +16,7 @@ function load_kiosk_weather_presenter_dependencies() {
 }
 
 function do_kiosk_weather_presenter_request_processing() {
-  $location         = filter_input(
+  $location = filter_input(
       INPUT_GET,
       'location',
       FILTER_SANITIZE_STRING

@@ -202,4 +202,54 @@ class Kiosk_Helper {
     return strtotime( $first_date['kiosk-end-date'] )
             - strtotime( $second_date['kiosk-end-date'] );
   }
+
+  /**
+   * Properly converts JSON string to array by removing unwanted characters
+   * If any errors in JSON string returns error message.
+   * Note: To use this method check the returned value type as not empty()
+   * and type array to get ensure no error message else there is some error
+   * in input JSON so log error message
+   * @param JSON
+   * @return array if success else error message
+   */
+  public static function convert_json_to_array( $json ) {
+    // Convert to array
+    $json = json_decode( self::remove_unwanted_chars( $json ), true );
+    if ( json_last_error() !== JSON_ERROR_NONE ) {
+      return json_last_error_msg();
+    } else {
+      return $json;
+    }
+  }
+  /*
+  http://stackoverflow.com/questions/17219916/
+  json-decode-returns-json-error-syntax-but-online-formatter-says-
+  the-json-is-ok */
+  public static function remove_unwanted_chars( $json ) {
+    // This will remove unwanted characters.
+    for ( $i = 0; $i <= 31; ++$i ) {
+      $json = str_replace( chr( $i ), '', $json );
+    }
+    $json = str_replace( chr( 127 ), '', $json );
+
+    // This is the most common part
+    // Some file begins with 'efbbbf' to mark the beginning of the file.
+    // (binary level) here we detect it and we remove it, basically
+    // it's the first 3 characters
+    if ( 0 === strpos( bin2hex( $json ), 'efbbbf' ) ) {
+      $json = substr( $json, 3 );
+    }
+    return $json;
+  }
+  /**
+   * Check for existence of key in array. If
+   * found returns its value else null
+   */
+  public static function get_value_by_key( $array, $key ) {
+    if ( empty( $array ) || ! is_array( $array ) ) {
+      return null;
+    }
+    return array_key_exists( $key, $array )
+        ? $array[ $key ] : null;
+  }
 }

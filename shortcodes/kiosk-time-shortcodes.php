@@ -16,21 +16,9 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Time_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
-
   public function __construct() {
-    $this->plugin_slug = 'kiosk-time-shortcodes';
-    $this->version     = '0.1';
-
     $this->load_dependencies();
     $this->define_hooks();
-  }
-
-  /**
-   * @override
-   */
-  public function load_dependencies() {
   }
 
   public function define_hooks() {

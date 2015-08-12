@@ -136,7 +136,7 @@ setInterval(function() {
   $.ajax({
     url: tweets_url,
     success: function(response) {
-       if(! (response.indexOf('Cannot load tweets') > -1 ) ){
+       if(! (response.indexOf('Cannot Load Tweets') > -1 ) ){
         $(".kiosk-tweets").replaceWith(response);
       }
     }

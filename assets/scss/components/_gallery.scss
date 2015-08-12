@@ -14,7 +14,7 @@
 
 .kiosk-gallery__slider__carousel-indicators {
   @extend .carousel-indicators;
-  
+
   visibility: hidden;
 }
 
@@ -29,10 +29,10 @@
   height: 100%;
   width: 100%;
 
-  img {    
-    @include img-responsive;    
+  img {
+    @include img-responsive;
     bottom: 0;
-    left: 0;    
+    left: 0;
     margin: auto;
     position: absolute;
     right: 0;
@@ -46,4 +46,8 @@
   color: #fff;
   display: block;
   font-weight: bold;
+}
+
+.kiosk-gallery__no-data {
+  text-align: center;
 }

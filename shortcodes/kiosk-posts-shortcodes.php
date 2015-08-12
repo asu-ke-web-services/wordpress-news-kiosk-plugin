@@ -16,20 +16,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Posts_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
   public function __construct() {
-    $this->plugin_slug = 'kiosk-post-shortcodes';
-    $this->version     = '0.1';
     $this->load_dependencies();
     $this->define_hooks();
   }
 
-  /**
-   * @override
-   */
-  public function load_dependencies() {
-  }
 
   public function define_hooks() {
     $this->add_shortcode( 'kiosk-posts', $this, 'kiosk_posts' );
@@ -69,8 +60,9 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
         'tag'               => $atts['tags'],
         'post_status'       => 'publish',
     );
-    $slider_data = array();
-    $posts      = Kiosk_Helper::get_posts_from_db( $query_options );
+    $slider_data     = array();
+    $carousel_slider = '<div class="kiosk-posts__no-data">Events Not Available</div>';
+    $posts           = Kiosk_Helper::get_posts_from_db( $query_options );
     foreach ( $posts as $post ) {
       if ( Kiosk_Helper::has_post_expired( $post->ID ) ) {
         continue;
@@ -87,7 +79,6 @@ class Kiosk_Posts_Shortcodes extends Base_Registrar {
       $slider_data = Kiosk_Helper::explode_urls( $atts['default_image'] );
     }
 
-    $carousel_slider = '';
     if ( 0 != count( $slider_data ) ) {
       $carousel_slider     = $this->get_posts_carousel_slider( $slider_data );
     }

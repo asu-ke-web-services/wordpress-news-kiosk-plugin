@@ -17,9 +17,6 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 class Kiosk_Plugin extends Base_Registrar {
 
   public function __construct() {
-    $this->plugin_slug = 'kiosk-plugin';
-    $this->version     = '0.1';
-
     $this->load_dependencies();
     $this->define_hooks();
   }

@@ -58,7 +58,7 @@
 
   max-width: 100px;
   width: 90%;
-  
+
 }
 
 .kiosk-weather_forecast__item_image {
@@ -75,4 +75,8 @@
   color: $kiosk-color;
   font-weight: bold;
   padding: 5px;
+}
+
+.kiosk-weather__no-data {
+  text-align: center;
 }

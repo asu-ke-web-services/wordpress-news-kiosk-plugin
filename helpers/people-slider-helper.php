@@ -99,7 +99,7 @@ class People_Slider_Helper {
    * @return array
    */
   public static function get_sliders( $data_sections, $gios_url ) {
-    $carousel_siders = array();
+    $carousel_sliders = array();
 
     foreach ( $data_sections as $section ) {
       $carousel_sliders[] = self::create_slider_layout(

@@ -127,25 +127,18 @@ HTML;
         ),
         $atts
     );
+    $kiosk_tweets_data = '<div class="kiosk-tweets__no-data">Cannot Load Tweets</div>';
     $this->limit  = $atts['limit'];
     $this->query  = $atts['query'];
     $tweets_json  = $this->get_tweets_json();
-    if ( empty( $tweets_json ) ) {
-
-      $kiosk_tweets_data = 'Cannot load tweets';
-
-    } else {
+    if ( ! empty( $tweets_json ) ) {
       $twitter_api_error_message = Twitter_Api_Helper::get_twitter_api_error_message( $tweets_json );
-
       if ( empty( $twitter_api_error_message ) ) {
         $kiosk_tweets_data = $this->generate_tweet_block(
-            Twitter_Api_Helper::get_tweets_column_from_twitter_api_response( $tweets_json )
+            Twitter_Api_Helper::get_tweets_data( $tweets_json )
         );
       } else {
-        $kiosk_tweets_data = 'Cannot load tweets';
-
-        error_log( basename( __FILE__ )
-            . 'Twitter API Errored with: '
+        error_log( basename( __FILE__ ) . 'Twitter API Errored with: '
             . $twitter_api_error_message . "\n"
         );
       }
@@ -174,11 +167,10 @@ HTML;
           $this->limit
       );
       return $json;
-    } else {
-      error_log( basename( __FILE__ )
-          . " Missing one or more required Twitter authentication details\n"
-      );
-      return '';
     }
+    error_log( basename( __FILE__ )
+        . " Missing one or more required Twitter authentication details\n"
+    );
+    return '';
   }
 }

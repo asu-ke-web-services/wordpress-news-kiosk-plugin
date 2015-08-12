@@ -176,10 +176,9 @@ class Twitter_Api_Helper {
   /**
    * Converts any URL in text to hyperlink
    * @param string
-   * @return string
    */
   public static function convert_url_text_to_hyperlink(
-      $tweet_text,
+      &$tweet_text,
       $classes
   ) {
     // http://www.dynamicdrive.com/forums/archive/index.php/t-64387.html for
@@ -196,16 +195,14 @@ class Twitter_Api_Helper {
           $tweet_text
       );
     }
-    return $tweet_text;
   }
 
   /**
    * Converts any hash tag text in text to hyperlink
    * @param string
-   * @return string
    */
   public static function convert_hash_text_to_hyperlink(
-      $tweet_text,
+      &$tweet_text,
       $classes
   ) {
     $regex_hash     = '/#([a-z_0-9]+)/i';
@@ -225,16 +222,14 @@ class Twitter_Api_Helper {
           $tweet_text
       );
     }
-    return $tweet_text;
   }
 
   /**
    * Converts any twitter handle text in text to hyperlink
    * @param string
-   * @return string
    */
   public static function convert_twitter_handle_text_to_hyperlink(
-      $tweet_text,
+      &$tweet_text,
       $classes
   ) {
     $regex_user   = '/@([a-z_0-9]+)/i';
@@ -246,7 +241,6 @@ class Twitter_Api_Helper {
           $tweet_text
       );
     }
-    return $tweet_text;
   }
   /**
    * JSON return by twitter API will have 'statuses' key in case of twitter
@@ -257,125 +251,172 @@ class Twitter_Api_Helper {
    * @param JSON
    * @return array
    */
-  public static function get_tweets_column_from_twitter_api_response( $json ) {
+  public static function get_tweets_data( $json ) {
     if ( empty( self::get_twitter_api_error_message( $json ) ) ) {
       $tweets = json_decode( $json, true );
-      if ( array_key_exists( 'statuses', $tweets ) ) {
-        $tweets = $tweets['statuses'];
-      }
+      $tweets = array_key_exists( 'statuses', $tweets )
+          ? $tweets = $tweets['statuses'] : $tweets;
     }
     return $tweets;
   }
   /**
-   * Gives error message in case of failure
+   * Gives error message in case of failure. Checks for both JSON format
+   * errors and error message from twitter.
+   * Use other function self::get_error_message to just get error message from twitter
    * @param JSON
    * @return String or '' if no error
    */
   public static function get_twitter_api_error_message( $tweets_json ) {
-    $tweets_json = Json_Decode_Helper::remove_unwanted_chars( $tweets_json );
-    $tweets_json = json_decode( $tweets_json, true );
-
-    if ( $tweets_json != null && json_last_error( ) === JSON_ERROR_NONE ) {
-      // Good JSON but there could be error response
-      // from twitter API so check and return it.
-      if ( array_key_exists( 'errors' , $tweets_json )
-            && array_key_exists( 0 , $tweets_json['errors'] )
-            && array_key_exists( 'message' , $tweets_json['errors'][0] ) ) {
-        return $tweets_json['errors'][0]['message'];
-      }
-    } else {
-      return json_last_error_msg();
+    $tweets_json = Kiosk_Helper::convert_json_to_array( $tweets_json );
+    if ( ! empty( $tweets_json ) && ! is_array( $tweets_json ) ) {
+      return $tweets_json;
     }
-    return '';
+
+    if ( empty( $tweets_json ) ) {
+      return '';
+    }
+    // Good JSON string but there could be error response
+    // from twitter API so check and return it.
+    return self::get_error_message( $tweets_json );
   }
   /**
-   * Extracts the tweet details and return thems
+   * Extracts the tweet details and return thems. Prefixes the anchor tag class
+   * with $prefix
    * @param JSON string $tweet
-   * @param String $class_hyperlink_prefix
+   * @param String $prefix
    * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
    * screen_name,text retweet_link retweet_by
    */
-  public static function extract_tweet_data( $tweet, $class_hyperlink_prefix ) {
+  public static function extract_tweet_data( $tweet, $prefix ) {
 
-    $tweet_info                           = array(
-      'text'                              => '',
-      'screen_name'                       => '',
-      'full_name'                         => '',
-      'profile_pic'                       => '',
-      'relative_date_time'                => '',
-      'actual_date_time'                  => '',
-      'status_link'                       => '',
-      'retweet_link'                      => '',
-      'retweet_by'                        => '',
-      );
-    $parse_tweet = $tweet;
-    if ( array_key_exists( 'retweet_count', $tweet )
-        &&  0 != $tweet['retweet_count']
-        && array_key_exists( 'retweeted_status', $tweet )
-    ) {
-      $parse_tweet = $tweet['retweeted_status'];
-      $tweet_info['retweet_link']     = self::get_tweet_profile_image( $tweet );
-      $tweet_info['retweet_by']       = self::get_tweet_screen_name( $tweet );
+    $tweet_info = array(
+        'text'               => '',
+        'screen_name'        => '',
+        'full_name'          => '',
+        'profile_pic'        => '',
+        'relative_date_time' => '',
+        'actual_date_time'   => '',
+        'status_link'        => '',
+        'retweet_link'       => '',
+        'retweet_by'         => '',
+    );
+
+    if ( self::is_retweet( $tweet ) ) {
+      $new_tweet = Kiosk_Helper::get_value_by_key( $tweet, 'retweeted_status' );
+      $tweet_info['retweet_link'] = self::get_tweet_profile_image( $tweet );
+      $tweet_info['retweet_by']   = self::get_tweet_screen_name( $tweet );
+    } else {
+      $new_tweet = $tweet;
     }
-    $tweet_info['text']               = self::get_tweet_text( $parse_tweet );
-    $tweet_info['screen_name']        = self::get_tweet_screen_name(
-        $parse_tweet
-    );
-    $tweet_info['full_name']          = self::get_tweet_full_name(
-        $parse_tweet
-    );
-    $tweet_info['profile_pic']        = self::get_tweet_profile_image(
-        $parse_tweet
-    );
+    $tweet_info['text']         = self::get_tweet_text( $new_tweet );
+    $tweet_info['screen_name']  = self::get_tweet_screen_name( $new_tweet );
+    $tweet_info['full_name']    = self::get_tweet_full_name( $new_tweet );
+    $tweet_info['profile_pic']  = self::get_tweet_profile_image( $new_tweet );
+    $tweet_info['status_link '] = self::get_tweet_status_link( $new_tweet );
+    self::convert_url_text_to_hyperlink( $tweet_info['text'], $prefix );
+    self::convert_hash_text_to_hyperlink( $tweet_info['text'], $prefix );
+    self::convert_twitter_handle_text_to_hyperlink( $tweet_info['text'], $prefix );
     $tweet_info['relative_date_time'] = self::get_tweet_created_date_short_form(
-        $parse_tweet
+        $new_tweet
     );
     $tweet_info['actual_date_time']   = self::get_tweet_created_date_actual(
-        $parse_tweet
+        $new_tweet
     );
-    $tweet_info['status_link ']       = self::get_tweet_status_link(
-        $parse_tweet
-    );
-    $tweet_info['text']               = self::convert_url_text_to_hyperlink(
-        $tweet_info['text'],
-        $class_hyperlink_prefix
-    );
-    $tweet_info['text']               = self::convert_hash_text_to_hyperlink(
-        $tweet_info['text'],
-        $class_hyperlink_prefix
-    );
-    $tweet_info['text']               = self::
-        convert_twitter_handle_text_to_hyperlink(
-            $tweet_info['text'],
-            $class_hyperlink_prefix
-        );
     return $tweet_info ;
   }
+
+  /**
+   * Get the tweet text from tweet array
+   * @return string
+   */
   public static function get_tweet_text( $tweet ) {
-    return array_key_exists( 'text', $tweet )
-        ? $tweet['text'] : '';
+    return Kiosk_Helper::get_value_by_key( $tweet, 'text' );
   }
+
+  /**
+   * Get the Screen name from tweet array
+   * @return string
+   */
   public static function get_tweet_screen_name( $tweet ) {
-    return array_key_exists( 'user', $tweet )
-        ? $tweet['user']['screen_name'] : '';
+    return Kiosk_Helper::get_value_by_key(
+        Kiosk_Helper::get_value_by_key( $tweet, 'user' ),
+        'screen_name'
+    );
   }
+
+  /**
+   * Get the full name from tweet array
+   * @return string
+   */
   public static function get_tweet_full_name( $tweet ) {
-    return array_key_exists( 'user', $tweet )
-        ? $tweet['user']['name'] : '';
+    return Kiosk_Helper::get_value_by_key(
+        Kiosk_Helper::get_value_by_key( $tweet, 'user' ),
+        'name'
+    );
   }
+
+  /**
+   * Get the profile image src from tweet array
+   * @return string
+   */
   public static function get_tweet_profile_image( $tweet ) {
-    return array_key_exists( 'user', $tweet )
-        ? $tweet['user']['profile_image_url_https'] : '';
+    return Kiosk_Helper::get_value_by_key(
+        Kiosk_Helper::get_value_by_key( $tweet, 'user' ),
+        'profile_image_url_https'
+    );
   }
+
+  /**
+   * Get the tweet created time in short realtive format
+   * @return string
+   */
   public static function get_tweet_created_date_short_form( $tweet ) {
-    return array_key_exists( 'created_at', $tweet )
-        ? self::time_short_form( $tweet['created_at'] ): '';
+    $created_at = Kiosk_Helper::get_value_by_key( $tweet, 'created_at' );
+    return empty( $created_at ) ? '' : self::time_short_form( $created_at );
   }
+
+  /**
+   * Get the tweet created time from the tweet array
+   * @return time
+   */
   public static function get_tweet_created_date_actual( $tweet ) {
-    return strtotime( $tweet['created_at'] );
+    return strtotime( Kiosk_Helper::get_value_by_key( $tweet, 'created_at' ) );
   }
+
+  /**
+   * Get the status link from the tweet array
+   * @return String
+   */
   public static function get_tweet_status_link( $tweet ) {
-    return array_key_exists( 'id_str', $tweet )
-        ? $tweet['id_str'] : '';
+    return Kiosk_Helper::get_value_by_key( $tweet, 'id_str' );
+  }
+  /**
+   * Checks if the current tweet is a retweet if so returns true
+   * @return boolean
+   */
+  public static function is_retweet( $tweet ) {
+    return array_key_exists( 'retweet_count', $tweet )
+        &&  0 != $tweet['retweet_count']
+        && array_key_exists( 'retweeted_status', $tweet );
+  }
+
+  /**
+   * Checks if the tweets json has an error message from API
+   * @param JSON $tweets_json
+   * @return boolean
+   */
+  public static function has_error_message( $tweets_json ) {
+    return array_key_exists( 'errors' , $tweets_json )
+          && array_key_exists( 0 , $tweets_json['errors'] )
+          && array_key_exists( 'message' , $tweets_json['errors'][0] );
+  }
+  /**
+   * If any error message in twitter json response object it will be returned
+   * @param JSON
+   * @return string
+   */
+  public static function get_error_message($tweets_json) {
+    return self::has_error_message( $tweets_json )
+        ? $tweets_json['errors'][0]['message'] : '';
   }
 }

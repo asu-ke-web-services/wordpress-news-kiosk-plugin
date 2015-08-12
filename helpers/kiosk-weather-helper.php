@@ -8,9 +8,6 @@
 namespace Kiosk_WP;
 
 class Kiosk_Weather_Helper {
-  public function __construct() {
-  }
-
   /**
    * Retrieves the current and forecast weather data
    * and creates a div block for the current and next 3 days forecast
@@ -30,13 +27,13 @@ HTML;
     if ( empty( $weather_details ) ) {
       return '';
     }
-    $location_title  = $weather_details['location_title'];
+    $location_title  = $weather_details['location'];
     $forecast_block  = '';
     $forecast        = $weather_details['forecast'];
     for ( $i = 0; $i < 3; $i++ ) {
       $forecast_block .= sprintf(
           $forecast_block_template,
-          $forecast[ $i ]['date'],
+          $forecast[ $i ]['day'],
           $forecast[ $i ]['image'],
           $forecast[ $i ]['low'],
           $forecast[ $i ]['high']
@@ -63,9 +60,9 @@ HTML;
     return sprintf(
         $weather_div,
         $location_title,
-        $weather_details['current_weather_image'],
-        $weather_details['current_weather_temp'],
-        $weather_details['current_weather_unit'],
+        $weather_details['image'],
+        $weather_details['temp'],
+        $weather_details['unit'],
         $forecast_block
     );
   }
@@ -78,10 +75,9 @@ HTML;
    */
   public function get_kiosk_weather_html( $location ) {
     $weather_json = $this->get_weather_json( $location );
+    $kiosk_weather_data = '<div class="kiosk-weather__no-data">Weather Data Not Available</div>';
     if ( ! empty( $weather_json ) ) {
       $kiosk_weather_data = $this->kiosk_populate_weather_data( $weather_json );
-    } else {
-      $kiosk_weather_data = 'Weather Data Not Available';
     }
     return '<div class="kiosk-weather">' . $kiosk_weather_data . '</div>';
   }

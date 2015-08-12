@@ -18,7 +18,6 @@ class Kiosk_Tweets_Page extends Base_Registrar {
   public static $param_slug    = 'twitter';
   public static $extra_params  = array( 'limit', 'query' );
 
-  protected $page_data         = null;
   public function __construct() {
     $this->define_hooks();
   }
@@ -58,7 +57,7 @@ class Kiosk_Tweets_Page extends Base_Registrar {
      * Add the rewrite rules
      */
     // ======================================================
-    // Rule: /kiosk/twitter/limit={20}/query={@asugreen}/handle={asugreen}/ => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
+    // Rule: /kiosk/twitter/limit={20}/query={@asugreen} => wp-content/plugins/pages/views/kiosk-tweets-presenter.php?limit=20
     // ======================================================
     $from_url = '.*' . Kiosk_Tweets_Page::$page_name . '/'
         . Kiosk_Tweets_Page::$param_slug . '/'

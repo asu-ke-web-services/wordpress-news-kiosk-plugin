@@ -16,24 +16,12 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_News_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
   protected $feed_helper;
 
   public function __construct( $feed_helper ) {
-    $this->plugin_slug = 'kiosk-news-shortcodes';
-    $this->version     = '0.1';
     $this->load_dependencies();
     $this->define_hooks();
-    //$this->feed_helper = new Feed_Helper();
     $this->feed_helper = $feed_helper;
-  }
-
-  /**
-   * @override
-   */
-  public function load_dependencies() {
-
   }
 
   public function define_hooks() {
@@ -44,12 +32,12 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with news from rss feed to display as slider
-   * Add more feed data my updating $feed_urls_array variable
+   * Add more feed data my updating $feed_urls variable
    * can be updated to accept as associative array which makes flexible
    *
    */
   public function kiosk_asu_news( $atts, $content = null ) {
-    $atts                  = shortcode_atts(
+    $atts = shortcode_atts(
         array(
           'feed_ids'       => '153,178,358,40',
           'limit'          => '20',
@@ -57,26 +45,27 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
         ),
         $atts
     );
-    $feed                  = explode( ',', $atts['feed_ids'] );
+    $feed = explode( ',', $atts['feed_ids'] );
     for ( $i = 0 ; $i < count( $feed ); $i++ ) {
-      $feed_urls_array[]   = "https://asunews.asu.edu/taxonomy/term/$feed[$i]/all/feed";
+      $feed_urls[] = "https://asunews.asu.edu/taxonomy/term/$feed[$i]/all/feed";
     }
-    $limit                 = $atts['limit'];
-    $content_limit         = $atts['content_limit'];
-    $items                 = $this->feed_helper->get_feed_data(
-        $feed_urls_array
-    );
-    // sorts the news ordered by date using helper function in Feed_Helper class
-    usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
-    // remove the duplicate items based on title
-    $items              = Feed_Helper::remove_duplicate_rss_items( $items );
-    // extract the required content from the feed
-    if ( count( $items ) > 0 ) {
-      $list_items         = Feed_Helper::extract_data_from_rss_feed(
-          $limit, $content_limit, $items
-      );
-      // get the carousel slider
-      $carousel_slider    = $this->get_carousel_slider( $list_items );
+    $limit           = $atts['limit'];
+    $content_limit   = $atts['content_limit'];
+    $items           = $this->feed_helper->get_feed_data( $feed_urls );
+    $carousel_slider = '<div class="kiosk-asu-news__no-data">News Not Available</div>';
+    if ( ! empty( $items ) ) {
+      // sorts the news ordered by date using helper function in Feed_Helper class
+      usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
+      // remove the duplicate items based on title
+      Feed_Helper::remove_duplicate_rss_items( $items );
+      // extract the required content from the feed
+      if ( count( $items ) > 0 ) {
+        $list_items = Feed_Helper::extract_data_from_rss_feed(
+            $limit, $content_limit, $items
+        );
+        // get the carousel slider
+        $carousel_slider = $this->get_carousel_slider( $list_items );
+      }
     }
     $kiosk_asu_news_div = '<div class="kiosk-asu-news">'
         . $carousel_slider . '</div>';
@@ -90,10 +79,14 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
    */
   private function get_carousel_slider( $list_items ) {
     $carousel_slider = '';
-    $prefix = 'kiosk-asu-news';
+    $prefix          = 'kiosk-asu-news';
     $layout_template = <<<HTML
       <div class="kiosk-asu-news__slider__header">
-        <a href="%s" title="%s" class="kiosk-asu-news__slider__header-link no-border"><h3><p>%s</p></h3></a>
+        <a href="%s" title="%s" class="kiosk-asu-news__slider__header-link no-border">
+          <h3>
+            <p>%s</p>
+          </h3>
+        </a>
       </div>
       <div class="kiosk-asu-news__slider__time">
         <p>%s</p>
@@ -103,7 +96,7 @@ class Kiosk_News_Shortcodes extends Base_Registrar {
       </div>
 HTML;
     if ( count( $list_items ) > 0 ) {
-      $carousel_slider   = Carosuel_Slider_Helper::generate_carousel_slider(
+      $carousel_slider = Carosuel_Slider_Helper::generate_carousel_slider(
           $prefix, $layout_template, $list_items
       );
     }

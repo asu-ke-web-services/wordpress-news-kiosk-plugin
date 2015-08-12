@@ -16,15 +16,11 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
   protected $gios_url;
   protected $people_slider_helper;
 
   public function __construct( $people_slider_helper ) {
-    $this->plugin_slug                = 'kiosk-people-slider-shortcodes';
-    $this->version                    = '0.1';
-    $this->people_slider_helper       = $people_slider_helper;
+    $this->people_slider_helper = $people_slider_helper;
     $this->load_dependencies();
     $this->define_hooks();
   }
@@ -88,16 +84,13 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
         array( '"', '"', '\'', '\'', '"', ),
         $content
     );
-    $decode = json_decode( trim( $content ), true );
-    if ( json_last_error( ) !== JSON_ERROR_NONE ) {
-      error_log(
-          basename( __FILE__ )
-          . ' People Slider Content JSON Decode Error'
-          . json_last_error_msg()
-          . "\n"
+    $decode = Kiosk_Helper::convert_json_to_array( trim( $content ) );
+    if ( ! empty( $decode ) && ! is_array( $decode ) ) {
+      error_log( basename( __FILE__ )
+          . " People Slider Content JSON Decode Error: JSON $decode\n"
       );
-      echo ' People Slider Content JSON Decode error: ' . json_last_error_msg();
-      die();
+      echo " People Slider Content JSON Decode Error: JSON $decode \n";
+      die;
     }
     return $decode;
   }

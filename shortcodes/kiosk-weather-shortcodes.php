@@ -16,7 +16,6 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Weather_Shortcodes extends Base_Registrar {
-  private $kiosk_weather_helper = null;
   public function __construct() {
     $this->define_hooks();
   }

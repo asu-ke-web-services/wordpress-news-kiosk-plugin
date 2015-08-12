@@ -45,83 +45,154 @@ class Yahoo_Weather_Api_Helper {
    */
   public function extract_weather_data( $json_weather ) {
 
-    $json_weather = json_decode(
-        Json_Decode_Helper::remove_unwanted_chars( $json_weather ),
-        true
-    );
-    if ( empty( $json_weather ) || json_last_error() !== JSON_ERROR_NONE ) {
+    $json_weather = Kiosk_Helper::convert_json_to_array( $json_weather );
+    if ( ! empty( $json_weather ) && ! is_array( $json_weather ) ) {
       error_log( basename( __FILE__ )
-          .' Weather API error: JSON '
-          . json_last_error_msg()
-          . "\n"
+          . " Weather API error: JSON $json_weather\n"
       );
       return '';
     }
-    $weather_details          = array(
-      'location_title'        => '',
-      'forecast'              => array( 3 ),
-      'current_weather_image' => '',
-      'current_weather_unit'  => '',
-      'current_weather_temp'  => '',
-    );
-    $forecast_details = array(
-      'date'                  => '',
-      'image'                 => '',
-      'low'                   => '',
-      'high'                  => '',
-    );
-    $weather_icon       = 'https://s.yimg.com/zz/combo?/a/i/us/we/52/%s.gif';
-    $location_city      = $json_weather['query']
-        ['results']
-            ['channel']
-                ['location']
-                    ['city'];
-    $location_region    = $json_weather['query']
-        ['results']
-            ['channel']
-                ['location']
-                    ['region'];
-    $forecast           = $json_weather['query']
-        ['results']
-            ['channel']
-                ['item']
-                    ['forecast'];
-    $yahoo_weather_code = $json_weather['query']
-        ['results']
-            ['channel']
-                ['item']
-                    ['condition']
-                        ['code'];
-    $weather_details['location_title']          = $location_city . ', '
-        . $location_region;
-    $weather_details['current_weather_image']   = sprintf(
-        $weather_icon,
-        $yahoo_weather_code
-    );
-    $weather_details['current_weather_unit']    = $json_weather['query']
-        ['results']
-            ['channel']
-                ['units']
-                    ['temperature'];
-    $weather_details['current_weather_temp']    = $json_weather['query']
-        ['results']
-            ['channel']
-                ['item']
-                    ['condition']
-                        ['temp'];
-    for ( $i = 0; $i < 3; $i++ ) {
-      $forecast_details[ $i ]['date']   = date_format(
-          date_create( $forecast[ $i ]['date'] ),
-          'l'
-      );
-      $forecast_details[ $i ]['image']  = sprintf(
-          $weather_icon,
-          $forecast[ $i ]['code']
-      );
-      $forecast_details[ $i ]['low']    = $forecast[ $i ]['low'];
-      $forecast_details[ $i ]['high']   = $forecast[ $i ]['high'];
+
+    if ( empty( $json_weather ) ) {
+      return '';
     }
-    $weather_details['forecast']                = $forecast_details;
-    return $weather_details;
+
+    $weather_data = array(
+      'location' => '',
+      'forecast' => array(),
+      'image'    => '',
+      'unit'     => '',
+      'temp'     => '',
+    );
+    $forecast_data = array(
+      'date'  => '',
+      'image' => '',
+      'low'   => '',
+      'high'  => '',
+    );
+
+    $location_city            = self::get_city_name_from_yahoo_weather( $json_weather );
+    $location_region          = self::get_region_name_from_yahoo_weather( $json_weather );
+    $forecast                 = self::get_forecast_column_yahoo_weather( $json_weather );
+    $yahoo_weather_code       = self::get_condition_code_column_yahoo_weather( $json_weather );
+    $weather_data['location'] = "$location_city, $location_region";
+    $weather_data['image']    = self::get_yahoo_weather_code_image_url( $yahoo_weather_code );
+    $weather_data['unit']     = self::get_temperature_column_yahoo_weather( $json_weather );
+    $weather_data['temp']     = self::get_condition_temp_column_yahoo_weather( $json_weather );
+    for ( $i = 0; $i < count( $forecast ); $i++ ) {
+      $forecast_data[ $i ]['day']   = Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'day' );
+      $forecast_data[ $i ]['low']   = Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'low' );
+      $forecast_data[ $i ]['high']  = Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'high' );
+      $forecast_data[ $i ]['image'] = self::get_yahoo_weather_code_image_url(
+          Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'code' )
+      );
+    }
+    $weather_data['forecast'] = $forecast_data;
+    return $weather_data;
+  }
+
+  /**
+   * Check for existence of results column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_results_column_yahoo_weather( $yahoo_weather_array ) {
+    $query = Kiosk_Helper::get_value_by_key( $yahoo_weather_array, 'query' );
+    return Kiosk_Helper::get_value_by_key( $query, 'results' );
+  }
+  /**
+   * Check for existence of channel column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_channel_column_yahoo_weather( $yahoo_weather_array ) {
+    $results = self::get_results_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $results, 'channel' );
+  }
+  /**
+   * Check for existence of location column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_location_column_yahoo_weather( $yahoo_weather_array ) {
+    $channel = self::get_channel_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $channel, 'location' );
+  }
+  /**
+   * Check for existence of city in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_city_name_from_yahoo_weather( $yahoo_weather_array ) {
+    $location = self::get_location_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $location, 'city' );
+  }
+  /**
+   * Check for existence of region in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_region_name_from_yahoo_weather( $yahoo_weather_array ) {
+    $location = self::get_location_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $location, 'region' );
+  }
+  /**
+   * Check for existence of units column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_units_column_yahoo_weather( $yahoo_weather_array ) {
+    $channel = self::get_channel_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $channel, 'units' );
+  }
+  /**
+   * Check for existence of temperature column under units column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_temperature_column_yahoo_weather( $yahoo_weather_array ) {
+    $units = self::get_units_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $units, 'temperature' );
+  }
+  /**
+   * Check for existence of item column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_item_column_yahoo_weather( $yahoo_weather_array ) {
+    $channel = self::get_channel_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $channel, 'item' );
+  }
+  /**
+   * Check for existence of forecast column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_forecast_column_yahoo_weather( $yahoo_weather_array ) {
+    $item = self::get_item_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $item, 'forecast' );
+  }
+
+  /**
+   * Check for existence of condition column in yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_condition_column_yahoo_weather( $yahoo_weather_array ) {
+    $item = self::get_item_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $item, 'condition' );
+  }
+  /**
+   * Check for existence of condition code from yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_condition_code_column_yahoo_weather( $yahoo_weather_array ) {
+    $condition = self::get_condition_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $condition, 'code' );
+  }
+
+  /**
+   * Check for existence of condition temp from yahoo weather array. If
+   * found returns its value else null
+   */
+  public static function get_condition_temp_column_yahoo_weather( $yahoo_weather_array ) {
+    $condition = self::get_condition_column_yahoo_weather( $yahoo_weather_array );
+    return Kiosk_Helper::get_value_by_key( $condition, 'temp' );
+  }
+  /**
+   * Get the weather image url for given code
+   */
+  public static function get_yahoo_weather_code_image_url( $code ){
+    return "https://s.yimg.com/zz/combo?/a/i/us/we/52/$code.gif";
   }
 }

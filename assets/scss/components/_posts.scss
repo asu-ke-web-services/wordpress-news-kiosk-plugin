@@ -27,13 +27,17 @@
   width: 100%;
 
   img {
-    @include img-responsive;  
+    @include img-responsive;
     bottom: 0;
     left: 0;
     margin: auto;
     max-height: 100% !important;
     position: absolute;
     right: 0;
-    top: 0; 
+    top: 0;
   }
+}
+
+.kiosk-posts__no-data {
+  text-align: center;
 }

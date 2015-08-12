@@ -28,9 +28,8 @@ class Feed_Helper {
   /**
    * Removes duplicate items based on title
    * @param array<SimplePie> $rss
-   * @return array<SimplePie>
    */
-  public static function remove_duplicate_rss_items( $rss ) {
+  public static function remove_duplicate_rss_items( &$rss ) {
     /* new length of modified array */
     $newlength = 1;
     $length    = count( $rss );
@@ -46,19 +45,21 @@ class Feed_Helper {
         $rss[ $newlength++ ] = $rss[ $i ];
       }
     }
-    return array_slice( $rss, 0, $newlength == 1 ? 1 : ( $newlength - 1 ) );
+    array_slice( $rss, 0, $newlength == 1 ? 1 : ( $newlength - 1 ) );
   }
 
   /**
    * Iterates through list of urls passed and fetches the feed data
-   * @param array $feed_urls_array
+   * @param array $feed_urls
    * @return array<SimplePie>
    */
-  public function get_feed_data( $feed_urls_array ) {
-    $items                 = [];
-    $total_feed_count      = 0;
-    for ( $i = 0 ; $i < count( $feed_urls_array ); $i++ ) {
-      $feed_url = $feed_urls_array[ $i ];
+  public function get_feed_data( $feed_urls ) {
+    if ( empty( $feed_urls ) ) {
+      return null;
+    }
+    $items            = [];
+    $total_feed_count = 0;
+    foreach ( $feed_urls as $feed_url ) {
       $feed     = $this->fetch_feed_data( $feed_url );
       // Checks that the object is created correctly
       if ( ! empty( $feed ) ) {

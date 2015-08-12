@@ -16,14 +16,7 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Tweets_Shortcodes extends Base_Registrar {
-
-  protected $plugin_slug;
-  protected $version;
-  protected $localsettings = array();
-
   public function __construct() {
-    $this->plugin_slug = 'kiosk-tweets-shortcodes';
-    $this->version     = '0.1';
     $this->define_hooks();
   }
 
@@ -39,7 +32,7 @@ class Kiosk_Tweets_Shortcodes extends Base_Registrar {
    * If query for search is not passed it displays user timeline
    * else it display the tweets for given query
    * Generates a <div> tag with tweets
-   * update twitter_oauth_access_token, twitter_oauth_access_token_secret,
+   * Make sure to update twitter_oauth_access_token, twitter_oauth_access_token_secret,
    * twitter_consumer_key,twitter_consumer_secret
    * with required account details in localsettings.php
    *

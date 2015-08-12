@@ -18,7 +18,6 @@ class Kiosk_Weather_Page extends Base_Registrar {
   public static $param_slug   = 'weather';
   public static $extra_params = array( 'location' );
 
-  protected $page_data        = null;
   public function __construct() {
     $this->define_hooks();
   }
