@@ -11,6 +11,18 @@ php:
 env:
   - WP_VERSION=4.2.4 WP_MULTISITE=1
 
+addons:
+  apt:
+    sources:
+    - ppa:chris-lea/node.js
+    - ubuntu-toolchain-r-test
+    packages:
+    - python-software-properties
+    - nodejs
+    - curl
+    - php5-tidy
+    - subversion
+
 before_install:
   - gem update --system
   - cd .standards
@@ -18,7 +30,12 @@ before_install:
   - php composer.phar install
   - ./vendor/bin/phpcs -vvv -w --config-set installed_paths "../../../coding_standards/"
   - cd ../
-  - bash ./bin/dep.sh
+  - gem install sass
+  - gem install scss-lint
+  - cd .standards
+  - npm install -g grunt grunt-cli
+  - npm install
+  - cd ../
   - gem update --system
 before_script:
   # For your convenience:
