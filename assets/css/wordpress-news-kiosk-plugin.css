@@ -1244,6 +1244,16 @@
   text-align: center;
 }
 
+.kiosk-weather__current__humidity-speed {
+  color: #fff;
+  text-align: center;
+}
+
+.kiosk-weather__current__wind-speed {
+  color: #fff;
+  text-align: center;
+}
+
 .kiosk-weather__current__item__image {
   display: block;
   max-width: 100%;

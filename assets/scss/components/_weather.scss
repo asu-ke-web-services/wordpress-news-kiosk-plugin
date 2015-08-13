@@ -52,6 +52,16 @@
   text-align: center;
 }
 
+.kiosk-weather__current__humidity-speed {
+  color: $kiosk-color;
+  text-align: center;
+}
+
+.kiosk-weather__current__wind-speed {
+  color: $kiosk-color;
+  text-align: center;
+}
+
 .kiosk-weather__current__item__image {
   @include img-responsive;
   @include center-block;

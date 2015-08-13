@@ -49,6 +49,9 @@ HTML;
       <div class="kiosk-weather__forecast__title">
         %s
       </div>
+      <div class="kiosk-weather__current__humidity-speed">
+      Humidity %s, Wind S at %s
+      </div>
       <div class="kiosk-weather__weather__row">
           <div class="kiosk-weather__current">
             <img class='kiosk-weather__current__item__image' src='%s' >
@@ -66,6 +69,8 @@ HTML;
     return sprintf(
         $weather_div,
         $location_title,
+        $weather_details['humidity'],
+        $weather_details['speed'],
         $weather_details['image'],
         $weather_details['temp'],
         $weather_details['unit'],
