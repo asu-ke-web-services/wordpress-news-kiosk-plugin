@@ -70,9 +70,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode() {
     $content = $this->good_stub->get_kiosk_tweets_html( array() );
     $this->assertEquals(
-        0,
+        200,
         $content['status'],
-        'Status should be 0 on success'
+        'Status should be 200 on success'
     );
     $this->assertContains(
         'kiosk-tweets__tweet',
@@ -91,9 +91,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode_limit_4() {
     $content = $this->good_stub->get_kiosk_tweets_html( array( 'limit' => 4 ) );
     $this->assertEquals(
-        0,
+        200,
         $content['status'],
-        'Status should be 0 on success'
+        'Status should be 200 on success'
     );
     $this->assertContains(
         'kiosk-tweets__tweet',
@@ -112,9 +112,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode_query() {
     $content = $this->good_data_query->get_kiosk_tweets_html( array( 'query' => '@asugreen' ) );
     $this->assertEquals(
-        0,
+        200,
         $content['status'],
-        'Status should be 0 on success'
+        'Status should be 200 on success'
     );
     $this->assertContains(
         'kiosk-tweets__tweet',
@@ -132,9 +132,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
         )
     );
     $this->assertEquals(
-        0,
+        200,
         $content['status'],
-        'Status should be 0 on success'
+        'Status should be 200 on success'
     );
     $this->assertContains(
         'kiosk-tweets__tweet',
@@ -153,9 +153,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode_bad_data() {
     $content = $this->bad_stub->get_kiosk_tweets_html( array() );
     $this->assertNotEquals(
-        0,
+        200,
         $content['status'],
-        'Status should not be 0 on failure'
+        'Status should not be 200 on failure'
     );
     $this->assertContains(
         'Cannot Load Tweets',
@@ -167,9 +167,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode_error_data() {
     $content = $this->twitter_error_stub->get_kiosk_tweets_html( array() );
     $this->assertNotEquals(
-        0,
+        200,
         $content['status'],
-        'Status should not be 0 on failure'
+        'Status should not be 200 on failure'
     );
     $this->assertContains(
         'Cannot Load Tweets',
@@ -181,9 +181,9 @@ class KioskTweetsTest extends WP_UnitTestCase {
   function test_kiosk_tweets_shortcode_empty_data() {
     $content = $this->empty_stub->get_kiosk_tweets_html( array() );
     $this->assertNotEquals(
-        0,
+        200,
         $content['status'],
-        'Status should not be 0 on failure'
+        'Status should not be 200 on failure'
     );
     $this->assertContains(
         'Cannot Load Tweets',

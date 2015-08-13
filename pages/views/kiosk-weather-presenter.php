@@ -25,10 +25,6 @@ function do_kiosk_weather_presenter_request_processing() {
   $weather_details = (new \Kiosk_WP\Kiosk_Weather_Handler())
       ->get_kiosk_weather_html( $location );
 
-  if ( 0 != $weather_details['status'] ) {
-    status_header( 502 );
-  } else {
-    status_header( 200 );
-    echo $weather_details['response'];
-  }
+  status_header( $weather_details['status'] );
+  echo $weather_details['response'];
 }

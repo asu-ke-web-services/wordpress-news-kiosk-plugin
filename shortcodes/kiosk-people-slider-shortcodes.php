@@ -17,18 +17,12 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 
 class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
   protected $gios_url;
-  protected $People_Slider_Handler;
+  protected $people_slider_handler;
 
-  public function __construct( $People_Slider_Handler ) {
-    $this->People_Slider_Handler = $People_Slider_Handler;
+  public function __construct( $people_slider_handler ) {
+    $this->people_slider_handler = $people_slider_handler;
     $this->load_dependencies();
     $this->define_hooks();
-  }
-
-  /**
-   * @override
-   */
-  public function load_dependencies() {
   }
 
   public function define_hooks() {
@@ -52,8 +46,8 @@ class Kiosk_People_Slider_Shortcodes extends Base_Registrar {
     $this->gios_url   = $atts['gios_url'];
     $parsed_content   = $this->parse_content( $content );
     // Get all the keywords
-    $keywords         = $this->People_Slider_Handler->get_keywords();
-    $data_sections    = $this->People_Slider_Handler
+    $keywords         = $this->people_slider_handler->get_keywords();
+    $data_sections    = $this->people_slider_handler
         ->get_sliders_data( $keywords, $parsed_content );
     $carousel_slider  = $this->get_carousel_slider(
         People_Slider_Handler::get_sliders(

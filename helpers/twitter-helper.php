@@ -251,11 +251,15 @@ class Twitter_Api_Helper {
    * @param JSON
    * @return array
    */
-  public static function get_tweets_data( $json ) {
-    if ( empty( self::get_twitter_api_error_message( $json ) ) ) {
+  public static function get_tweets( $json ) {
+    $error_message = self::get_twitter_api_error_message( $json );
+    $tweets        = [];
+    if ( empty( $error_message ) ) {
       $tweets = json_decode( $json, true );
       $tweets = array_key_exists( 'statuses', $tweets )
           ? $tweets = $tweets['statuses'] : $tweets;
+    } else {
+      error_log( 'Twitter API Errored with: ' . $error_message . "\n" );
     }
     return $tweets;
   }
@@ -271,7 +275,6 @@ class Twitter_Api_Helper {
     if ( ! empty( $tweets_json ) && ! is_array( $tweets_json ) ) {
       return $tweets_json;
     }
-
     if ( empty( $tweets_json ) ) {
       return '';
     }
@@ -287,7 +290,7 @@ class Twitter_Api_Helper {
    * @return array<profile_pic, relative_date_time, actual_date_time, full_name,
    * screen_name,text retweet_link retweet_by
    */
-  public static function extract_tweet_data( $tweet, $prefix ) {
+  public static function extract_tweet( $tweet, $prefix ) {
 
     $tweet_info = array(
         'text'               => '',

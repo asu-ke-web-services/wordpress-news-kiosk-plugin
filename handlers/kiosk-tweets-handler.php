@@ -13,7 +13,9 @@ namespace Kiosk_WP;
  * and lives out of wordpress
  */
 class Kiosk_Tweets_Handler {
-  protected $localsettings    = array();
+  private static $STATUS        = array( 'success' => 200, 'failure' => 502, );
+  private static $ERROR_MESSAGE = 'Cannot Load Tweets';
+  protected $localsettings      = array();
   protected $limit;
   protected $query;
 
@@ -35,7 +37,10 @@ class Kiosk_Tweets_Handler {
    * @param array $tweets
    * @return string
    */
-  private function generate_tweet_block( $tweets ) {
+  private function get_tweet_block( $tweets ) {
+    if ( empty( $tweets ) ) {
+      return '';
+    }
     $div_start   = <<<HTML
     <div class="kiosk-tweets__timeline__title" data-query="%s" data-limit="%s">
        <b class="kiosk-tweets__timeline__title__text">Tweets</b>
@@ -45,7 +50,7 @@ class Kiosk_Tweets_Handler {
     <div id="kiosk_tweets_scrollContainer" class="kiosk-tweets__container">
       <ul class="kiosk-tweets__tweets" id="kiosk-tweets__tweets">
 HTML;
-    $item_template     = <<<HTML
+    $tweet_template     = <<<HTML
         <li class="kiosk-tweets__tweets__tweet">
           <div class="kiosk-tweets__tweet__avatar">
               <img src="%s" class="kiosk-tweets__tweet__avatar__image" alt="">
@@ -81,30 +86,28 @@ HTML;
 HTML;
     $div_end = '</ul></div>';
     $tweet_items  = '';
-    if ( empty( $tweets ) ) {
-      return '';
-    }
+
     for ( $i = 0; $i < $this->limit && $i < count( $tweets ); $i++ ) {
-      $tweet_data = Twitter_Api_Helper::extract_tweet_data(
+      $tweet = Twitter_Api_Helper::extract_tweet(
           $tweets[ $i ],
           'kiosk-tweets__tweet__link'
       );
       $retweet  = '';
-      if ( ! empty( $tweet_data['retweet_by'] ) ) {
+      if ( ! empty( $tweet['retweet_by'] ) ) {
         $retweet = sprintf(
             $retweet_template,
-            $tweet_data['retweet_link'],
-            $tweet_data['retweet_by']
+            $tweet['retweet_link'],
+            $tweet['retweet_by']
         );
       }
       $tweet_items .= sprintf(
-          $item_template,
-          $tweet_data['profile_pic'],
-          $tweet_data['actual_date_time'],
-          $tweet_data['relative_date_time'],
-          $tweet_data['full_name'],
-          $tweet_data['screen_name'],
-          $tweet_data['text'],
+          $tweet_template,
+          $tweet['profile_pic'],
+          $tweet['actual_date_time'],
+          $tweet['relative_date_time'],
+          $tweet['full_name'],
+          $tweet['screen_name'],
+          $tweet['text'],
           $retweet
       );
     }
@@ -119,7 +122,6 @@ HTML;
    * response contains HTML mark up to be displayed.
    * @param array
    * @return array< int status, String response<HTML markup>>
-   * status = 0 if success else non-negative
    */
   public function get_kiosk_tweets_html( $atts ) {
     $atts = shortcode_atts(
@@ -129,31 +131,25 @@ HTML;
         ),
         $atts
     );
-    $status            = 0;
-    $kiosk_tweets_data = '<div class="kiosk-tweets__no-data">Cannot Load Tweets</div>';
+    $tweets       = '';
     $this->limit  = $atts['limit'];
     $this->query  = $atts['query'];
     $tweets_json  = $this->get_tweets_json();
+
     if ( ! empty( $tweets_json ) ) {
-      $twitter_api_error_message = Twitter_Api_Helper::get_twitter_api_error_message( $tweets_json );
-      if ( empty( $twitter_api_error_message ) ) {
-        $kiosk_tweets_data = $this->generate_tweet_block(
-            Twitter_Api_Helper::get_tweets_data( $tweets_json )
-        );
-      } else {
-        error_log( basename( __FILE__ ) . ' Twitter API Errored with: '
-            . $twitter_api_error_message . "\n"
-        );
-      }
+      $tweets = $this->get_tweet_block( Twitter_Api_Helper::get_tweets( $tweets_json ) );
     }
-    if ( empty( $tweets_json ) || empty( $kiosk_tweets_data ) || ! empty( $twitter_api_error_message ) ) {
-      $status = 1;
+
+    if ( empty( $tweets ) ) {
+      $status = self::$STATUS['failure'];
+      $tweets = '<div class="kiosk-tweets__no-data">' . self::$ERROR_MESSAGE  . '</div>';
+    } else {
+      $status = self::$STATUS['success'];
     }
+
     return array(
         'status'    => $status,
-        'response'  => '<div class="kiosk-tweets">'
-        . $kiosk_tweets_data
-        . '</div>',
+        'response'  => '<div class="kiosk-tweets">' . $tweets . '</div>',
     );
   }
 

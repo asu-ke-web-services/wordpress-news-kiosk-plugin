@@ -30,10 +30,6 @@ function do_kiosk_tweets_request_processing() {
   $query  = filter_input( INPUT_GET, 'query', FILTER_SANITIZE_STRING );
   $tweet_details = (new \Kiosk_WP\Kiosk_Tweets_Handler())
       ->get_kiosk_tweets_html( array( 'limit' => $limit, 'query' => $query, ) );
-  if ( 0 != $tweet_details['status'] ) {
-    status_header( 502 );
-  } else {
-    status_header( 200 );
-    echo $tweet_details['response'];
-  }
+  status_header( $tweet_details['status'] );
+  echo $tweet_details['response'];
 }

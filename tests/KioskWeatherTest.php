@@ -60,9 +60,9 @@ class KioskWeatherTest extends WP_UnitTestCase {
         'Should return current weather block'
     );
     $this->assertEquals(
-        '0',
+        '200',
         $content['status'],
-        'Status should be 0 on success'
+        'Status should be 200 on success'
     );
     $this->assertContains(
         'kiosk-weather__forecast',
@@ -88,9 +88,9 @@ class KioskWeatherTest extends WP_UnitTestCase {
         'Should return Weather Data Not Available message'
     );
     $this->assertNotEquals(
-        '0',
+        '200',
         $content['status'],
-        'Status should not be 0 on success'
+        'Status should not be 200 on success'
     );
   }
   /**
@@ -99,14 +99,15 @@ class KioskWeatherTest extends WP_UnitTestCase {
    */
   function test_kiosk_weather_shortcode_bad_data() {
     $content = $this->bad_stub->get_kiosk_weather_html( 'tempe, az' );
-    $this->assertEquals(
-        '<div class="kiosk-weather"></div>',
-        $content['response']
+    $this->assertContains(
+        'Weather Data Not Available',
+        $content['response'],
+        'Should return Weather Data Not Available message'
     );
     $this->assertNotEquals(
-        '0',
+        '200',
         $content['status'],
-        'Status should not be 0 on failure'
+        'Status should not be 200 on failure'
     );
   }
 

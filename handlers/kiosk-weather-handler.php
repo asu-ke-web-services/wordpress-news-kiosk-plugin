@@ -8,13 +8,24 @@
 namespace Kiosk_WP;
 
 class Kiosk_Weather_Handler {
+  private static $STATUS        = array( 'success' => 200, 'failure' => 502, );
+  private static $ERROR_MESSAGE = 'Weather Data Not Available';
+
   /**
    * Retrieves the current and forecast weather data
    * and creates a div block for the current and next 3 days forecast
-   * @param
+   * @param JSON
    * @return string HTML markup or empty string on failure
    */
   function kiosk_populate_weather_data( $weather_json ) {
+
+    $weather_details = Yahoo_Weather_Api_Helper::extract_weather_data(
+        $weather_json
+    );
+    if ( empty( $weather_details ) ) {
+      return '';
+    }
+
     $forecast_block_template  = <<<HTML
       <div class='kiosk-weather__forecast__item'>
         <div class="kiosk-weather__forecast__item__header">%s</div>
@@ -22,12 +33,6 @@ class Kiosk_Weather_Handler {
         <div class="kiosk-weather__forecast__item__text"><b>%s° / %s°</b></div>
       </div>
 HTML;
-    $weather_details = Yahoo_Weather_Api_Helper::extract_weather_data(
-        $weather_json
-    );
-    if ( empty( $weather_details ) ) {
-      return '';
-    }
     $location_title  = $weather_details['location'];
     $forecast_block  = '';
     $forecast        = $weather_details['forecast'];
@@ -72,23 +77,26 @@ HTML;
    * response contains HTML mark up to be displayed.
    * @param string $location
    * @return array< int status, String response<HTML markup>>
-   * status = 0 if success else non-negative
    */
   public function get_kiosk_weather_html( $location = 'tempe, az' ) {
-    $weather_json       = $this->get_weather_json( $location );
-    $status             = 0;
-    $kiosk_weather_data = '<div class="kiosk-weather__no-data">Weather Data Not Available</div>';
+    $weather_data = '';
+    $weather_json = $this->get_weather_json( $location );
+
     if ( ! empty( $weather_json ) ) {
-      $kiosk_weather_data = $this->kiosk_populate_weather_data( $weather_json );
+      $weather_data = $this->kiosk_populate_weather_data( $weather_json );
     }
-    if ( empty( $weather_json ) || empty( $kiosk_weather_data ) ) {
-      $status = 1;
+
+    if ( empty( $weather_data ) ) {
+      $status       = self::$STATUS['failure'];
+      $weather_data = '<div class="kiosk-weather__no-data">'
+          . self::$ERROR_MESSAGE  . '</div>';
+    } else {
+      $status       = self::$STATUS['success'];
     }
+
     return array(
-        'status'    => $status,
-        'response'  => '<div class="kiosk-weather">'
-            . $kiosk_weather_data
-            . '</div>',
+        'status'   => $status,
+        'response' => '<div class="kiosk-weather">' . $weather_data . '</div>',
     );
   }
   /**
