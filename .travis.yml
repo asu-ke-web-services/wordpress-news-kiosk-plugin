@@ -12,7 +12,6 @@ env:
   - WP_VERSION=4.2.4 WP_MULTISITE=1
 
 before_install:
-  - apt-get update
   - gem update --system
   - cd .standards
   - curl -sS https://getcomposer.org/installer | php
