@@ -50,7 +50,7 @@ HTML;
         %s
       </div>
       <div class="kiosk-weather__current__humidity-speed">
-      Humidity %s, Wind S at %s
+      Humidity %s, Wind S at %s %s
       </div>
       <div class="kiosk-weather__weather__row">
           <div class="kiosk-weather__current">
@@ -71,9 +71,10 @@ HTML;
         $location_title,
         $weather_details['humidity'],
         $weather_details['speed'],
+        $weather_details['speed_unit'],
         $weather_details['image'],
-        $weather_details['temp'],
-        $weather_details['unit'],
+        $weather_details['temperature'],
+        $weather_details['temperature_unit'],
         $forecast_block
     );
   }

@@ -58,13 +58,14 @@ class Yahoo_Weather_Api_Helper {
       return '';
     }
     $weather_data = array(
-      'location' => '',
-      'forecast' => array(),
-      'image'    => '',
-      'unit'     => '',
-      'temp'     => '',
-      'humidity' => '',
-      'speed'    => '',
+      'location'         => '',
+      'forecast'         => array(),
+      'image'            => '',
+      'temperature_unit' => '',
+      'temperature'      => '',
+      'humidity'         => '',
+      'speed'            => '',
+      'speed_unit'       => '',
     );
     $forecast_data = array(
       'date'  => '',
@@ -73,15 +74,16 @@ class Yahoo_Weather_Api_Helper {
       'high'  => '',
     );
 
-    $location_city            = self::get_city( $weather );
-    $location_region          = self::get_region( $weather );
-    $forecast                 = self::get_forecast( $weather );
-    $weather_data['image']    = self::get_image_src( self::get_current_code( $weather ) );
-    $weather_data['unit']     = self::get_temperature_unit( $weather );
-    $weather_data['temp']     = self::get_current_temp( $weather );
-    $weather_data['humidity'] = self::get_humidity( $weather );
-    $weather_data['speed']    = self::get_wind_speed( $weather );
-    $weather_data['location'] = "$location_city, $location_region";
+    $location_city                      = self::get_city( $weather );
+    $location_region                    = self::get_region( $weather );
+    $forecast                           = self::get_forecast( $weather );
+    $weather_data['image']              = self::get_image_src( self::get_current_code( $weather ) );
+    $weather_data['temperature_unit']   = self::get_temperature_unit( $weather );
+    $weather_data['temperature']        = self::get_current_temp( $weather );
+    $weather_data['humidity']           = self::get_humidity( $weather );
+    $weather_data['speed']              = self::get_wind_speed( $weather );
+    $weather_data['speed_unit']         = self::get_wind_speed_unit( $weather );
+    $weather_data['location']           = "$location_city, $location_region";
     for ( $i = 0; $i < count( $forecast ); $i++ ) {
       $forecast_data[ $i ]['day']   = Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'day' );
       $forecast_data[ $i ]['low']   = Kiosk_Helper::get_value_by_key( $forecast[ $i ], 'low' );
@@ -279,6 +281,19 @@ class Yahoo_Weather_Api_Helper {
   public static function get_wind_speed( $weather ) {
     return Kiosk_Helper::get_value_by_key(
         self::get_wind( $weather ),
+        'speed'
+    );
+  }
+
+  /**
+   * Check for existence of speed under units column in yahoo weather array. If
+   * found returns its value else null
+   * @param array
+   * @return String
+   */
+  public static function get_wind_speed_unit( $weather ) {
+    return Kiosk_Helper::get_value_by_key(
+        self::get_units( $weather ),
         'speed'
     );
   }
