@@ -1244,6 +1244,11 @@
   text-align: center;
 }
 
+.kiosk-weather__current__humidity-speed {
+  color: #fff;
+  text-align: center;
+}
+
 .kiosk-weather__current__item__image {
   display: block;
   max-width: 100%;
@@ -1273,6 +1278,10 @@
   color: #fff;
   font-weight: bold;
   padding: 5px;
+}
+
+.kiosk-weather__no-data {
+  text-align: center;
 }
 
 /* =================
@@ -1322,6 +1331,7 @@
 .kiosk-tweets__tweets {
   height: 100%;
   list-style: none;
+  padding: 0;
   position: relative;
 }
 
@@ -1380,6 +1390,10 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.kiosk-tweets__no-data {
+  text-align: center;
 }
 
 /* ========
@@ -1470,6 +1484,10 @@
   font-weight: bold;
 }
 
+.kiosk-gallery__no-data {
+  text-align: center;
+}
+
 /* ====
    News
    ====*/
@@ -1500,6 +1518,16 @@
 
 .kiosk-asu-news__slider {
   overflow: hidden;
+}
+
+.kiosk-asu-news__slider__header-link {
+  border: 0;
+  color: black;
+  font-weight: bold;
+}
+
+.kiosk-asu-news__no-data {
+  text-align: center;
 }
 
 /* =====
@@ -1533,6 +1561,10 @@
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.kiosk-posts__no-data {
+  text-align: center;
 }
 
 /* =============

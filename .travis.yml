@@ -1,3 +1,5 @@
+sudo: false
+
 language: php
 
 services:
@@ -7,24 +9,40 @@ php:
   - 5.5
 
 env:
-  - WP_VERSION=4.1.1 WP_MULTISITE=1
+  - WP_VERSION=4.2.4 WP_MULTISITE=1
+
+addons:
+  apt:
+    sources:
+    - ppa:chris-lea/node.js
+    - ubuntu-toolchain-r-test
+    packages:
+    - python-software-properties
+    - nodejs
+    - curl
+    - php5-tidy
+    - subversion
 
 before_install:
-  - sudo apt-get update
   - gem update --system
   - cd .standards
   - curl -sS https://getcomposer.org/installer | php
   - php composer.phar install
   - ./vendor/bin/phpcs -vvv -w --config-set installed_paths "../../../coding_standards/"
   - cd ../
-  - bash ./bin/dep.sh
+  - gem install sass
+  - gem install scss-lint
+  - cd .standards
+  - npm install -g grunt grunt-cli
+  - npm install
+  - cd ../
   - gem update --system
 before_script:
   # For your convenience:
   # sudo mysqladmin drop -f wordpress_test --user="root" --password="root"
   # sudo bash bin/install-wp-tests.sh wordpress_test root root localhost 4.1.1
-  - sudo bash bin/install-wp-tests.sh wordpress_test travis '' localhost $WP_VERSION
-  - sudo bash tests/bootstrap/init-localsettings.sh YOUR_TWITTER_HANDLE YOUR_OAUTH_ACCESS_TOKEN YOUR_OAUTH_ACCESS_TOKEN_SECRET YOUR_CONSUMER_KEY YOUR_CONSUMER_SECRET
+  - bash bin/install-wp-tests.sh wordpress_test travis '' localhost $WP_VERSION
+  - bash tests/bootstrap/init-localsettings.sh YOUR_TWITTER_HANDLE YOUR_OAUTH_ACCESS_TOKEN YOUR_OAUTH_ACCESS_TOKEN_SECRET YOUR_CONSUMER_KEY YOUR_CONSUMER_SECRET
   - cd .standards
 
 script:

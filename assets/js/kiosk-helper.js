@@ -126,26 +126,24 @@ $('.carousel').carousel({
  * Updates tweets and weather widgets only when servers returns valid data
  */
 var site_url          = $(location).attr("href");
-var tweets_limit      = 20;
+var $tweets_title     = $('.kiosk-tweets__timeline__title');
+var tweets_limit      = $tweets_title.data('limit');
+var tweets_query      = $tweets_title.data('query');
 var $weather_location = $.trim($('.kiosk-weather__forecast__title').text());
-var tweets_url        = site_url + 'kiosk/twitter/limit/' + tweets_limit;
+var tweets_url        = site_url + 'kiosk/twitter/limit=' + tweets_limit + '/query='+ tweets_query;
 var weather_url       = site_url + 'kiosk/weather/location='+ $weather_location;
 setInterval(function() {
   $.ajax({
     url: tweets_url,
     success: function(response) {
-      if(response.length){
-        $(".kiosk-tweets").replaceWith(response);
-      }
+      $(".kiosk-tweets").replaceWith(response);
     }
   });
 
   $.ajax({
     url: weather_url,
     success: function(response) {
-       if(response.length){
-        $(".kiosk-weather").replaceWith(response);
-      }
+      $(".kiosk-weather").replaceWith(response);
     }
   });
 }, 300000 /* 5 minutes */ );

@@ -16,21 +16,8 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Logo_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
-
   public function __construct() {
-    $this->plugin_slug = 'kiosk-logo-shortcodes';
-    $this->version     = '0.1';
-
-    $this->load_dependencies();
     $this->define_hooks();
-  }
-
-  /**
-   * @override
-   */
-  public function load_dependencies() {
   }
 
   public function define_hooks() {
@@ -44,8 +31,8 @@ class Kiosk_Logo_Shortcodes extends Base_Registrar {
    * @param $atts array
    */
   public function kiosk_logo( $atts, $content = null ) {
-    $site_url   = get_site_url();
-    $atts                   = shortcode_atts(
+    $site_url = get_site_url();
+    $atts     = shortcode_atts(
         array(
           'path' => "{$site_url}/wp-content/plugins/wordpress-news-kiosk-plugin/assets/images/sos-logo.png",
         ),

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @group news
+ */
 class KioskNewsTest extends WP_UnitTestCase {
   private $feed_stub  = null;
   private $stub       = null;
@@ -13,10 +15,10 @@ class KioskNewsTest extends WP_UnitTestCase {
         // Mockup the data
     $this->feed_stub = $this->getMock(
         'Kiosk_WP\Feed_Helper',
-        array( 'simple_pie_feed_fetch' )
+        array( 'fetch_feed_data' )
     );
     $this->feed_stub->expects( $this->any() )
-         ->method( 'simple_pie_feed_fetch' )
+         ->method( 'fetch_feed_data' )
          ->with( $this->stringContains( 'asunews' ) )
          ->will( $this->returnValue( $this->return_unit_test_data() ) );
     $this->stub = $this->getMockBuilder( 'Kiosk_WP\Kiosk_News_Shortcodes' )
@@ -27,11 +29,16 @@ class KioskNewsTest extends WP_UnitTestCase {
   // @codingStandardsIgnoreEnd
 
   /**
+   * test for shortcode existence
+   */
+  function test_kiosk_news_shortcode_exists() {
+        $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
+  }
+  /**
    * To Test Kiosk asu news can be called with limit and feed attributes
    * [kiosk-asu-news limit ='20' feed_ids='153,40,178,358']
    */
   function test_kiosk_news_shortcode_without_attributes() {
-    $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     // Test no tags by default limit 20 news items if found
     $content = $this->stub->kiosk_asu_news( '' );
 
@@ -44,7 +51,6 @@ class KioskNewsTest extends WP_UnitTestCase {
 
   function test_kiosk_news_shortcode_with_limit() {
     // Test limit tag
-    $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     $content = $this->stub->kiosk_asu_news( array( 'limit' => 20 ) );
     $this->assertContains(
         'kiosk-asu-news__slider__slide',
@@ -61,7 +67,6 @@ class KioskNewsTest extends WP_UnitTestCase {
 
   function test_kiosk_news_shortcode_with_content_limit() {
     // Test with content_limit tag
-    $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     $content = $this->stub->kiosk_asu_news( array( 'content_limit' => '50' ) );
     $this->assertContains(
         'kiosk-asu-news__slider__slide',
@@ -72,7 +77,6 @@ class KioskNewsTest extends WP_UnitTestCase {
 
   function test_kiosk_news_shortcode_with_feed_ids() {
     // Test with feed tag
-    $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     $content = $this->stub->kiosk_asu_news(
         array( 'feed_ids' => '153,40,358' )
     );
@@ -85,7 +89,6 @@ class KioskNewsTest extends WP_UnitTestCase {
 
   function test_kiosk_news_shortcode_with_multiple_attributes() {
     // Test with multipe tags
-    $this->assertTrue( shortcode_exists( 'kiosk-asu-news' ) );
     $content = $this->stub->kiosk_asu_news(
         array( 'feed_ids' => '153,40,358', 'limit' => 5 )
     );

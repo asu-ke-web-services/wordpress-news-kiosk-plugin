@@ -37,3 +37,13 @@
 .kiosk-asu-news__slider__carousel-inner {
   @extend .carousel-inner;
 }
+
+.kiosk-asu-news__slider__header-link {
+  border: 0;
+  color: black;
+  font-weight: bold;
+}
+
+.kiosk-asu-news__no-data {
+  text-align: center;
+}

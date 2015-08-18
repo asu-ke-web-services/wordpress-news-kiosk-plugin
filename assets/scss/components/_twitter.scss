@@ -45,6 +45,7 @@
 .kiosk-tweets__tweets {
   height: 100%;
   list-style: none;
+  padding: 0;
   position: relative;
 }
 
@@ -96,4 +97,8 @@
 .kiosk-tweets__tweet__avatar__image {
   @include img-responsive;
   @include center-block;
+}
+
+.kiosk-tweets__no-data {
+  text-align: center;
 }

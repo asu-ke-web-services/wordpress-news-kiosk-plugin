@@ -1,68 +1,242 @@
 <?php
-
+/**
+ * @group tweets
+ */
 class KioskTweetsTest extends WP_UnitTestCase {
-  private $stub = null;
+  private $good_stub            = null;
+  private $bad_stub             = null;
+  private $twitter_error_stub   = null;
+  private $good_data_query_stub = null;
+  private $empty_stub           = null;
   // @codingStandardsIgnoreStart
   static function setUpBeforeClass() {
     WP_UnitTestCase::setUpBeforeClass();
 
   }
   function setUp() {
-    // Mockup data
-    $this->stub = $this->getMock(
-        'Kiosk_WP\Kiosk_Tweets_Helper',
+    // Mockup good json data
+    $this->good_stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Handler',
         array( 'get_tweets_json' )
     );
-    $this->stub->expects( $this->any() )
+    $this->good_stub->expects( $this->any() )
          ->method( 'get_tweets_json' )
-         ->will( $this->returnValue( $this->return_unit_test_data() ) );
+         ->will( $this->returnValue( $this->get_unit_test_good_data() ) );
+    // Mockup good json data for query attribute
+    $this->good_data_query = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Handler',
+        array( 'get_tweets_json' )
+    );
+    $this->good_data_query->expects( $this->any() )
+         ->method( 'get_tweets_json' )
+         ->will( $this->returnValue( $this->get_unit_test_good_data_query() ) );
+    // Mockup bad json data
+    $this->bad_stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Handler',
+        array( 'get_tweets_json' )
+    );
+    $this->bad_stub->expects( $this->any() )
+         ->method( 'get_tweets_json' )
+         ->will( $this->returnValue( $this->get_unit_test_bad_data() ) );
+    // Mockup data some error message from twitter
+    $this->twitter_error_stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Handler',
+        array( 'get_tweets_json' )
+    );
+    $this->twitter_error_stub->expects( $this->any() )
+         ->method( 'get_tweets_json' )
+         ->will( $this->returnValue( $this->get_unit_test_error_data() ) );
+    // Mockup for empty data
+    $this->empty_stub = $this->getMock(
+        'Kiosk_WP\Kiosk_Tweets_Handler',
+        array( 'get_tweets_json' )
+    );
+    $this->empty_stub->expects( $this->any() )
+         ->method( 'get_tweets_json' )
+         ->will( $this->returnValue( $this->get_unit_test_empty_data() ) );
   }
   // @codingStandardsIgnoreEnd
 
+  /**
+   * test kiosk-tweets shortcode existence
+   */
+  function test_kiosk_tweets_shortcode_exists() {
+    $this->assertTrue( shortcode_exists( 'kiosk-tweets' ) );
+  }
   /**
    * To Test Kiosk tweets
    * [kiosk-tweets]
    */
   function test_kiosk_tweets_shortcode() {
-    $this->assertTrue( shortcode_exists( 'kiosk-tweets' ) );
-
-    $content = $this->stub->kiosk_tweets( array() );
+    $content = $this->good_stub->get_kiosk_tweets_html( array() );
+    $this->assertEquals(
+        200,
+        $content['status'],
+        'Status should be 200 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return all current tweets item max default 20'
     );
 
-    $number_of_items = substr_count( $content, '<li' );
+    $number_of_items = substr_count( $content['response'], '<li' );
     $this->assertLessThanOrEqual(
         8,
         $number_of_items,
         'There should be <= 8 news items'
     );
   }
+  // Test with attribute limit
   function test_kiosk_tweets_shortcode_limit_4() {
-
-    $content = $this->stub->kiosk_tweets( array( 'limit' => 4 ) );
+    $content = $this->good_stub->get_kiosk_tweets_html( array( 'limit' => 4 ) );
+    $this->assertEquals(
+        200,
+        $content['status'],
+        'Status should be 200 on success'
+    );
     $this->assertContains(
         'kiosk-tweets__tweet',
-        $content,
+        $content['response'],
         'Should return current tweets item'
     );
-    $number_of_items = substr_count( $content, '<li' );
+    $number_of_items = substr_count( $content['response'], '<li' );
     $this->assertLessThanOrEqual(
         4,
         $number_of_items,
         'There should be <= 4 news items'
     );
   }
+
+  //Test with attribute query
+  function test_kiosk_tweets_shortcode_query() {
+    $content = $this->good_data_query->get_kiosk_tweets_html( array( 'query' => '@asugreen' ) );
+    $this->assertEquals(
+        200,
+        $content['status'],
+        'Status should be 200 on success'
+    );
+    $this->assertContains(
+        'kiosk-tweets__tweet',
+        $content['response'],
+        'Should return current tweets item'
+    );
+  }
+
+  //Test with attribute limit and query
+  function test_kiosk_tweets_shortcode_limit_and_query() {
+    $content = $this->good_data_query->get_kiosk_tweets_html(
+        array(
+            'limit' => 4,
+            'query' => '@asugreen',
+        )
+    );
+    $this->assertEquals(
+        200,
+        $content['status'],
+        'Status should be 200 on success'
+    );
+    $this->assertContains(
+        'kiosk-tweets__tweet',
+        $content['response'],
+        'Should return current tweets item'
+    );
+    $number_of_items = substr_count( $content['response'], '<li' );
+    $this->assertLessThanOrEqual(
+        4,
+        $number_of_items,
+        'There should be <= 4 news items'
+    );
+  }
+
+  //Test with bad Json data
+  function test_kiosk_tweets_shortcode_bad_data() {
+    $content = $this->bad_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        200,
+        $content['status'],
+        'Status should not be 200 on failure'
+    );
+    $this->assertContains(
+        'Cannot Load Tweets',
+        $content['response'],
+        'Should contain Cannot load tweets'
+    );
+  }
+  //Test for error message from twitter api
+  function test_kiosk_tweets_shortcode_error_data() {
+    $content = $this->twitter_error_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        200,
+        $content['status'],
+        'Status should not be 200 on failure'
+    );
+    $this->assertContains(
+        'Cannot Load Tweets',
+        $content['response'],
+        'Should contain Cannot load tweets'
+    );
+  }
+  //Test for empty response
+  function test_kiosk_tweets_shortcode_empty_data() {
+    $content = $this->empty_stub->get_kiosk_tweets_html( array() );
+    $this->assertNotEquals(
+        200,
+        $content['status'],
+        'Status should not be 200 on failure'
+    );
+    $this->assertContains(
+        'Cannot Load Tweets',
+        $content['response'],
+        'Should contain Cannot load tweets'
+    );
+  }
+
   /**
-  * Creates a mock up data to be used as twitter streaming api response
+  * Creates a mock up good data to be used as twitter streaming api response
   * @return string
   */
-  function return_unit_test_data() {
+  function get_unit_test_good_data() {
     $sample_json = <<<JSON
 [{"created_at":"Fri May 15 20:59:29 +0000 2015","id":599318204721205249,"id_str":"599318204721205249","text":"test1","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"}]
 JSON;
     return $sample_json;
+  }
+  /**
+  * Creates a mock up bad data to be used as twitter streaming api response
+  * @return string
+  */
+  function get_unit_test_bad_data() {
+    $sample_json = <<<JSON
+"created_at":"Fri May 15 20:59:29 +0000 2015","id":599318204721205249,"id_str":"599318204721205249","text":"test1","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"},{"created_at":"Thu Jun 17 06:27:40 +0000 2010","id":16368735150,"id_str":"16368735150","text":"@samantha_prabhu u have to believe this as pille (Iron tongue) said that BRAZIL AND SPAIN are the strongest teams for this world cup","source":"\u003ca href=\"http:\/\/twitter.com\" rel=\"nofollow\"\u003eTwitter Web Client\u003c\/a\u003e","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":100546785,"id_str":"100546785","name":"Nagarjuna","screen_name":"chasethenag420","location":"Bangalore","description":"","url":null,"entities":{"description":{"urls":[]}},"protected":false,"followers_count":27,"friends_count":96,"listed_count":0,"created_at":"Wed Dec 30 17:11:46 +0000 2009","favourites_count":0,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":22,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_image_url_https":"https:\/\/abs.twimg.com\/images\/themes\/theme1\/bg.png","profile_background_tile":false,"profile_image_url":"http:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_image_url_https":"https:\/\/pbs.twimg.com\/profile_images\/1098848936\/nag_normal.jpg","profile_link_color":"0084B4","profile_sidebar_border_color":"C0DEED","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"default_profile":true,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[],"symbols":[],"user_mentions":[{"screen_name":"samantha_prabhu","name":"Samantha Ruth prabhu","id":578616675,"id_str":"578616675","indices":[0,16]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"}]
+JSON;
+    return $sample_json;
+  }
+  /**
+  * Creates a mock up error message data to be used as twitter streaming api response
+  * @return string
+  */
+  function get_unit_test_error_data() {
+    $sample_json = <<<JSON
+    "{"errors":[{"code":89,"message":"Invalid or expired token."}]}"
+JSON;
+    return $sample_json;
+  }
+  /**
+  * Creates a mock up query search data to be used as twitter streaming api response
+  * @return string
+  */
+  function get_unit_test_good_data_query() {
+    $sample_json = <<<JSON
+    {"statuses":[{"metadata":{"iso_language_code":"en","result_type":"recent"},"created_at":"Tue Aug 11 21:08:58 +0000 2015","id":631210722148675600,"id_str":"631210722148675588","text":"RT @SusanHeaney: Yay @asu @ASUgreen @WSSIatASU ! @Sierra_Magazine top #green colleges http://t.co/0mOcfJZcxw","source":"<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":2149458450,"id_str":"2149458450","name":"Mindy Kimball","screen_name":"MindyKimball","location":"West Point, NY","description":"PhD, Assistant Professor, D/G&EnE, US Military Academy; Army Officer; Electric Car and Bicycle Driver; Volunteer Presenter, Climate Reality Project","url":"http://t.co/s8i6G5jSSY","entities":{"url":{"urls":[{"url":"http://t.co/s8i6G5jSSY","expanded_url":"http://mindyisfreezing.blogspot.com","display_url":"mindyisfreezing.blogspot.com","indices":[0,22]}]},"description":{"urls":[]}},"protected":false,"followers_count":58,"friends_count":42,"listed_count":8,"created_at":"Tue Oct 22 17:50:27 +0000 2013","favourites_count":105,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":507,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http://pbs.twimg.com/profile_background_images/378800000099876876/7f4f6fc861fd135ea73071d835b870b5.jpeg","profile_background_image_url_https":"https://pbs.twimg.com/profile_background_images/378800000099876876/7f4f6fc861fd135ea73071d835b870b5.jpeg","profile_background_tile":false,"profile_image_url":"http://pbs.twimg.com/profile_images/378800000633833853/3e4bcc4b1bc0514071ddc4f668f703c2_normal.jpeg","profile_image_url_https":"https://pbs.twimg.com/profile_images/378800000633833853/3e4bcc4b1bc0514071ddc4f668f703c2_normal.jpeg","profile_link_color":"0084B4","profile_sidebar_border_color":"FFFFFF","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"has_extended_profile":false,"default_profile":false,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"retweeted_status":{"metadata":{"iso_language_code":"en","result_type":"recent"},"created_at":"Tue Aug 11 04:14:15 +0000 2015","id":630955361277747200,"id_str":"630955361277747201","text":"Yay @asu @ASUgreen @WSSIatASU ! @Sierra_Magazine top #green colleges http://t.co/0mOcfJZcxw","source":"<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":460455698,"id_str":"460455698","name":"Susan Arnot Heaney","screen_name":"SusanHeaney","location":"New York City","description":"Business mind + activist heart. Passions: #environmental #sustainability & empowering #women. Mantra: do well by doing good. Issues=universal/opinions=mine.","url":"http://t.co/5TrZ7TKguF","entities":{"url":{"urls":[{"url":"http://t.co/5TrZ7TKguF","expanded_url":"http://www.linkedin.com/in/susanarnotheaney/","display_url":"linkedin.com/in/susanarnoth…","indices":[0,22]}]},"description":{"urls":[]}},"protected":false,"followers_count":2330,"friends_count":895,"listed_count":218,"created_at":"Tue Jan 10 19:41:56 +0000 2012","favourites_count":3994,"utc_offset":-14400,"time_zone":"Eastern Time (US & Canada)","geo_enabled":false,"verified":false,"statuses_count":16459,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"000000","profile_background_image_url":"http://abs.twimg.com/images/themes/theme1/bg.png","profile_background_image_url_https":"https://abs.twimg.com/images/themes/theme1/bg.png","profile_background_tile":false,"profile_image_url":"http://pbs.twimg.com/profile_images/378800000383463175/b6cc92b295ed4381b0fc0d5d246f9866_normal.jpeg","profile_image_url_https":"https://pbs.twimg.com/profile_images/378800000383463175/b6cc92b295ed4381b0fc0d5d246f9866_normal.jpeg","profile_banner_url":"https://pbs.twimg.com/profile_banners/460455698/1381121096","profile_link_color":"4A913C","profile_sidebar_border_color":"000000","profile_sidebar_fill_color":"000000","profile_text_color":"000000","profile_use_background_image":false,"has_extended_profile":false,"default_profile":false,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"is_quote_status":false,"retweet_count":3,"favorite_count":4,"entities":{"hashtags":[{"text":"green","indices":[53,59]}],"symbols":[],"user_mentions":[{"screen_name":"ASU","name":"AZ State University","id":18783501,"id_str":"18783501","indices":[4,8]},{"screen_name":"ASUgreen","name":"Sustainability @ ASU","id":23408887,"id_str":"23408887","indices":[9,18]},{"screen_name":"WSSIatASU","name":"Walton Initiatives","id":1454776844,"id_str":"1454776844","indices":[19,29]},{"screen_name":"Sierra_Magazine","name":"Sierra Magazine","id":14325188,"id_str":"14325188","indices":[32,48]}],"urls":[{"url":"http://t.co/0mOcfJZcxw","expanded_url":"http://www.sierraclub.org/sierra/2015-5-september-october/cool-schools-2015/full-ranking#.Vcl193w-5xM.twitter","display_url":"sierraclub.org/sierra/2015-5-…","indices":[69,91]}]},"favorited":false,"retweeted":false,"possibly_sensitive":false,"lang":"en"},"is_quote_status":false,"retweet_count":3,"favorite_count":0,"entities":{"hashtags":[{"text":"green","indices":[70,76]}],"symbols":[],"user_mentions":[{"screen_name":"SusanHeaney","name":"Susan Arnot Heaney","id":460455698,"id_str":"460455698","indices":[3,15]},{"screen_name":"ASU","name":"AZ State University","id":18783501,"id_str":"18783501","indices":[21,25]},{"screen_name":"ASUgreen","name":"Sustainability @ ASU","id":23408887,"id_str":"23408887","indices":[26,35]},{"screen_name":"WSSIatASU","name":"Walton Initiatives","id":1454776844,"id_str":"1454776844","indices":[36,46]},{"screen_name":"Sierra_Magazine","name":"Sierra Magazine","id":14325188,"id_str":"14325188","indices":[49,65]}],"urls":[{"url":"http://t.co/0mOcfJZcxw","expanded_url":"http://www.sierraclub.org/sierra/2015-5-september-october/cool-schools-2015/full-ranking#.Vcl193w-5xM.twitter","display_url":"sierraclub.org/sierra/2015-5-…","indices":[86,108]}]},"favorited":false,"retweeted":false,"possibly_sensitive":false,"lang":"en"},{"metadata":{"iso_language_code":"en","result_type":"recent"},"created_at":"Tue Aug 11 21:03:26 +0000 2015","id":631209329702604800,"id_str":"631209329702604800","text":"Lucky 13! @ASU is ranked by @sierraclub as one of America's Greenest Universities! #Susty @ASUgreen @SOS_Alumni","source":"<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>","truncated":false,"in_reply_to_status_id":null,"in_reply_to_status_id_str":null,"in_reply_to_user_id":null,"in_reply_to_user_id_str":null,"in_reply_to_screen_name":null,"user":{"id":2149458450,"id_str":"2149458450","name":"Mindy Kimball","screen_name":"MindyKimball","location":"West Point, NY","description":"PhD, Assistant Professor, D/G&EnE, US Military Academy; Army Officer; Electric Car and Bicycle Driver; Volunteer Presenter, Climate Reality Project","url":"http://t.co/s8i6G5jSSY","entities":{"url":{"urls":[{"url":"http://t.co/s8i6G5jSSY","expanded_url":"http://mindyisfreezing.blogspot.com","display_url":"mindyisfreezing.blogspot.com","indices":[0,22]}]},"description":{"urls":[]}},"protected":false,"followers_count":58,"friends_count":42,"listed_count":8,"created_at":"Tue Oct 22 17:50:27 +0000 2013","favourites_count":105,"utc_offset":null,"time_zone":null,"geo_enabled":false,"verified":false,"statuses_count":507,"lang":"en","contributors_enabled":false,"is_translator":false,"is_translation_enabled":false,"profile_background_color":"C0DEED","profile_background_image_url":"http://pbs.twimg.com/profile_background_images/378800000099876876/7f4f6fc861fd135ea73071d835b870b5.jpeg","profile_background_image_url_https":"https://pbs.twimg.com/profile_background_images/378800000099876876/7f4f6fc861fd135ea73071d835b870b5.jpeg","profile_background_tile":false,"profile_image_url":"http://pbs.twimg.com/profile_images/378800000633833853/3e4bcc4b1bc0514071ddc4f668f703c2_normal.jpeg","profile_image_url_https":"https://pbs.twimg.com/profile_images/378800000633833853/3e4bcc4b1bc0514071ddc4f668f703c2_normal.jpeg","profile_link_color":"0084B4","profile_sidebar_border_color":"FFFFFF","profile_sidebar_fill_color":"DDEEF6","profile_text_color":"333333","profile_use_background_image":true,"has_extended_profile":false,"default_profile":false,"default_profile_image":false,"following":false,"follow_request_sent":false,"notifications":false},"geo":null,"coordinates":null,"place":null,"contributors":null,"is_quote_status":false,"retweet_count":0,"favorite_count":0,"entities":{"hashtags":[{"text":"Susty","indices":[83,89]}],"symbols":[],"user_mentions":[{"screen_name":"ASU","name":"AZ State University","id":18783501,"id_str":"18783501","indices":[10,14]},{"screen_name":"sierraclub","name":"Sierra Club","id":34113439,"id_str":"34113439","indices":[28,39]},{"screen_name":"ASUgreen","name":"Sustainability @ ASU","id":23408887,"id_str":"23408887","indices":[90,99]},{"screen_name":"SOS_Alumni","name":"SOSAlumni","id":3011700690,"id_str":"3011700690","indices":[100,111]}],"urls":[]},"favorited":false,"retweeted":false,"lang":"en"}],"search_metadata":{"completed_in":0.05,"max_id":631210722148675600,"max_id_str":"631210722148675588","next_results":"?max_id=630955361277747200&q=%40asugreen&count=20&include_entities=1","query":"%40asugreen","refresh_url":"?since_id=631210722148675588&q=%40asugreen&include_entities=1","count":20,"since_id":0,"since_id_str":"0"}}
+JSON;
+    return $sample_json;
+  }
+  /**
+  * Creates a mock up empty response
+  * @return string
+  */
+  function get_unit_test_empty_data() {
+    return '';
   }
 }

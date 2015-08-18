@@ -5,7 +5,7 @@
   align-content: space-around;
   align-items: stretch;
   display: flex;
-  flex: 100%;  
+  flex: 100%;
   justify-content: space-around;
  }
 
@@ -35,7 +35,7 @@
 }
 
 .timeline_header_section:nth-child(odd) {
-  background-color: rgba(75,75,75,1); 
+  background-color: rgba(75,75,75,1);
 }
 
 .timeline-row-item {
@@ -69,11 +69,11 @@
 
 .timeline-row-item__details {
   align-self: stretch;
-  flex: 100%; 
+  flex: 100%;
   bottom: 0;
   left: 0;
-  position: absolute;  
-  right: 0;  
+  position: absolute;
+  right: 0;
   top: 0;
   z-index: 10;
 }

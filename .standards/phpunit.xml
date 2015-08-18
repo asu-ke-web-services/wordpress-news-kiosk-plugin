@@ -31,8 +31,13 @@
 </testsuites>
 <filter>
   <whitelist processUncoveredFilesFromWhitelist="true">
-    <directory suffix=".php">../shortcodes</directory>
+    <directory suffix=".php">../globals</directory>
     <directory suffix=".php">../helpers</directory>
+    <directory suffix=".php">../includes</directory>
+    <directory suffix=".php">../pages</directory>
+    <directory suffix=".php">../page-templates</directory>
+    <directory suffix=".php">../plugin</directory>
+    <directory suffix=".php">../shortcodes</directory>
   </whitelist>
 </filter>
 <logging>

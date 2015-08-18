@@ -16,23 +16,12 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Slider_Shortcodes extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
   protected $feed_helper;
 
   public function __construct( $feed_helper ) {
-    $this->plugin_slug = 'kiosk-slider-shortcodes';
-    $this->version     = '0.1';
     $this->load_dependencies();
     $this->define_hooks();
-    //$this->feed_helper = new Feed_Helper();
     $this->feed_helper = $feed_helper;
-  }
-
-  /**
-   * @override
-   */
-  public function load_dependencies() {
   }
 
   public function define_hooks() {
@@ -44,32 +33,32 @@ class Kiosk_Slider_Shortcodes extends Base_Registrar {
    *
    * @param $atts array
    * Generates a <div> tag with slider from rss feed to display as slider
-   * To add feed from other urls update $feed_urls_array we can improve by
+   * To add feed from other urls update $feed_urls we can improve by
    * accepting associative array
    */
   public function kiosk_slider( $atts, $content = null ) {
-    $total_feed_count   = 0;
     $atts               = shortcode_atts(
         array(
           'limit'       => '20',
           'feed_urls'   => array(
-                            'https://api.flickr.com/services/feeds
-                            /photos_public.gne?id=55424394@N03
-                            &lang=en-us&format=rss_200',
-                          )
+              'https://api.flickr.com/services/feeds/photos_public.gne?id=55424394@N03&lang=en-us&format=rss_200',
+          )
         ),
         $atts
     );
-    $feed_urls_array    = $atts['feed_urls'];
-    if ( ! is_array( $feed_urls_array ) ) {
-      $feed_urls_array  = explode( ',', $feed_urls_array );
+    $feed_urls    = $atts['feed_urls'];
+    if ( ! is_array( $feed_urls ) ) {
+      $feed_urls  = explode( ',', $feed_urls );
     }
-    $limit              = $atts['limit'];
-    $list_items         = array();
-    $items              = $this->feed_helper->get_feed_data( $feed_urls_array );
-    usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
-    $list_items         = Feed_Helper::extract_data_from_flickr_feed( $items, $limit );
-    $carousel_slider    = $this->get_gallery_carousel_slider( $list_items );
+    $limit           = $atts['limit'];
+    $list_items      = array();
+    $items           = $this->feed_helper->get_feed_data( $feed_urls );
+    $carousel_slider = '<div class="kiosk-gallery__no-data">Gallery Not Available</div>';
+    if ( ! empty( $items ) ) {
+      usort( $items, array( 'Kiosk_WP\Feed_Helper', 'rss_sort_date_dsc' ) );
+      $list_items      = Feed_Helper::extract_data_from_flickr_feed( $items, $limit );
+      $carousel_slider = $this->get_gallery_carousel_slider( $list_items );
+    }
     $kiosk_slider_div   = '<div class="kiosk-gallery">' . $carousel_slider . '</div>';
     return $kiosk_slider_div;
   }

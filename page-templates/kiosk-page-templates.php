@@ -13,14 +13,10 @@ if ( ! defined( 'KIOSK_WP_VERSION' ) ) {
 }
 
 class Kiosk_Page_Templates extends Base_Registrar {
-  protected $plugin_slug;
-  protected $version;
   protected $templates;
 
 
   public function __construct() {
-    $this->plugin_slug = 'kiosk-page-template';
-    $this->version = '0.1';
     $this->templates = array( 'kiosk-default-template.php' => 'Kiosk' );
 
     $this->load_dependencies();
