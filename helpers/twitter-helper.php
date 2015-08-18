@@ -243,7 +243,7 @@ class Twitter_Api_Helper {
     }
   }
   /**
-   * JSON return by twitter API will have 'statuses' key in case of twitter
+   * JSON returned by twitter API will have 'statuses' key in case of twitter
    * search api is used. To read actual tweets take data from statutses key.
    *
    * For user timeline we do not have 'statuses' key so read data as it comes

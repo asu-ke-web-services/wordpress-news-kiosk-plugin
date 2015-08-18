@@ -20,13 +20,18 @@ class Base_Registrar {
   protected $actions    = array();
   protected $filters    = array();
   protected $shortcodes = array();
-
-  protected function __construct() {
-
-  }
+  /** @type String */
+  protected $plugin_slug;
+  /** @type String */
+  protected $version;
 
   public function load_dependencies() {
     // Do nothing by default.
+  }
+
+  protected function __construct( $plugin_slug, $version = '0.1' ) {
+    $this->plugin_slug = $plugin_slug;
+    $this->version     = $version;
   }
 
   public function add_action( $hook, $component, $callback, $priority = 10 ) {

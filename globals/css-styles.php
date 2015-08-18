@@ -43,22 +43,12 @@ class CSS_Styles extends Base_Registrar {
    * @override
    */
   public function define_hooks() {
-    $this->add_action( 'wp_enqueue_scripts',  $this, 'kiosk_scripts', 99 );
+    $this->add_action( 'wp_enqueue_scripts',  $this, 'kiosk_styles', 99 );
   }
   /**
-  * Enqueue scripts and styles.
+  * Enqueue styles.
   */
-  function kiosk_scripts() {
-    // Wordpress provides jquery, but we enqueue our own mainly so we include it in the footer and control the version.
-    $plugin_dir_url = plugin_dir_url( dirname( __FILE__ ) );
-    wp_register_script( 'jquery', $plugin_dir_url . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
-    wp_register_script( 'bootstrap-js', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
-    wp_register_script( 'kiosk-helper', $plugin_dir_url . '/assets/js/kiosk-helper.js', array( 'jquery' ),'1.0', true );
-
-    wp_enqueue_script( 'jquery', $plugin_dir_url . '/assets/js/jquery-1.11.2.min.js', array(), '1.11.2', true );
-    wp_enqueue_script( 'bootstrap-js', $plugin_dir_url . '/assets/bootstrap-3.1.1-dist/js/bootstrap.min.js', array( 'jquery' ), '3.1.1', true );
-    wp_enqueue_script( 'kiosk-helper', $plugin_dir_url . '/assets/js/kiosk-helper.js', array( 'jquery' ), '1.0', true );
-
+  function kiosk_styles() {
     wp_enqueue_style( $this->plugin_slug, $this->css,'', $this->version );
   }
 }
