@@ -1,5 +1,5 @@
 /**
- *  
+ *
  * @see  https://github.com/squizlabs/PHP_CodeSniffer
  */
  module.exports = function (grunt) {
@@ -80,7 +80,7 @@
         ]
       }
     },
-    
+
     // PHPUnit
     // =======
     phpunit: {
@@ -125,7 +125,50 @@
           spawn: false,
         },
       },
-    }
+    },
+    // JS Hint
+    // =======
+    jshint: {
+      options: {
+        jshintrc: '../assets/js/coding_standards/.jshintrc'
+      },
+      core: {
+        src: [
+          '../assets/js/src/*.js',
+        ]
+      }
+    },
+    // JS Coding Style
+    // ===============
+    jscs: {
+      options: {
+        config: '../assets/js/coding_standards/.jscsrc'
+      },
+      core: {
+        src: '<%= jshint.core.src %>'
+      }
+    },
+    // JS Compile
+    // ==========
+    concat: {
+      core: {
+        src: [
+          '../assets/js/src/*.js'
+        ],
+        dest: '../assets/js/build/wordpress-news-kiosk-plugin.js'
+      }
+    },
+    // JS Uglify
+    // =========
+    uglify: {
+      options: {
+        preserveComments: 'some'
+      },
+      core: {
+        src: '<%= concat.core.dest %>',
+        dest: '../assets/js/build/wordpress-news-kiosk-plugin.min.js'
+      }
+    },
   });
 
   // These plugins provide necessary tasks
@@ -134,6 +177,10 @@
   grunt.loadNpmTasks('grunt-scss-lint');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-jscs');
 
   // Watch Styles
   grunt.registerTask('watchStyles', [
@@ -146,11 +193,23 @@
     'sass:dist',
   ]);
 
+  // JSlint
+  grunt.registerTask('jslint', [
+    'jshint',
+    'jscs',
+    'concat',
+    'uglify',
+  ]);
+
   // Default task
   grunt.registerTask('default', [
     'scsslint',
     'sass:dist',
     'phpcs',
+    'jshint',
+    'jscs',
+    'concat',
+    'uglify',
     'phpunit'
   ]);
 };

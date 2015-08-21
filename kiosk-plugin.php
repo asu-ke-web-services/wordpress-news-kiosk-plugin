@@ -125,6 +125,9 @@ if ( ! function_exists( 'run_kiosk_loaded_classes' ) ) {
     // =============
     $css_styles = new \Kiosk_WP\CSS_Styles();
     $css_styles->run();
+
+    $javascripts = new \Kiosk_WP\Javascripts( $version );
+    $javascripts->run();
   }
 }
 /**
