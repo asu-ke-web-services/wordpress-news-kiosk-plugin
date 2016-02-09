@@ -1,5 +1,12 @@
 Wordpress News Kiosk Plugin
 ===========================
+
+# HEADS UP!
+
+## This repo is deprecated
+
+Please see [https://github.com/gios-asu/apiarium-wp-plugin](https://github.com/gios-asu/apiarium-wp-plugin) instead.
+
 [![Build Status](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin.svg)](https://travis-ci.org/gios-asu/wordpress-news-kiosk-plugin) [![Code Climate](https://codeclimate.com/github/gios-asu/wordpress-news-kiosk-plugin/badges/gpa.svg)](https://codeclimate.com/github/gios-asu/wordpress-news-kiosk-plugin) [![Stories in Ready](https://badge.waffle.io/gios-asu/wordpress-news-kiosk-plugin.svg?label=ready&title=Ready)](http://waffle.io/gios-asu/wordpress-news-kiosk-plugin)
 
 [![Github release](https://img.shields.io/github/release/gios-asu/wordpress-news-kiosk-plugin.svg?style=flat)](https://github.com/gios-asu/wordpress-news-kiosk-plugin/releases)
